@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="player_timeline" parent="@android:style/Widget.RatingBar"> 
+	    <item name="android:progressDrawable">@drawable/player_timeline</item>
+	    <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item> 
+ 	    <item name="android:minHeight">13dip</item> 
+	    <item name="android:maxHeight">13dip</item> 
+	</style>
+	<style name="theme_main" parent="android:Theme">
+	    <item name="android:windowContentOverlay">@null</item>
+	    <item name="android:windowNoTitle">true</item>
+	</style>
+</resources>
