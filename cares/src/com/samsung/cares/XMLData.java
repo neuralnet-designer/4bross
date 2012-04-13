@@ -20,21 +20,26 @@ public class XMLData implements Parcelable {
 	public String twitterURL = "";
 	public String chatURL = "";
 	public String callNumber = "";
+	public String warrantyURL = "";
 	public String callYN = "";
 	public String lastYN = "";
 	
 	//for content
+	public String orgType = "";
+	public String orgContentId = "";
 	public String contentId = "";
-	public String contentTitle = "";
-	public String content1URL = "";
-	public String content2URL = "";
-	public String content3URL = "";
-	public String content4URL = "";
-	public String content5URL = "";
+	public String title = "";
+	public String contentURL = "";
+	public String stepCount = "";
 	
 	//for tracking
 	public String ticketNo = "";
 	public String phoneNo = "";
+	public String firstName = "";
+	public String lastName = "";
+	public String zipCode = "";
+	public String modelCode = "";
+	public String postingDate = "";
 	public String company = "";
 	public String serviceType = "";
 	public String status = "";
@@ -44,7 +49,6 @@ public class XMLData implements Parcelable {
 	public String ascNo = "";
 	public String ascName = "";
 	public String ascPhone = "";
-	public String postingDate = "";
 	public String scheduleDate = "";
 	public String completeDate = "";
 	public String receiveDate = "";
@@ -60,7 +64,7 @@ public class XMLData implements Parcelable {
 	public String categoryId = "";
 	public String scheduleId = "";
 	public String scheduleImage = "";
-	public String title = "";
+	//public String title = "";
 	public String fileURL = "";
 	public String HQFileURL = "";
 	public String description = "";   	 	
@@ -94,20 +98,26 @@ public class XMLData implements Parcelable {
 		chatURL = in.readString();
 		callNumber = in.readString();
 		callYN = in.readString();
+		warrantyURL = in.readString();
 		lastYN = in.readString();
 			
 		//for content
+		orgType = in.readString();
+		orgContentId = in.readString();
+		
 		contentId = in.readString();
-		contentTitle = in.readString();
-		content1URL = in.readString();
-		content2URL = in.readString();
-		content3URL = in.readString();
-		content4URL = in.readString();
-		content5URL = in.readString();
+		title = in.readString();
+		contentURL = in.readString();
+		stepCount = in.readString();
 			
 		//for tracking
 		ticketNo = in.readString();
 		phoneNo = in.readString();
+		firstName = in.readString();
+		lastName = in.readString();
+		zipCode = in.readString();
+		modelCode = in.readString();
+		postingDate = in.readString();
 		company = in.readString();
 		serviceType = in.readString();
 		status = in.readString();
@@ -117,7 +127,6 @@ public class XMLData implements Parcelable {
 		ascNo = in.readString();
 		ascName = in.readString();
 		ascPhone = in.readString();
-		postingDate = in.readString();
 		scheduleDate = in.readString();
 		completeDate = in.readString();
 		receiveDate = in.readString();
@@ -133,7 +142,7 @@ public class XMLData implements Parcelable {
 		categoryId = in.readString();
 		scheduleId = in.readString();
 		scheduleImage = in.readString();
-		title = in.readString();
+		//title = in.readString();
 		fileURL = in.readString();
 		HQFileURL = in.readString();
 		description = in.readString();   	 	
@@ -168,20 +177,26 @@ public class XMLData implements Parcelable {
 		out.writeString(chatURL);
 		out.writeString(callNumber);
 		out.writeString(callYN);
+		out.writeString(warrantyURL);
 		out.writeString(lastYN);
 			
 		//for content
+		out.writeString(orgType);
+		out.writeString(orgContentId);
+		
 		out.writeString(contentId);
-		out.writeString(contentTitle);
-		out.writeString(content1URL);
-		out.writeString(content2URL);
-		out.writeString(content3URL);
-		out.writeString(content4URL);
-		out.writeString(content5URL);
+		out.writeString(title);
+		out.writeString(contentURL);
+		out.writeString(stepCount);
 			
 		//for tracking
 		out.writeString(ticketNo);
 		out.writeString(phoneNo);
+		out.writeString(firstName);
+		out.writeString(lastName);
+		out.writeString(zipCode);
+		out.writeString(modelCode);
+		out.writeString(postingDate);
 		out.writeString(company);
 		out.writeString(serviceType);
 		out.writeString(status);
@@ -191,7 +206,6 @@ public class XMLData implements Parcelable {
 		out.writeString(ascNo);
 		out.writeString(ascName);
 		out.writeString(ascPhone);
-		out.writeString(postingDate);
 		out.writeString(scheduleDate);
 		out.writeString(completeDate);
 		out.writeString(receiveDate);
@@ -207,7 +221,7 @@ public class XMLData implements Parcelable {
 		out.writeString(categoryId);
 		out.writeString(scheduleId);
 		out.writeString(scheduleImage);
-		out.writeString(title);
+		//out.writeString(title);
 		out.writeString(fileURL);
 		out.writeString(HQFileURL);
 		out.writeString(description);   	 	
