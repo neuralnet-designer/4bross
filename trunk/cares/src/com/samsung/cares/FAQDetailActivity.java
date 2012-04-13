@@ -250,32 +250,20 @@ public class FAQDetailActivity extends ActivityGroup {
 		            		if(tag.equals("contentId")) {                      
 		            			xmlData.contentId = xpp.nextText() ;
 		            		}
-		            		if(tag.equals("contentTitle")) {                      
-		            			xmlData.contentTitle = xpp.nextText() ;
+		            		if(tag.equals("title")) {                      
+		            			xmlData.title = xpp.nextText() ;
 		            		}
-		            		if(tag.equals("content1URL")) {                      
-		            			xmlData.content1URL = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("content2URL")) {                      
-		            			xmlData.content2URL = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("content3URL")) {                      
-		            			xmlData.content3URL = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("content4URL")) {                      
-		            			xmlData.content4URL = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("content5URL")) {                      
-		            			xmlData.content5URL = xpp.nextText() ;
+		            		if(tag.equals("contentURL")) {                      
+		            			xmlData.contentURL = xpp.nextText() ;
 		            		}
 		            	}
 		            	else if(eventType == XmlPullParser.END_TAG) { 
 		            		tag = xpp.getName();
 		            		if(tag.equals("item")) {
-		            			if(xmlData.content1URL != null) {
-		            				contentURLList.add(xmlData.content1URL);
-		            				Logger.d("xmlData.content1URL:"+xmlData.content1URL);
+		            			if(xmlData.contentURL != null) {
+		            				contentURLList.add(xmlData.contentURL);
 		            			}
+		            			/*
 		            			if(xmlData.content2URL != null) {
 		            				contentURLList.add(xmlData.content2URL);
 		            			}
@@ -288,6 +276,8 @@ public class FAQDetailActivity extends ActivityGroup {
 		            			if(xmlData.content5URL != null) {
 		            				contentURLList.add(xmlData.content5URL);
 		            			}
+		            			*/
+		            			
 		            			/*
 		            			int COUNT = Integer.parseInt(xmlData.count);
 		            			if(COUNT > 0) {

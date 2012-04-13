@@ -142,7 +142,7 @@ public class PageAdapter extends BaseAdapter {
 				
 		    	ProductViewHolder holder = new ProductViewHolder();
 		    	holder.productName = (TextView)vi.findViewById(R.id.title); 
-				holder.productName.setText(delHtmlTag(xmlData.contentTitle));
+				holder.productName.setText(delHtmlTag(xmlData.title));
 				    
 				vi.setTag(holder);
     		}

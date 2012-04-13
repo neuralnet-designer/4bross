@@ -494,8 +494,8 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		if(tag.equals("contentId")) {
 		            			xmlData.contentId = xpp.nextText();		                      
 		            		} 
-		            		if(tag.equals("contentTitle")) {
-		            			xmlData.contentTitle = xpp.nextText();		                      
+		            		if(tag.equals("title")) {
+		            			xmlData.title = xpp.nextText();		                      
 		            		}
 		            		
 		            		if(tag.equals("channelGroup")) {
