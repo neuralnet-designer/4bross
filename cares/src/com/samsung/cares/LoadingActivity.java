@@ -205,7 +205,7 @@ public class LoadingActivity extends Activity {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=user&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL);
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=USER&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL);
 			        	URL url = new URL(XMLURL);
 			        	
 			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
@@ -238,6 +238,18 @@ public class LoadingActivity extends Activity {
 			            			}
 			            			catch(NumberFormatException nfe) {
 			            			}
+			            		}
+			            		if(tag.equals("privacyURL")) {
+			            			Status.PRIVACY_URL = xpp.nextText();
+			            		}
+			            		if(tag.equals("legalURL")) {
+			            			Status.LEGAL_URL = xpp.nextText();
+			            		}
+			            		if(tag.equals("aboutURL")) {
+			            			Status.ABOUT_URL = xpp.nextText();
+			            		}
+			            		if(tag.equals("samsungURL")) {
+			            			Status.SAMSUNG_URL = xpp.nextText();
 			            		}
 			            	}
 			            	else if(eventType == XmlPullParser.END_TAG) { 

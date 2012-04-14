@@ -11,6 +11,9 @@ public class XMLData implements Parcelable {
 	public String level = "";
 	public String count = "";
 	
+	public String orgType = "";
+	public String orgContentId = "";
+	
 	//for product category
 	public String productId = "";
 	public String productLevel = "";
@@ -25,8 +28,6 @@ public class XMLData implements Parcelable {
 	public String lastYN = "";
 	
 	//for content
-	public String orgType = "";
-	public String orgContentId = "";
 	public String contentId = "";
 	public String title = "";
 	public String contentURL = "";
@@ -87,6 +88,9 @@ public class XMLData implements Parcelable {
 		subType = in.readString();
 		level = in.readString();
 		count = in.readString();
+		
+		orgType = in.readString();
+		orgContentId = in.readString();
 
 		//for product category
 		productId = in.readString();
@@ -102,9 +106,6 @@ public class XMLData implements Parcelable {
 		lastYN = in.readString();
 			
 		//for content
-		orgType = in.readString();
-		orgContentId = in.readString();
-		
 		contentId = in.readString();
 		title = in.readString();
 		contentURL = in.readString();
@@ -167,6 +168,9 @@ public class XMLData implements Parcelable {
 		out.writeString(level);
 		out.writeString(count);
 
+		out.writeString(orgType);
+		out.writeString(orgContentId);
+		
 		//for product category
 		out.writeString(productId);
 		out.writeString(productLevel);
@@ -181,9 +185,6 @@ public class XMLData implements Parcelable {
 		out.writeString(lastYN);
 			
 		//for content
-		out.writeString(orgType);
-		out.writeString(orgContentId);
-		
 		out.writeString(contentId);
 		out.writeString(title);
 		out.writeString(contentURL);

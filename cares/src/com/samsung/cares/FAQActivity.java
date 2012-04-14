@@ -28,14 +28,13 @@ public class FAQActivity extends PageActivity {
     }
 	
 	protected void viewPage(XMLData xmlData) {
-		if(xmlData.subType.equals("product")) {
-			Intent intent = new Intent(this, FAQActivity.class);
+		if(!xmlData.contentId.equals("") && !xmlData.contentURL.equals("")) {
+			Intent intent = new Intent(this, ContentDetailActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}
 		else {
-			Intent intent = new Intent(this, FAQDetailActivity.class);
-			xmlData.subType = "content_detail";
+			Intent intent = new Intent(this, FAQActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}

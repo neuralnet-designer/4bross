@@ -9,10 +9,15 @@ public class Status {
 	public static String SERIAL;
 	public static String PHONE;
 	public static String EMAIL;
-    
+	
 	public static int LAST_VERSION_CODE;
 	public static int CURRENT_VERSION_CODE;
 	public static String CURRENT_VERSION_NAME;
+	
+	public static String PRIVACY_URL;
+	public static String LEGAL_URL;
+	public static String ABOUT_URL;
+	public static String SAMSUNG_URL;
 	
 	public static int NETWORK;
 	public static final int NETWORK_WIFI = 0; 

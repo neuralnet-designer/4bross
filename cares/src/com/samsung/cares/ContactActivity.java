@@ -38,55 +38,68 @@ public class ContactActivity extends PageActivity {
         
         //if(CONTENTID.equals("")) {
         	addItems();
-        	if(!SUBTYPE.equals("product")) {
+        	if(SUBTYPE.equals("CONTENT")) {
             	contactLayout.setVisibility(View.VISIBLE);
+            	
+            	ImageView facebookView = (ImageView)findViewById(R.id.facebook);
+        		ImageView twitterView = (ImageView)findViewById(R.id.twitter);
+        		ImageView chatView = (ImageView)findViewById(R.id.chat);
+        		ImageView callView = (ImageView)findViewById(R.id.call);
+        		
+        		facebookView.setOnClickListener(new View.OnClickListener() {
+        	        public void onClick(View v) {
+        	        	if(FACEBOOK_URL != null && !FACEBOOK_URL.equals("")) {
+        	        		//insert log
+            	        	openBrowser(FACEBOOK_URL);
+        	        	}
+        	        }
+        	    });
+        		
+        		twitterView.setOnClickListener(new View.OnClickListener() {
+        	        public void onClick(View v) {
+        	        	if(TWITTER_URL != null && !TWITTER_URL.equals("")) {
+        	        		//insert log
+            	        	openBrowser(TWITTER_URL);
+        	        	}
+        	        }
+        	    });
+        		
+        		chatView.setOnClickListener(new View.OnClickListener() {
+        	        public void onClick(View v) {
+        	        	if(CHAT_URL != null && !CHAT_URL.equals("")) {
+        	        		//insert log
+            	        	openBrowser(CHAT_URL);
+        	        	}
+        	        }
+        	    });
+        		
+        		callView.setOnClickListener(new View.OnClickListener() {
+        	        public void onClick(View v) {
+        	        	if(CALL_NUMBER != null && !CALL_NUMBER.equals("")) {
+        	        		if(CALL_YN != null && CALL_YN.equals("Y")) {
+		        	        	//insert log
+		        	        	call(CALL_NUMBER);
+        	        		}
+        	        		else {
+        	        			//show intent
+        	        		}
+        	        	}
+        	        }
+        	    });
             }
         //}
         
-        ImageView facebookView = (ImageView)findViewById(R.id.facebook);
-		ImageView twitterView = (ImageView)findViewById(R.id.twitter);
-		ImageView chatView = (ImageView)findViewById(R.id.chat);
-		ImageView callView = (ImageView)findViewById(R.id.call);
-		
-		facebookView.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	//insert log
-	        	openBrowser("http://www.facebook.com/share.php?u=http%3A%2F%2Fwww.samsung.com%2Fspstv");
-	        }
-	    });
-		
-		twitterView.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	//insert log
-	        	openBrowser("http://twitter.com/home?status=Watching SAMSUNG SUPPORT PRODUCT TV on http://www.samsung.com/spstv");
-	        }
-	    });
-		
-		chatView.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	//insert log
-	        	openBrowser("http://www.samsung.com");
-	        }
-	    });
-		
-		callView.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	//insert log
-	        	call("2012865165");
-	        }
-	    });
+        
     }
 	
 	protected void viewPage(XMLData xmlData) {
-		if(xmlData.subType.equals("product")) {
-		//if(xmlData.productGroupId.equals("") || xmlData.productTypeId.equals("")) {
-			Intent intent = new Intent(this, ContactActivity.class);
+		if(!xmlData.contentId.equals("") && !xmlData.contentURL.equals("")) {
+			Intent intent = new Intent(this, ContentDetailActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}
 		else {
-			Intent intent = new Intent(this, FAQDetailActivity.class);
-			xmlData.type = "faq";
+			Intent intent = new Intent(this, ContactActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}

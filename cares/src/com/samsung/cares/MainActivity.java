@@ -127,8 +127,8 @@ public class MainActivity extends Activity {
     		        public void onClick(View v) {
     		        	Intent intent = new Intent(MainActivity.this, ContactActivity.class);
     		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "contact";
-    		        	xmlData.subType = "product";
+    		        	xmlData.type = "CONTACT";
+    		        	xmlData.subType = "PRODUCT";
     		        	xmlData.level = "0";
     		        	intent.putExtra("xmlData", xmlData);
     		        	startActivity(intent);
@@ -137,7 +137,11 @@ public class MainActivity extends Activity {
     	        
     	        howToView.setOnClickListener(new View.OnClickListener() {
     		        public void onClick(View v) {
-    		        	viewPage();
+    		        	Intent intent = new Intent(MainActivity.this, HowToActivity.class);
+    		        	XMLData xmlData = new XMLData();
+    		        	xmlData.type = "HOWTO";
+    		        	intent.putExtra("xmlData", xmlData);
+    		        	startActivity(intent);
     		        }
     		    });
     	        
@@ -145,8 +149,8 @@ public class MainActivity extends Activity {
     		        public void onClick(View v) {
     		        	Intent intent = new Intent(MainActivity.this, FAQActivity.class);
     		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "faq";
-    		        	xmlData.subType = "product";
+    		        	xmlData.type = "FAQ";
+    		        	xmlData.subType = "PRODUCT";
     		        	xmlData.level = "0";
     		        	intent.putExtra("xmlData", xmlData);
     		        	startActivity(intent);
@@ -157,8 +161,8 @@ public class MainActivity extends Activity {
     		        public void onClick(View v) {
     		        	Intent intent = new Intent(MainActivity.this, WarrantyActivity.class);
     		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "warranty";
-    		        	xmlData.subType = "product";
+    		        	xmlData.type = "WARRANTY";
+    		        	xmlData.subType = "PRODUCT";
     		        	xmlData.level = "0";
     		        	intent.putExtra("xmlData", xmlData);
     		        	startActivity(intent);
@@ -187,12 +191,39 @@ public class MainActivity extends Activity {
                	
                	ImageView privacyView = (ImageView)view.findViewById(R.id.privacy);
                	ImageView legalView = (ImageView)view.findViewById(R.id.legal);
-               	ImageView appView = (ImageView)view.findViewById(R.id.app);
+               	ImageView aboutView = (ImageView)view.findViewById(R.id.about);
                	ImageView samsungView = (ImageView)view.findViewById(R.id.samsung);
+               	
+               	privacyView.setOnClickListener(new View.OnClickListener() {
+    		        public void onClick(View v) {
+    		        	XMLData xmlData = new XMLData();
+    		        	xmlData.type = "PRIVACY";
+    		        	xmlData.contentURL = Status.PRIVACY_URL;
+    		        	viewContentDetail(xmlData);
+    		        }
+    		    });
+               	
+               	legalView.setOnClickListener(new View.OnClickListener() {
+    		        public void onClick(View v) {
+    		        	XMLData xmlData = new XMLData();
+    		        	xmlData.type = "LEGAL";
+    		        	xmlData.contentURL = Status.LEGAL_URL;
+    		        	viewContentDetail(xmlData);
+    		        }
+    		    });
+               	
+               	aboutView.setOnClickListener(new View.OnClickListener() {
+    		        public void onClick(View v) {
+    		        	XMLData xmlData = new XMLData();
+    		        	xmlData.type = "ABOUT";
+    		        	xmlData.contentURL = Status.ABOUT_URL;
+    		        	viewContentDetail(xmlData);
+    		        }
+    		    });
                	
                	samsungView.setOnClickListener(new View.OnClickListener() {
         	        public void onClick(View v) {
-        	        	openBrowser("http://www.samsung.com");
+        	        	openBrowser(Status.SAMSUNG_URL);
         	        }
         	    });
                	
@@ -232,15 +263,11 @@ public class MainActivity extends Activity {
         }
     }
     
-    private void viewPage() {
-    	
-    	Intent intent = new Intent(this, HowToActivity.class);
-    	XMLData xmlData = new XMLData();
-    	xmlData.type = "howto";
+    protected void viewContentDetail(XMLData xmlData) {
+
+    	Intent intent = new Intent(this, ContentDetailActivity.class);
     	intent.putExtra("xmlData", xmlData);
-    	
     	startActivity(intent);
-    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
 	
 	private void openBrowser(String url) {

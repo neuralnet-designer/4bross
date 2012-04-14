@@ -36,14 +36,13 @@ public class WarrantyActivity extends PageActivity {
     }
 	
 	protected void viewPage(XMLData xmlData) {
-		if(xmlData.subType.equals("product")) {
-			Intent intent = new Intent(this, WarrantyActivity.class);
+		if(!xmlData.contentId.equals("") && !xmlData.contentURL.equals("")) {
+			Intent intent = new Intent(this, ContentDetailActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}
 		else {
-			Intent intent = new Intent(this, WarrantyDetailActivity.class);
-			xmlData.subType = "content_detail";
+			Intent intent = new Intent(this, WarrantyActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}

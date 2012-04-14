@@ -69,6 +69,12 @@ public class PageActivity extends Activity implements OnScrollListener {
     protected int LEVEL = 0;
     protected int COUNT = 0;
     
+    protected String FACEBOOK_URL = "";
+    protected String TWITTER_URL = "";
+    protected String CHAT_URL = "";
+    protected String CALL_NUMBER = "";
+    protected String CALL_YN = "";
+    
     protected String PRODUCTID = "";
     
     protected String CONTENTID = "";
@@ -143,29 +149,29 @@ public class PageActivity extends Activity implements OnScrollListener {
 				catch(NumberFormatException nfe) {
 				}
 				
-				if(TYPE.equals("contact") || TYPE.equals("faq") || TYPE.equals("warranty")) {
+				if(TYPE.equals("CONTACT") || TYPE.equals("FAQ") || TYPE.equals("WARRANTY")) {
 					
 					PRODUCTID = xmlData.productId;
 					
-					if(SUBTYPE.equals("product")) {
+					if(SUBTYPE.equals("PRODUCT")) {
 						if(LEVEL > 1 && COUNT == 0) {
-							if(TYPE.equals("contact") || TYPE.equals("faq")) {
-								SUBTYPE = "content_list";
-							}
-							else if(TYPE.equals("warranty")) {
-								//SUBTYPE = "content_detail";
+							if(TYPE.equals("CONTACT") || TYPE.equals("FAQ")) {
+								SUBTYPE = "CONTENT";
+								if(TYPE.equals("CONTACT")) {
+			            			FACEBOOK_URL = xmlData.facebookURL;
+			            			TWITTER_URL = xmlData.twitterURL;
+			            			CHAT_URL = xmlData.chatURL;
+			            			CALL_NUMBER = xmlData.callNumber;
+			            			CALL_YN = xmlData.callYN;
+								}
 							}
 						}
 						else {
 							LEVEL++;
 						}
 					}
-					else if(SUBTYPE.equals("content_list")) {
-						//SUBTYPE = "content_detail";
-						//CONTENTID = xmlData.contentId;
-					}
 				}
-				else if(TYPE.equals("howto")) {				
+				else if(TYPE.equals("HOWTO")) {				
 					CHANNELID = xmlData.channelId;
 					CATEGORYID = xmlData.categoryId;
 				}
@@ -304,7 +310,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 		        
 		        try {
 		        	
-		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=category&siteCode=" + Status.SITECODE + "&channelId=" + CHANNELID;
+		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=HOWTO_CATEGORY&siteCode=" + Status.SITECODE + "&channelId=" + CHANNELID;
 		        	//Logger.d(XMLURL);
 		        	URL url = new URL(XMLURL);
 		            
@@ -455,7 +461,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		} 
 		            		
 		            		if(tag.equals("type")) {
-		            			xmlData.type = xpp.nextText();		                      
+		            			xmlData.type = xpp.nextText();
 		            		}
 		            		if(tag.equals("subType")) {
 		            			xmlData.subType = xpp.nextText();		                      
@@ -466,6 +472,14 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		if(tag.equals("count")) {
 		            			xmlData.count = xpp.nextText();		                      
 		            		}
+		            		
+		            		if(tag.equals("orgType")) {
+		            			xmlData.orgType = xpp.nextText();		                      
+		            		}
+		            		if(tag.equals("orgContentId")) {
+		            			xmlData.orgContentId = xpp.nextText();		                      
+		            		}
+		            			
 		            		if(tag.equals("productId")) {
 		            			xmlData.productId = xpp.nextText();		                      
 		            		} 
@@ -476,19 +490,19 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            			xmlData.productImage = xpp.nextText();		                      
 		            		} 
 		            		if(tag.equals("facebookURL")) {
-		            			xmlData.facebookURL = xpp.nextText();		                      
+		            			xmlData.facebookURL = xpp.nextText();	
 		            		}
 		            		if(tag.equals("twitterURL")) {
-		            			xmlData.twitterURL = xpp.nextText();		                      
+		            			xmlData.twitterURL = xpp.nextText();	
 		            		} 
 		            		if(tag.equals("chatURL")) {
-		            			xmlData.chatURL = xpp.nextText();		                      
+		            			xmlData.chatURL = xpp.nextText();
 		            		} 
 		            		if(tag.equals("callNumber")) {
-		            			xmlData.callNumber = xpp.nextText();		                      
+		            			xmlData.callNumber = xpp.nextText();			            			
 		            		} 
 		            		if(tag.equals("callYN")) {
-		            			xmlData.callYN = xpp.nextText();		                      
+		            			xmlData.callYN = xpp.nextText();
 		            		} 
 		            		
 		            		if(tag.equals("contentId")) {
@@ -496,6 +510,12 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		} 
 		            		if(tag.equals("title")) {
 		            			xmlData.title = xpp.nextText();		                      
+		            		}
+		            		if(tag.equals("contentURL")) {
+		            			xmlData.contentURL = xpp.nextText();		                      
+		            		}
+		            		if(tag.equals("stepCount")) {
+		            			xmlData.stepCount = xpp.nextText();		                      
 		            		}
 		            		
 		            		if(tag.equals("channelGroup")) {
@@ -516,9 +536,9 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		if(tag.equals("scheduleImage")) {
 		            			xmlData.scheduleImage = xpp.nextText();
 		            		}
-		            		if(tag.equals("title")) {                      
-		            			xmlData.title = xpp.nextText() ;
-		            		}
+		            		//if(tag.equals("title")) {                      
+		            		//	xmlData.title = xpp.nextText() ;
+		            		//}
 		            		if(tag.equals("fileURL")) {
 		            			xmlData.fileURL = xpp.nextText();
 		            		}
@@ -534,11 +554,14 @@ public class PageActivity extends Activity implements OnScrollListener {
 		            		if(tag.equals("thumbnail")) {
 		            			xmlData.thumbnail = xpp.nextText();
 		            		}
-		            		if(tag.equals("scheduleDate")) {                	  
+		            		if(tag.equals("scheduleDate")) {
+		            			/*
 		            			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		            			Date date = new Date(xpp.nextText());
 		            			String dateString = sdf.format(date);
 		            			xmlData.scheduleDate = dateString;
+		            			*/
+		            			xmlData.scheduleDate = xpp.nextText();
 		            		}
 		            		if(tag.equals("scheduleTime")) {
 		            			xmlData.scheduleTime = xpp.nextText();

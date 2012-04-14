@@ -451,7 +451,7 @@ public class PlayerActivity extends Activity
 		        
 		        try {
 		        	
-		        	String XMLURL = "http://www.samsungsupport.com/spstv/rss/android.jsp?type=video_log&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID;
+		        	String XMLURL = "http://www.samsungsupport.com/spstv/rss/android.jsp?type=VIDEO_LOG&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID;
 		        	//Logger.d(XMLURL);
 
 		        	URL url = new URL(XMLURL);
