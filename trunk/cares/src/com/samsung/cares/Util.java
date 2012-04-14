@@ -77,5 +77,14 @@ public class Util {
 		return hexString.toString();
 	}
 
-
+	public static int parseInt(String str, int defaultInt) {
+		int resultInt = 0;
+		try {
+			resultInt = Integer.parseInt(str);
+		}
+		catch(NumberFormatException nfe) {
+			resultInt = defaultInt;
+		}
+		return resultInt;
+	}
 }

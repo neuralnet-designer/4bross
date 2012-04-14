@@ -133,7 +133,7 @@ public class DetailActivity extends ActivityGroup {
     	
     	try {
         	
-        	String XMLURL = "http://www.samsungsupport.com/spstv/rss/android.jsp?type=poll&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID + "&isHelpful=" + isHelpful;
+        	String XMLURL = "http://www.samsungsupport.com/spstv/rss/android.jsp?type=POLL&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID + "&isHelpful=" + isHelpful;
             
         	URL url = new URL(XMLURL);
         	Logger.d(XMLURL);

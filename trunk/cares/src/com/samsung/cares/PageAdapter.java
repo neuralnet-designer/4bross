@@ -67,10 +67,13 @@ public class PageAdapter extends BaseAdapter {
     	XMLData xmlData = (XMLData)xmlDataList.get(position);
     	
     	Logger.d("--------------------------");
-    	Logger.d(xmlData.type);
-    	Logger.d(xmlData.channelId);
+    	Logger.d("[" + position + "] type : " + xmlData.type);
+    	Logger.d("[" + position + "] orgType : " + xmlData.orgType);
+    	Logger.d("[" + position + "] subType : " + xmlData.subType);
+    	Logger.d("[" + position + "] contentId : " + xmlData.contentId);
+    	Logger.d("[" + position + "] scheduleId : " + xmlData.scheduleId);
     	
-    	if(xmlData.type.equals("howto")) {
+    	if(xmlData.type.equals("HOWTO")) {
     		
     		if(xmlData.scheduleId.equals("")) {
     		
@@ -118,7 +121,7 @@ public class PageAdapter extends BaseAdapter {
     	}
     	else {
     		
-    		if(xmlData.subType.equals("product")) {
+    		if(xmlData.subType.equals("PRODUCT")) {
     		
 	    		vi = inflater.inflate(R.layout.page_list_product, null);
 					
