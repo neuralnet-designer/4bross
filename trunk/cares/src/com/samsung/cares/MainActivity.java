@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
@@ -34,11 +35,11 @@ import android.widget.AbsListView.OnScrollListener;
 public class MainActivity extends Activity {
 	
     public final int VIEW_PAGE_NUM = 2;
-    int nowPage = 0;
+    private int nowPage = 0;
     
-	ViewPager mainViewPager = null;
-    MainPagerAdapter mainPageAdapter = null;
-    Context context = null;
+    private ViewPager mainViewPager = null;
+    private MainPagerAdapter mainPageAdapter = null;
+    private Context context = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

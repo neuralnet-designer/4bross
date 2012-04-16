@@ -7,7 +7,7 @@
 	android:paddingTop="10dip"
 	android:paddingBottom="10dip"
 	android:paddingLeft="5dip"
-	android:paddingRight="5dip"
+	android:paddingRight="10dip"
 	>
 	<ImageView
 	    android:id="@+id/thumbnail"
@@ -37,6 +37,5 @@
         android:layout_width="76dip"
 		android:layout_height="31dip"
 		android:layout_centerVertical="true"
-	    android:layout_alignParentRight="true"
-  		/>
+	    android:layout_alignParentRight="true" />
 </RelativeLayout>  
