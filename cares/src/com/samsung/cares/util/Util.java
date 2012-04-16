@@ -1,4 +1,4 @@
-package com.samsung.cares;
+package com.samsung.cares.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import com.samsung.cares.common.Status;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

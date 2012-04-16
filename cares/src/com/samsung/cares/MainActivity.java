@@ -3,6 +3,10 @@ package com.samsung.cares;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 
@@ -34,8 +39,8 @@ public class MainActivity extends Activity {
 	ViewPager mainViewPager = null;
     MainPagerAdapter mainPageAdapter = null;
     Context context = null;
-	
-	@Override
+    
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -63,7 +68,79 @@ public class MainActivity extends Activity {
         });
     }
 	
-	OnClickListener onClickListener = new OnClickListener() {
+	public void pageCheck(int pageNum){
+		/*
+		if(pageNum <= 0){
+			bt_prev.setEnabled(false);
+		}else if(pageNum >= VIEW_PAGE_NUM-1){
+			bt_next.setEnabled(false);
+		}else{
+			bt_prev.setEnabled(true);			
+			bt_next.setEnabled(true);
+		}
+		*/
+		nowPage = pageNum;
+    }
+	
+	private final View.OnClickListener contactListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+	       	Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+	       	XMLData xmlData = new XMLData();
+	       	xmlData.type = "CONTACT";
+	       	xmlData.subType = "PRODUCT";
+	       	xmlData.level = "0";
+	       	intent.putExtra("xmlData", xmlData);
+	       	startActivity(intent);
+    	}
+    };
+    
+    private final View.OnClickListener howToListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+	       	Intent intent = new Intent(MainActivity.this, HowToActivity.class);
+	       	XMLData xmlData = new XMLData();
+	       	xmlData.type = "HOWTO";
+	       	intent.putExtra("xmlData", xmlData);
+	       	startActivity(intent);
+    	}
+    };
+    
+    private final View.OnClickListener faqListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+	       	Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+	       	XMLData xmlData = new XMLData();
+	       	xmlData.type = "FAQ";
+	       	xmlData.subType = "PRODUCT";
+	       	xmlData.level = "0";
+	       	intent.putExtra("xmlData", xmlData);
+	       	startActivity(intent);
+    	}
+    };
+    
+    private final View.OnClickListener warrantyListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+	       	Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+	       	XMLData xmlData = new XMLData();
+	       	xmlData.type = "WARRANTY";
+	       	xmlData.subType = "PRODUCT";
+	       	xmlData.level = "0";
+	       	intent.putExtra("xmlData", xmlData);
+	       	startActivity(intent);
+    	}
+    };
+    
+    private final View.OnClickListener trackingListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		Intent intent = new Intent(MainActivity.this, TrackingActivity.class);
+    		startActivity(intent);
+    	}
+    };
+    
+    private final View.OnClickListener pageListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
@@ -79,20 +156,43 @@ public class MainActivity extends Activity {
 			mainViewPager.setCurrentItem(nowPage);
 		}
     };
-	
-	public void pageCheck(int pageNum){
-		/*
-		if(pageNum <= 0){
-			bt_prev.setEnabled(false);
-		}else if(pageNum >= VIEW_PAGE_NUM-1){
-			bt_next.setEnabled(false);
-		}else{
-			bt_prev.setEnabled(true);			
-			bt_next.setEnabled(true);
-		}
-		*/
-		nowPage = pageNum;
-    }
+    
+    private final View.OnClickListener privacyListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		XMLData xmlData = new XMLData();
+        	xmlData.type = "PRIVACY";
+        	xmlData.contentURL = Status.PRIVACY_URL;
+        	viewContentDetail(xmlData);
+    	}
+    };
+    
+    private final View.OnClickListener legalListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		XMLData xmlData = new XMLData();
+        	xmlData.type = "LEGAL";
+        	xmlData.contentURL = Status.LEGAL_URL;
+        	viewContentDetail(xmlData);
+    	}
+    };
+    
+    private final View.OnClickListener aboutListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		XMLData xmlData = new XMLData();
+        	xmlData.type = "ABOUT";
+        	xmlData.contentURL = Status.ABOUT_URL;
+        	viewContentDetail(xmlData);
+    	}
+    };
+    
+    private final View.OnClickListener samsungListener = new View.OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		openBrowser(Status.SAMSUNG_URL);
+    	}
+    };
     
     private class MainPagerAdapter extends PagerAdapter{
     	
@@ -113,78 +213,34 @@ public class MainActivity extends Activity {
     		View view = null;
     		if(position == 0){
     			view = layoutInflater.inflate(R.layout.main_first, null);
-               	//view.findViewById(R.id.iv_one);
-               	//view.findViewById(R.id.imageView1).setOnClickListener(mPagerListener);
     			
     			ImageView contactView = (ImageView)view.findViewById(R.id.contact);
     			ImageView howToView = (ImageView)view.findViewById(R.id.how_to);
     			ImageView faqView = (ImageView)view.findViewById(R.id.faq);
     			ImageView warrantyView = (ImageView)view.findViewById(R.id.warranty);
     			ImageView trackingView = (ImageView)view.findViewById(R.id.tracking);
-    			//ImageView moreView = (ImageView)view.findViewById(R.id.more);
+    			ImageView moreView = (ImageView)view.findViewById(R.id.more);
     			
-    			contactView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	Intent intent = new Intent(MainActivity.this, ContactActivity.class);
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "CONTACT";
-    		        	xmlData.subType = "PRODUCT";
-    		        	xmlData.level = "0";
-    		        	intent.putExtra("xmlData", xmlData);
-    		        	startActivity(intent);
-    		        }
-    		    });
-    	        
-    	        howToView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	Intent intent = new Intent(MainActivity.this, HowToActivity.class);
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "HOWTO";
-    		        	intent.putExtra("xmlData", xmlData);
-    		        	startActivity(intent);
-    		        }
-    		    });
-    	        
-    	        faqView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	Intent intent = new Intent(MainActivity.this, FAQActivity.class);
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "FAQ";
-    		        	xmlData.subType = "PRODUCT";
-    		        	xmlData.level = "0";
-    		        	intent.putExtra("xmlData", xmlData);
-    		        	startActivity(intent);
-    		        }
-    		    });
-    	        
-    	        warrantyView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	Intent intent = new Intent(MainActivity.this, WarrantyActivity.class);
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "WARRANTY";
-    		        	xmlData.subType = "PRODUCT";
-    		        	xmlData.level = "0";
-    		        	intent.putExtra("xmlData", xmlData);
-    		        	startActivity(intent);
-    		        }
-    		    });
-    	        
-    	        trackingView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	Intent intent = new Intent(MainActivity.this, TrackingActivity.class);
-    		        	startActivity(intent);
-    		        }
-    		    });
-    	        
-    	        /*
-    	        moreView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	viewMore();
-    		        }
-    		    });
-    		    */
-    	        
-    	        view.findViewById(R.id.more).setOnClickListener(onClickListener);
+    			TextView contactTextView = (TextView)view.findViewById(R.id.contact_text);
+    			TextView howToTextView = (TextView)view.findViewById(R.id.how_to_text);
+    			TextView faqTextView = (TextView)view.findViewById(R.id.faq_text);
+    			TextView warrantyTextView = (TextView)view.findViewById(R.id.warranty_text);
+    			TextView trackingTextView = (TextView)view.findViewById(R.id.tracking_text);
+    			TextView moreTextView = (TextView)view.findViewById(R.id.more_text);
+    			
+    			contactView.setOnClickListener(contactListener);
+    			howToView.setOnClickListener(howToListener);
+    			faqView.setOnClickListener(faqListener);
+    			warrantyView.setOnClickListener(warrantyListener);
+    			trackingView.setOnClickListener(trackingListener);
+    			moreView.setOnClickListener(pageListener);
+    			
+    			contactTextView.setOnClickListener(contactListener);
+    			howToTextView.setOnClickListener(howToListener);
+    			faqTextView.setOnClickListener(faqListener);
+    			warrantyTextView.setOnClickListener(warrantyListener);
+    			trackingTextView.setOnClickListener(trackingListener);
+    			moreTextView.setOnClickListener(pageListener);
             }
     		else if(position == 1){
                	view = View.inflate(context, R.layout.main_more, null);
@@ -194,40 +250,22 @@ public class MainActivity extends Activity {
                	ImageView aboutView = (ImageView)view.findViewById(R.id.about);
                	ImageView samsungView = (ImageView)view.findViewById(R.id.samsung);
                	
-               	privacyView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "PRIVACY";
-    		        	xmlData.contentURL = Status.PRIVACY_URL;
-    		        	viewContentDetail(xmlData);
-    		        }
-    		    });
+               	TextView privacyTextView = (TextView)view.findViewById(R.id.privacy_text);
+               	TextView legalTextView = (TextView)view.findViewById(R.id.legal_text);
+               	TextView aboutTextView = (TextView)view.findViewById(R.id.about_text);
+               	TextView samsungTextView = (TextView)view.findViewById(R.id.samsung_text);
                	
-               	legalView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "LEGAL";
-    		        	xmlData.contentURL = Status.LEGAL_URL;
-    		        	viewContentDetail(xmlData);
-    		        }
-    		    });
+               	privacyView.setOnClickListener(privacyListener);
+               	legalView.setOnClickListener(legalListener);
+               	aboutView.setOnClickListener(aboutListener);
+               	samsungView.setOnClickListener(samsungListener);
                	
-               	aboutView.setOnClickListener(new View.OnClickListener() {
-    		        public void onClick(View v) {
-    		        	XMLData xmlData = new XMLData();
-    		        	xmlData.type = "ABOUT";
-    		        	xmlData.contentURL = Status.ABOUT_URL;
-    		        	viewContentDetail(xmlData);
-    		        }
-    		    });
+               	privacyTextView.setOnClickListener(privacyListener);
+               	legalTextView.setOnClickListener(legalListener);
+               	aboutTextView.setOnClickListener(aboutListener);
+               	samsungTextView.setOnClickListener(samsungListener);
                	
-               	samsungView.setOnClickListener(new View.OnClickListener() {
-        	        public void onClick(View v) {
-        	        	openBrowser(Status.SAMSUNG_URL);
-        	        }
-        	    });
-               	
-               	view.findViewById(R.id.back_button).setOnClickListener(onClickListener);
+               	view.findViewById(R.id.back_button).setOnClickListener(pageListener);
             }
     		
             ((ViewPager) collection).addView(view, position);

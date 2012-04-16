@@ -10,6 +10,9 @@ import java.util.Date;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

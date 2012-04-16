@@ -5,6 +5,10 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.ImageLoader;
+import com.samsung.cares.util.Logger;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -156,7 +160,7 @@ public class PageAdapter extends BaseAdapter {
     
     private void viewDetail(XMLData xmlData) {
     	
-    	Intent intent = new Intent(activity, DetailActivity.class);
+    	Intent intent = new Intent(activity, HowToDetailActivity.class);
     	intent.putExtra("xmlData", xmlData);
     	
     	activity.startActivity(intent);

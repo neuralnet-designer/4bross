@@ -3,6 +3,9 @@ package com.samsung.cares;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.common.XMLData;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -28,10 +31,10 @@ public class HowToActivity extends PageActivity {
         
         if(!CHANNELID.equals("")) {
 	        categorySpinner.setAdapter(spinnerAdapter);	        
-	        listView.addFooterView(footerView, null, false);
+	        //listView.addFooterView(footerView, null, false);
 	        listView.setOnScrollListener(this);
 	        
-	        setCategory();
+	        setHowToCategory();
         }
         
 		listView.setAdapter(pageAdapter);
@@ -43,7 +46,7 @@ public class HowToActivity extends PageActivity {
 	
 	protected void viewDetail(XMLData xmlData) {
 		
-		Intent intent = new Intent(this, DetailActivity.class);
+		Intent intent = new Intent(this, HowToDetailActivity.class);
 		intent.putExtra("xmlData", xmlData);
         startActivity(intent);
 	}

@@ -11,6 +11,11 @@ import java.util.Date;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle; 
@@ -30,7 +35,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class DetailActivity extends ActivityGroup {
+public class HowToDetailActivity extends ActivityGroup {
 	
 	//private DetailAdapter adapter;
 	private Activity activity;
@@ -45,7 +50,7 @@ public class DetailActivity extends ActivityGroup {
     	//setTheme(android.R.style.Theme_NoTitleBar_Fullscreen);
     	
         super.onCreate(savedInstanceState); 
-        setContentView(R.layout.page_detail); 
+        setContentView(R.layout.howto_detail); 
 
         xmlData = getIntent().getExtras().getParcelable("xmlData");
         //adapter = new DetailAdapter(this, xmlData);

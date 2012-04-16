@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.samsung.cares.common.XMLData;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CategoryAdapter extends BaseAdapter {
+public class HowToCategoryAdapter extends BaseAdapter {
     
 	private Context context;
 	private ArrayList<XMLData> xmlDataList;
 	private LayoutInflater inflater = null;
 
-	public CategoryAdapter(Context context, ArrayList<XMLData> xmlDataList) {
+	public HowToCategoryAdapter(Context context, ArrayList<XMLData> xmlDataList) {
 		this.context = context;
 		this.xmlDataList = xmlDataList;
 		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
