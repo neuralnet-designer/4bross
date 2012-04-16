@@ -10,12 +10,18 @@ import java.util.StringTokenizer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +50,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 	protected LinearLayout pageListView;
 	protected ListView listView;
 	
-	protected CategoryAdapter spinnerAdapter;
+	protected HowToCategoryAdapter spinnerAdapter;
     protected PageAdapter pageAdapter;
     protected ProgressBar loadingProgressBar;
     
@@ -56,6 +62,9 @@ public class PageActivity extends Activity implements OnScrollListener {
     protected LayoutInflater inflater;   
     protected View headerView;
     protected View footerView;
+    
+    protected LinearLayout footerButtonView;
+    protected LinearLayout footerLoadingView;
     
     protected ImageView logoView;
 	protected LinearLayout contactLayout;
@@ -109,7 +118,25 @@ public class PageActivity extends Activity implements OnScrollListener {
         //headerView = inflater.inflate(R.layout.page_list_header, null); 
         //headerView.setVisibility(View.VISIBLE);
         footerView = inflater.inflate(R.layout.page_list_footer, null); 
-        footerView.setVisibility(View.GONE);
+        //footerView.setVisibility(View.GONE);
+        
+        footerButtonView = (LinearLayout)footerView.findViewById(R.id.footer_button);
+        footerLoadingView = (LinearLayout)footerView.findViewById(R.id.footer_loading);
+        
+        homeButton = (ImageButton)footerView.findViewById(R.id.home_button);
+        backButton = (ImageButton)footerView.findViewById(R.id.back_button);
+        
+        homeButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	viewMain();
+	        }
+	    });
+        
+        backButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	finish();
+	        }
+	    });
         
         listView.setOnItemClickListener(new OnItemClickListener() {
         	@Override
@@ -187,7 +214,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 		categoryLayout.setVisibility(View.GONE);
 		categorySpinner = (Spinner)findViewById(R.id.category_spinner);     
         //categorySpinner.setVisibility(View.GONE);
-        spinnerAdapter = new CategoryAdapter(this, categoryList);
+        spinnerAdapter = new HowToCategoryAdapter(this, categoryList);
         
         categorySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
         	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -198,7 +225,9 @@ public class PageActivity extends Activity implements OnScrollListener {
 	        		CATEGORYID = xmlData.categoryId;
 	        		Logger.d("CATEGORYID:"+CATEGORYID);
 	        		loadingProgressBar.setVisibility(View.VISIBLE);
-	        		listView.addFooterView(footerView, null, false);
+	        		//listView.addFooterView(footerView, null, false);
+	        		footerButtonView.setVisibility(View.GONE);
+	        		footerLoadingView.setVisibility(View.GONE);
 	        		clearItems();
 	                addItems();
         		}
@@ -211,23 +240,8 @@ public class PageActivity extends Activity implements OnScrollListener {
         	
         	}
         });
-
-		homeButton = (ImageButton)findViewById(R.id.home_button);
-        backButton = (ImageButton)findViewById(R.id.back_button);
         
-        homeButton.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	viewMain();
-	        }
-	    });
-        
-        backButton.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	finish();
-	        }
-	    });
-        
-        //listView.addFooterView(footerView, null, false);
+        listView.addFooterView(footerView, null, false);
         //listView.setOnScrollListener(this);
         //listView.setAdapter(adapter);
         
@@ -254,6 +268,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 	protected void viewMain() {
 
     	Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     }
     
@@ -268,7 +283,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 
     protected void viewDetail(XMLData xmlData) {
     	
-    	Intent intent = new Intent(this, DetailActivity.class);
+    	Intent intent = new Intent(this, HowToDetailActivity.class);
     	intent.putExtra("xmlData", xmlData);
     	
     	startActivity(intent);
@@ -298,7 +313,7 @@ public class PageActivity extends Activity implements OnScrollListener {
         super.onDestroy();
     }
     
-    protected void setCategory() {
+    protected void setHowToCategory() {
 		
 		Runnable run = new Runnable() {
 			@Override
@@ -381,7 +396,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 			        }
 		        }
 		        catch (Exception e) {
-		        	Logger.d("Page - setCategory - Exception");
+		        	Logger.d("Page - setHowToCategory - Exception");
 		        	//e.printStackTrace();
 		        }
 			}
@@ -594,17 +609,20 @@ public class PageActivity extends Activity implements OnScrollListener {
 		        if(PAGENO == 1) {					
 					loadingProgressBar.setVisibility(View.GONE);
 					if(PAGECOUNT > PAGENO) {
-						footerView.setVisibility(View.VISIBLE);
+						//footerView.setVisibility(View.VISIBLE);
+						footerLoadingView.setVisibility(View.VISIBLE);
 					}
 					else {
-						//footerView.setVisibility(View.GONE);
-						listView.removeFooterView(footerView);
+						//listView.removeFooterView(footerView);
+						footerLoadingView.setVisibility(View.GONE);
 					}
 				}
 				else if(PAGECOUNT <= PAGENO) {
-					//footerView.setVisibility(View.GONE);
-					listView.removeFooterView(footerView);
+					//listView.removeFooterView(footerView);
+					footerLoadingView.setVisibility(View.GONE);
 				}
+		        
+		        footerButtonView.setVisibility(View.VISIBLE);
 				
 		        pageAdapter.notifyDataSetChanged();
 		        pageListView.setVisibility(View.VISIBLE);
@@ -618,9 +636,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 	
 	protected void clearItems() {
 		PAGENO = 0;
-		footerView.setVisibility(View.GONE);
-		//xmlDataList = null;
-		//xmlDataList = new ArrayList<XMLData>();
+		//footerView.setVisibility(View.GONE);
 		xmlDataList.clear();
 		pageAdapter.notifyDataSetChanged();
 	}
@@ -690,5 +706,29 @@ public class PageActivity extends Activity implements OnScrollListener {
             }
         });
         alertDialog.show();
+    }
+	
+	protected void openBrowser(String url) {
+    	
+    	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    	startActivity(intent);
+    }
+	
+	protected void call(String phoneNumber) {
+    	
+    	Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+    	
+    	/*
+    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP 
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    	intent.putExtra("xmlData", xmlData);
+    	
+    	Status.SCREEN = Status.SCREEN_ON;
+    	
+    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    	*/
+    	startActivity(intent);
+    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
 }

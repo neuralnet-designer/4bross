@@ -1,4 +1,4 @@
-package com.samsung.cares;
+package com.samsung.cares.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +23,7 @@ public class ImageLoader {
     private int stubId;
     private File cacheDir;
     
-    private final String TAG = "SPSN";
+    private final String TAG = "CARES";
     
     public ImageLoader(Context context, int stubId) {
         this.stubId = stubId;

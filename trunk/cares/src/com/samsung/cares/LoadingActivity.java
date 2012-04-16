@@ -7,6 +7,10 @@ import java.net.URL;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;

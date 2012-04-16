@@ -1,4 +1,4 @@
-package com.samsung.cares;
+package com.samsung.cares.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;

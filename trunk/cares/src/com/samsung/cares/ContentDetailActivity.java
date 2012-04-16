@@ -18,6 +18,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.samsung.cares.common.Status;
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle; 
@@ -242,7 +247,7 @@ public class ContentDetailActivity extends ActivityGroup {
     		
     		Logger.d("=====================================instantiateItem");
 
-    		view = layoutInflater.inflate(R.layout.page_faq_detail, null);			
+    		view = layoutInflater.inflate(R.layout.content_detail_webview, null);			
 			WebView webView = (WebView)view.findViewById(R.id.webView);
 			
 			webView.setWebViewClient(new WebViewClient() {

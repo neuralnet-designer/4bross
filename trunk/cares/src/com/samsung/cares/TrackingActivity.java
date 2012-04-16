@@ -3,6 +3,9 @@ package com.samsung.cares;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Util;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
