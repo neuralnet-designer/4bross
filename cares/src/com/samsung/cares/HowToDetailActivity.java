@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -43,6 +44,10 @@ public class HowToDetailActivity extends ActivityGroup {
     
     protected String CHANNELID = "";
     protected String SCHEDULEID = "";
+    
+    private LinearLayout footerButtonView;
+    private ImageButton homeButton;
+    private ImageButton backButton;
  
     /** Called when the activity is first created. */ 
     @Override 
@@ -77,8 +82,7 @@ public class HowToDetailActivity extends ActivityGroup {
         ImageButton yesButton = (ImageButton)findViewById(R.id.yes_button);
         yesButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
-	        	//setPoll(1);
-	        	call("2012865165");
+	        	setPoll(1);
 	        }
 	    });
 		
@@ -92,6 +96,23 @@ public class HowToDetailActivity extends ActivityGroup {
 		setScreen();
 		
 		Status.NETWORK = Util.checkNetworkStatus(this);
+		
+		footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
+        
+        homeButton = (ImageButton)findViewById(R.id.home_button);
+        backButton = (ImageButton)findViewById(R.id.back_button);
+        
+        homeButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	viewMain();
+	        }
+	    });
+        
+        backButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	finish();
+	        }
+	    });
     }
     
     @Override
@@ -99,6 +120,13 @@ public class HowToDetailActivity extends ActivityGroup {
 		super.onResume();
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+    
+    private void viewMain() {
+
+    	Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    }
     
     private void viewVideo(XMLData xmlData) {
     	
@@ -114,24 +142,6 @@ public class HowToDetailActivity extends ActivityGroup {
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     	startActivity(intent);
     	overridePendingTransition(R.anim.fade, R.anim.hold);
-    }
-    
-    private void call(String phoneNumber) {
-    	
-    	Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
-    	
-    	/*
-    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP 
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    	intent.putExtra("xmlData", xmlData);
-    	
-    	Status.SCREEN = Status.SCREEN_ON;
-    	
-    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    	*/
-    	startActivity(intent);
-    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
     
     private void setPoll(int isHelpful) {

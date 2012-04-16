@@ -76,6 +76,7 @@ public class PageAdapter extends BaseAdapter {
     	Logger.d("[" + position + "] subType : " + xmlData.subType);
     	Logger.d("[" + position + "] contentId : " + xmlData.contentId);
     	Logger.d("[" + position + "] scheduleId : " + xmlData.scheduleId);
+    	Logger.d("[" + position + "] fileURL : " + xmlData.fileURL);
     	
     	if(xmlData.type.equals("HOWTO")) {
     		
@@ -107,12 +108,14 @@ public class PageAdapter extends BaseAdapter {
 		    	}
 		    	holder.scheduleDate.setText(delHtmlTag(xmlData.scheduleDate));
 		    	holder.info = (ImageView)vi.findViewById(R.id.info);
-		    			
-		    	holder.info.setOnClickListener(new View.OnClickListener() {
-		    		public void onClick(View v) {
-		    			viewDetail((XMLData)xmlDataList.get(position));
-		    	    }
-		    	});
+		    	
+		    	if(!xmlData.orgType.equals("CONTACT")) {
+			    	holder.info.setOnClickListener(new View.OnClickListener() {
+			    		public void onClick(View v) {
+			    			viewDetail((XMLData)xmlDataList.get(position));
+			    	    }
+			    	});
+		    	}
 		    		
 			    holder.title = (TextView)vi.findViewById(R.id.title);
 			    holder.description = (TextView)vi.findViewById(R.id.description);

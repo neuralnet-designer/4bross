@@ -38,6 +38,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,17 +60,17 @@ public class ContentDetailActivity extends ActivityGroup {
 	//private DetailAdapter adapter;
 	private Activity activity;
 	private XMLData xmlData;
-	protected ProgressBar loadingProgressBar;
+	private ProgressBar loadingProgressBar;
 	
-	protected String TYPE = "";
-    protected String SUBTYPE = "";
-    protected int LEVEL = 0;
-    protected int COUNT = 0;
+	private String TYPE = "";
+	private String SUBTYPE = "";
+	private int LEVEL = 0;
+	private int COUNT = 0;
     
-    protected String PRODUCT_ID = "";
+	private String PRODUCT_ID = "";
     
-    protected String CONTENT_ID = "";
-    protected String CONTENT_URL = "";
+	private String CONTENT_ID = "";
+	private String CONTENT_URL = "";
 	
 	public int VIEW_PAGE_NUM;
     int nowPage = 0;
@@ -77,6 +78,10 @@ public class ContentDetailActivity extends ActivityGroup {
 	ViewPager contentViewPager = null;
 	ContentDetailPagerAdapter contentDetailPagerAdapter = null;
     Context context = null;
+    
+    private LinearLayout footerButtonView;
+    private ImageButton homeButton;
+    private ImageButton backButton;
     
     /** Called when the activity is first created. */ 
     @Override 
@@ -139,8 +144,25 @@ public class ContentDetailActivity extends ActivityGroup {
 				pageCheck(position);				
 			}
         });
-		
-		loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
+        
+        footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
+        
+        homeButton = (ImageButton)findViewById(R.id.home_button);
+        backButton = (ImageButton)findViewById(R.id.back_button);
+        
+        homeButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	viewMain();
+	        }
+	    });
+        
+        backButton.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	finish();
+	        }
+	    });
+        
+        loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
         //loadingProgressBar.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.GONE);
 		
@@ -157,6 +179,13 @@ public class ContentDetailActivity extends ActivityGroup {
 			contentViewPager.setCurrentItem(nowPage);
 		}
     };
+    
+    protected void viewMain() {
+
+    	Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(intent);
+    }
 	
 	public void pageCheck(int pageNum){
 		/*
@@ -261,6 +290,7 @@ public class ContentDetailActivity extends ActivityGroup {
 	            public void onProgressChanged(WebView view, int progress) {
 	            	if(progress == 100) {
 	            		loadingProgressBar.setVisibility(View.GONE);
+	            		footerButtonView.setVisibility(View.VISIBLE);
 	            	}
 	            	else if(loadingProgressBar.getVisibility() != View.VISIBLE) {
 	            		loadingProgressBar.setVisibility(View.VISIBLE);

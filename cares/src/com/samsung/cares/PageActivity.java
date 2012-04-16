@@ -65,6 +65,8 @@ public class PageActivity extends Activity implements OnScrollListener {
     
     protected LinearLayout footerButtonView;
     protected LinearLayout footerLoadingView;
+    protected ImageButton homeButton;
+	protected ImageButton backButton;
     
     protected ImageView logoView;
 	protected LinearLayout contactLayout;
@@ -96,9 +98,6 @@ public class PageActivity extends Activity implements OnScrollListener {
 	protected int PAGECOUNT;
 	protected int TOTALCOUNT;
 
-	protected ImageButton homeButton;
-	protected ImageButton backButton;
-	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
