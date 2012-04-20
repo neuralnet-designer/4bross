@@ -150,7 +150,7 @@ public class MainActivity extends Activity {
 				nowPage--;
 				pageCheck(nowPage);				
 			}
-			else if(id == R.id.more) {
+			else if(id == R.id.more_layout) {
 				nowPage++;
 				pageCheck(nowPage);
 			}
@@ -215,19 +215,12 @@ public class MainActivity extends Activity {
     		if(position == 0){
     			view = layoutInflater.inflate(R.layout.main_first, null);
     			
-    			ImageView contactView = (ImageView)view.findViewById(R.id.contact);
-    			ImageView howToView = (ImageView)view.findViewById(R.id.how_to);
-    			ImageView faqView = (ImageView)view.findViewById(R.id.faq);
-    			ImageView warrantyView = (ImageView)view.findViewById(R.id.warranty);
-    			ImageView trackingView = (ImageView)view.findViewById(R.id.tracking);
-    			ImageView moreView = (ImageView)view.findViewById(R.id.more);
-    			
-    			TextView contactTextView = (TextView)view.findViewById(R.id.contact_text);
-    			TextView howToTextView = (TextView)view.findViewById(R.id.how_to_text);
-    			TextView faqTextView = (TextView)view.findViewById(R.id.faq_text);
-    			TextView warrantyTextView = (TextView)view.findViewById(R.id.warranty_text);
-    			TextView trackingTextView = (TextView)view.findViewById(R.id.tracking_text);
-    			TextView moreTextView = (TextView)view.findViewById(R.id.more_text);
+    			View contactView = view.findViewById(R.id.contact_layout);
+    			View howToView = view.findViewById(R.id.how_to_layout);
+    			View faqView = view.findViewById(R.id.faq_layout);
+    			View warrantyView = view.findViewById(R.id.warranty_layout);
+    			View trackingView = view.findViewById(R.id.tracking_layout);
+    			View moreView = view.findViewById(R.id.more_layout);
     			
     			contactView.setOnClickListener(contactListener);
     			howToView.setOnClickListener(howToListener);
@@ -235,36 +228,19 @@ public class MainActivity extends Activity {
     			warrantyView.setOnClickListener(warrantyListener);
     			trackingView.setOnClickListener(trackingListener);
     			moreView.setOnClickListener(pageListener);
-    			
-    			contactTextView.setOnClickListener(contactListener);
-    			howToTextView.setOnClickListener(howToListener);
-    			faqTextView.setOnClickListener(faqListener);
-    			warrantyTextView.setOnClickListener(warrantyListener);
-    			trackingTextView.setOnClickListener(trackingListener);
-    			moreTextView.setOnClickListener(pageListener);
             }
     		else if(position == 1){
                	view = View.inflate(context, R.layout.main_more, null);
                	
-               	ImageView privacyView = (ImageView)view.findViewById(R.id.privacy);
-               	ImageView legalView = (ImageView)view.findViewById(R.id.legal);
-               	ImageView aboutView = (ImageView)view.findViewById(R.id.about);
-               	ImageView samsungView = (ImageView)view.findViewById(R.id.samsung);
-               	
-               	TextView privacyTextView = (TextView)view.findViewById(R.id.privacy_text);
-               	TextView legalTextView = (TextView)view.findViewById(R.id.legal_text);
-               	TextView aboutTextView = (TextView)view.findViewById(R.id.about_text);
-               	TextView samsungTextView = (TextView)view.findViewById(R.id.samsung_text);
+               	View privacyView = view.findViewById(R.id.privacy_layout);
+               	View legalView = view.findViewById(R.id.legal_layout);
+               	View aboutView = view.findViewById(R.id.about_layout);
+               	View samsungView = view.findViewById(R.id.samsung_layout);
                	
                	privacyView.setOnClickListener(privacyListener);
                	legalView.setOnClickListener(legalListener);
                	aboutView.setOnClickListener(aboutListener);
                	samsungView.setOnClickListener(samsungListener);
-               	
-               	privacyTextView.setOnClickListener(privacyListener);
-               	legalTextView.setOnClickListener(legalListener);
-               	aboutTextView.setOnClickListener(aboutListener);
-               	samsungTextView.setOnClickListener(samsungListener);
                	
                	view.findViewById(R.id.back_button).setOnClickListener(pageListener);
             }

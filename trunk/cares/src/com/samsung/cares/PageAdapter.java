@@ -32,7 +32,7 @@ public class PageAdapter extends BaseAdapter {
         this.activity = activity;
         this.xmlDataList = xmlDataList;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageLoader = new ImageLoader(activity.getApplicationContext(), R.drawable.thumbnail_bg);
+        imageLoader = new ImageLoader(activity.getApplicationContext(), R.drawable.thumbnail);
     }
 
     public int getCount() {
@@ -50,6 +50,11 @@ public class PageAdapter extends BaseAdapter {
     public static class ProductViewHolder {
     	public ImageView productImage;
         public TextView productName;
+    }
+    
+    public static class ContentViewHolder {
+    	public ImageView contentTypeImage;
+        public TextView contentTitle;
     }
     
     public static class HowToViewHolder {
@@ -80,50 +85,64 @@ public class PageAdapter extends BaseAdapter {
     	
     	if(xmlData.type.equals("HOWTO")) {
     		
-    		if(xmlData.scheduleId.equals("")) {
-    		
-	    		vi = inflater.inflate(R.layout.page_list_title, null);
-		    	HowToViewHolder holder = new HowToViewHolder();
-		    	holder.title = (TextView)vi.findViewById(R.id.title);
-		    	holder.count = (TextView)vi.findViewById(R.id.count);
-		    	vi.setTag(holder);
-		    		
-		    	holder.title.setText(delHtmlTag(xmlData.title));
-		    	if(!xmlData.count.equals("")) {
-		    		holder.count.setText("(" + delHtmlTag(xmlData.count) + ")");
-		    	}
+    		if(!xmlData.orgType.equals("CONTACT")) {
+    			
+    			if(xmlData.scheduleId.equals("")) {
+    	    		
+    	    		vi = inflater.inflate(R.layout.page_list_title, null);
+    		    	HowToViewHolder holder = new HowToViewHolder();
+    		    	holder.title = (TextView)vi.findViewById(R.id.title);
+    		    	holder.count = (TextView)vi.findViewById(R.id.count);
+    		    	vi.setTag(holder);
+    		    		
+    		    	holder.title.setText(delHtmlTag(xmlData.title));
+    		    	if(!xmlData.count.equals("")) {
+    		    		holder.count.setText("(" + delHtmlTag(xmlData.count) + ")");
+    		    	}
+        		}
+        		else {
+        	
+    		    	vi = inflater.inflate(R.layout.page_list_thumbnail, null);
+    		    			
+    		    	HowToViewHolder holder = new HowToViewHolder();
+    		    	holder.thumbnail = (ImageView)vi.findViewById(R.id.thumbnail);
+    		    	holder.scheduleDate = (TextView)vi.findViewById(R.id.schedule_date); 
+    		    			
+    		    	holder.thumbnail.setTag(xmlData.thumbnail);    			
+    		    	if(!xmlData.thumbnail.equals("")) {
+    		    		//holder.thumbnail.setBackgroundResource(R.drawable.border_thumbnail_selected);
+    		    	   	imageLoader.displayImage(xmlData.thumbnail, activity, holder.thumbnail);
+    		    	}
+    		    	holder.scheduleDate.setText(delHtmlTag(xmlData.scheduleDate));
+    		    	holder.info = (ImageView)vi.findViewById(R.id.info);
+    		    	
+    		    	holder.info.setOnClickListener(new View.OnClickListener() {
+    			    	public void onClick(View v) {
+    			    		viewDetail((XMLData)xmlDataList.get(position));
+    			        }
+    			    });
+    		    		
+    			    holder.title = (TextView)vi.findViewById(R.id.title);
+    			    holder.description = (TextView)vi.findViewById(R.id.description);
+    			        
+    				holder.title.setText(delHtmlTag(xmlData.title));
+    				holder.description.setText(delHtmlTag(xmlData.description));
+    				  
+    			    vi.setTag(holder);
+        		}
     		}
     		else {
-    	
-		    	vi = inflater.inflate(R.layout.page_list_thumbnail, null);
-		    			
-		    	HowToViewHolder holder = new HowToViewHolder();
-		    	holder.thumbnail = (ImageView)vi.findViewById(R.id.thumbnail);
-		    	holder.scheduleDate = (TextView)vi.findViewById(R.id.schedule_date); 
-		    			
-		    	holder.thumbnail.setTag(xmlData.thumbnail);    			
-		    	if(!xmlData.thumbnail.equals("")) {
-		    		//holder.thumbnail.setBackgroundResource(R.drawable.border_thumbnail_selected);
-		    	   	imageLoader.displayImage(xmlData.thumbnail, activity, holder.thumbnail);
-		    	}
-		    	holder.scheduleDate.setText(delHtmlTag(xmlData.scheduleDate));
-		    	holder.info = (ImageView)vi.findViewById(R.id.info);
+    			//how-to list for contact
+    			vi = inflater.inflate(R.layout.page_list_content, null);
+				
+    			ContentViewHolder holder = new ContentViewHolder();
+    			holder.contentTypeImage = (ImageView)vi.findViewById(R.id.thumbnail);
+		    	holder.contentTitle = (TextView)vi.findViewById(R.id.title); 
 		    	
-		    	if(!xmlData.orgType.equals("CONTACT")) {
-			    	holder.info.setOnClickListener(new View.OnClickListener() {
-			    		public void onClick(View v) {
-			    			viewDetail((XMLData)xmlDataList.get(position));
-			    	    }
-			    	});
-		    	}
-		    		
-			    holder.title = (TextView)vi.findViewById(R.id.title);
-			    holder.description = (TextView)vi.findViewById(R.id.description);
-			        
-				holder.title.setText(delHtmlTag(xmlData.title));
-				holder.description.setText(delHtmlTag(xmlData.description));
-				  
-			    vi.setTag(holder);
+		    	holder.contentTypeImage.setImageResource(R.drawable.content_how_to_icon);
+				holder.contentTitle.setText(delHtmlTag(xmlData.title));
+				    
+				vi.setTag(holder);
     		}
     	}
     	else {
@@ -148,11 +167,15 @@ public class PageAdapter extends BaseAdapter {
     		}
     		else {
     			
-    			vi = inflater.inflate(R.layout.page_list_faq, null);
+    			//faq list
+    			vi = inflater.inflate(R.layout.page_list_content, null);
 				
-		    	ProductViewHolder holder = new ProductViewHolder();
-		    	holder.productName = (TextView)vi.findViewById(R.id.title); 
-				holder.productName.setText(delHtmlTag(xmlData.title));
+    			ContentViewHolder holder = new ContentViewHolder();
+    			holder.contentTypeImage = (ImageView)vi.findViewById(R.id.thumbnail);
+		    	holder.contentTitle = (TextView)vi.findViewById(R.id.title); 
+		    	
+		    	holder.contentTypeImage.setImageResource(R.drawable.content_question_icon);
+				holder.contentTitle.setText(delHtmlTag(xmlData.title));
 				    
 				vi.setTag(holder);
     		}

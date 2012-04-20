@@ -15,7 +15,7 @@
 	    android:layout_height="46dip"
 	    android:layout_alignParentLeft="true"
 	    android:layout_centerVertical="true"
-	    android:src="@drawable/question_icon" />
+	    android:src="@drawable/thumbnail" />
 	<TextView
  	    android:id="@+id/title"
  	    android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
  	    android:layout_toLeftOf="@+id/info" 
  	    android:layout_centerVertical="true"
  	    android:ellipsize="end"
- 	    android:singleLine="true"
+ 	    android:singleLine="false"
  	    android:text=""
  	    android:textColor="#000000"
  	    android:textSize="7pt"
@@ -34,9 +34,9 @@
 	<ImageView 
  		android:id="@+id/info"  
   		android:layout_marginLeft="0dip"
-        android:background="@drawable/arrow"
-        android:layout_width="36dip"
-	    android:layout_height="36dip"
+        android:background="@drawable/arrow_btn"
+        android:layout_width="25dip"
+	    android:layout_height="56dip"
 	    android:layout_alignParentRight="true"
-  		/>
+	    android:layout_centerVertical="true" />
 </RelativeLayout>  
