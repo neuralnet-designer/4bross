@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.content.ActivityNotFoundException;
@@ -41,6 +42,7 @@ public class LoadingActivity extends Activity {
 	private int progressCount = 0;
 	
 	private boolean sentLog = false;
+	private boolean forceStop = false;
 	
 	private static final String PACKAGE_NAME = "com.samsung.cares";
 	private static final String MARKET_URI_PREFIX = "market://details?id=";
@@ -150,6 +152,7 @@ public class LoadingActivity extends Activity {
     	@Override
     	public void handleMessage(Message msg) {
     		super.handleMessage(msg);
+    		Logger.d("progressCount : " + progressCount);
     		if(progressCount >= SLEEP_TIME) {
     			if(sentLog) {
 	    			loadingProgressBar.setVisibility(View.GONE);
@@ -177,11 +180,11 @@ public class LoadingActivity extends Activity {
 	    			    builder.show();
 	    			    return;
 	    			}
-	    			else {
+	    			else if(!forceStop) {
 	    				Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
 	    				startActivityForResult(intent, 10);
+	    				finish();
 	    			}
-	    	        finish();
     			}
     			else {
     				SLEEP_TIME += 10;
@@ -203,8 +206,10 @@ public class LoadingActivity extends Activity {
     private void insertLog() {
     	
     	if(Status.NETWORK == Status.NETWORK_NONE) {
-    		Status.LAST_VERSION_CODE = Status.CURRENT_VERSION_CODE;
-    		sentLog = true;
+    		//Status.LAST_VERSION_CODE = Status.CURRENT_VERSION_CODE;
+    		//sentLog = true;
+    		forceStop = true;
+    		showAlertDialog("Connection");
     	}
     	else {
 		
@@ -227,7 +232,7 @@ public class LoadingActivity extends Activity {
 			            xpp.setInput(in, "utf-8");
 				         
 			            int eventType = xpp.getEventType();
-			            //boolean isNetworkError = true;
+			            boolean isNetworkError = true;
 			            
 			            while(eventType != XmlPullParser.END_DOCUMENT) { 
 			            	if(eventType == XmlPullParser.START_DOCUMENT) {
@@ -265,6 +270,7 @@ public class LoadingActivity extends Activity {
 			            	}
 			            	else if(eventType == XmlPullParser.END_TAG) { 
 			            		tag = xpp.getName();
+			            		isNetworkError = false;
 			            	}
 			            	else if(eventType == XmlPullParser.TEXT) {
 			            	}
@@ -272,10 +278,14 @@ public class LoadingActivity extends Activity {
 			            	eventType = xpp.next(); 
 			            }
 			            
-			            //isNetworkError = false;
+			            if(isNetworkError) {
+			            	forceStop = true;
+			            	showAlertDialog("Network");
+			            }
 			        }
 			        catch(Exception e) {
-			        	//showAlertDialog("Network");
+			        	forceStop = true;
+			        	showAlertDialog("Network");
 			        	e.printStackTrace();
 			        }
 			        
@@ -350,4 +360,72 @@ public class LoadingActivity extends Activity {
           }
         }
       }
+    
+    protected void showAlertDialog(String title) {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle(title);
+		alertDialog.setCancelable(true);
+        
+        if(title.equals("Network")) {
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
+	        	new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	            	dialog.dismiss();
+	                finish();
+	            }
+	        });
+        }
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
+        	alertDialog.setPositiveButton("Yes",
+            	new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	dialog.dismiss();
+                    finish();
+                }
+            });
+        	alertDialog.setNegativeButton("No", null);
+        }
+        
+        alertDialog.show();
+    }
+    
+    @Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    
+	    if(keyCode == KeyEvent.KEYCODE_BACK) {
+	    	//showAlertDialog("Exit");
+	    	//return false;
+	    	forceStop = true;
+	    	finish();
+	    }
+	    
+	    return super.onKeyDown(keyCode, event);
+	}
 }
