@@ -2,16 +2,14 @@ package com.samsung.cares;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.StringTokenizer;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.custom.CustomListView;
 import com.samsung.cares.util.Logger;
 import com.samsung.cares.util.Util;
 
@@ -22,13 +20,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -36,19 +32,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class PageActivity extends Activity implements OnScrollListener {
     
 	protected LinearLayout pageListView;
-	protected ListView listView;
+	protected CustomListView listView;
 	
 	protected HowToCategoryAdapter spinnerAdapter;
     protected PageAdapter pageAdapter;
@@ -63,7 +55,7 @@ public class PageActivity extends Activity implements OnScrollListener {
     protected View headerView;
     protected View footerView;
     
-    protected LinearLayout footerButtonView;
+    //protected LinearLayout footerButtonView;
     protected LinearLayout footerLoadingView;
     protected ImageButton homeButton;
 	protected ImageButton backButton;
@@ -110,7 +102,7 @@ public class PageActivity extends Activity implements OnScrollListener {
         lockListView = true;
         
         pageListView = (LinearLayout)findViewById(R.id.page_list);           
-        listView = (ListView)findViewById(R.id.list);
+        listView = (CustomListView)findViewById(R.id.list);
         pageAdapter = new PageAdapter(this, xmlDataList);
         
         inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);        
@@ -119,11 +111,11 @@ public class PageActivity extends Activity implements OnScrollListener {
         footerView = inflater.inflate(R.layout.page_list_footer, null); 
         //footerView.setVisibility(View.GONE);
         
-        footerButtonView = (LinearLayout)footerView.findViewById(R.id.footer_button);
+        //footerButtonView = (LinearLayout)footerView.findViewById(R.id.footer_button);
         footerLoadingView = (LinearLayout)footerView.findViewById(R.id.footer_loading);
         
-        homeButton = (ImageButton)footerView.findViewById(R.id.home_button);
-        backButton = (ImageButton)footerView.findViewById(R.id.back_button);
+        homeButton = (ImageButton)findViewById(R.id.home_button);
+        backButton = (ImageButton)findViewById(R.id.back_button);
         
         homeButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
@@ -225,7 +217,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 	        		Logger.d("CATEGORYID:"+CATEGORYID);
 	        		loadingProgressBar.setVisibility(View.VISIBLE);
 	        		//listView.addFooterView(footerView, null, false);
-	        		footerButtonView.setVisibility(View.GONE);
+	        		//footerButtonView.setVisibility(View.GONE);
 	        		footerLoadingView.setVisibility(View.GONE);
 	        		clearItems();
 	                addItems();
@@ -277,7 +269,7 @@ public class PageActivity extends Activity implements OnScrollListener {
     	intent.putExtra("xmlData", xmlData);
     	
     	startActivity(intent);
-    	overridePendingTransition(R.anim.fade, R.anim.hold);
+    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
 
     protected void viewDetail(XMLData xmlData) {
@@ -286,7 +278,7 @@ public class PageActivity extends Activity implements OnScrollListener {
     	intent.putExtra("xmlData", xmlData);
     	
     	startActivity(intent);
-    	overridePendingTransition(R.anim.fade, R.anim.hold);
+    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
     
     protected void viewVideo(XMLData xmlData) {
@@ -302,7 +294,7 @@ public class PageActivity extends Activity implements OnScrollListener {
     	
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     	startActivity(intent);
-    	overridePendingTransition(R.anim.fade, R.anim.hold);
+    	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
     
     @Override
@@ -621,7 +613,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 					footerLoadingView.setVisibility(View.GONE);
 				}
 		        
-		        footerButtonView.setVisibility(View.VISIBLE);
+		        //footerButtonView.setVisibility(View.VISIBLE);
 				
 		        pageAdapter.notifyDataSetChanged();
 		        pageListView.setVisibility(View.VISIBLE);

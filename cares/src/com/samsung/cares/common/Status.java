@@ -10,6 +10,8 @@ public class Status {
 	public static String PHONE;
 	public static String EMAIL;
 	
+	public static int DENSITY;
+	
 	public static int LAST_VERSION_CODE;
 	public static int CURRENT_VERSION_CODE;
 	public static String CURRENT_VERSION_NAME;

@@ -1,18 +1,9 @@
 package com.samsung.cares;
 
-import java.lang.reflect.Method;
-import java.util.Calendar;
-
 import com.samsung.cares.common.XMLData;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 

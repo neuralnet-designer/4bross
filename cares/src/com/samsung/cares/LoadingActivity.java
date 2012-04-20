@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -64,6 +65,11 @@ public class LoadingActivity extends Activity {
         Status.NETWORK = Util.checkNetworkStatus(this);
         Status.DEVICE = isTabletDevice() ? Status.DEVICE_TABLET : Status.DEVICE_PHONE;
         
+        DisplayMetrics metrics = new DisplayMetrics();    
+	    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+	    
+	    Status.DENSITY = metrics.densityDpi;
+        
         try {
 	        PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
 	        Status.CURRENT_VERSION_CODE = info.versionCode;
@@ -79,6 +85,7 @@ public class LoadingActivity extends Activity {
         Logger.d("PHONE : " + Status.PHONE);
         Logger.d("NETWORK : " + Status.NETWORK);
         Logger.d("DEVICE : " + Status.DEVICE);
+        Logger.d("DENSITY : " + Status.DENSITY);
         Logger.d("CURRENT_VERSION_CODE : " + Status.CURRENT_VERSION_CODE);
         Logger.d("CURRENT_VERSION_NAME : " + Status.CURRENT_VERSION_NAME);
         

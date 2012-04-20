@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.custom.CustomWebView;
 import com.samsung.cares.util.Logger;
 import com.samsung.cares.util.Util;
 
@@ -277,7 +278,7 @@ public class ContentDetailActivity extends ActivityGroup {
     		Logger.d("=====================================instantiateItem");
 
     		view = layoutInflater.inflate(R.layout.content_detail_webview, null);			
-			WebView webView = (WebView)view.findViewById(R.id.webView);
+    		CustomWebView webView = (CustomWebView)view.findViewById(R.id.webView);
 			
 			webView.setWebViewClient(new WebViewClient() {
 				public boolean shouldOverrideUrlLoading(WebView view, String url) {

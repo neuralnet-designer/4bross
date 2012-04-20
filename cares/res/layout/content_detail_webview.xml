@@ -5,8 +5,9 @@
     android:layout_height="wrap_content" 
     android:layout_width="fill_parent" 
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <WebView android:layout_height="wrap_content" 
-        android:layout_width="fill_parent" 
-        xmlns:android="http://schemas.android.com/apk/res/android" 
-        android:id="@+id/webView"/>
+    <com.samsung.cares.custom.CustomWebView
+        android:id="@+id/webView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+    />
 </LinearLayout>

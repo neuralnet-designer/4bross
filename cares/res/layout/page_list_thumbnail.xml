@@ -12,7 +12,7 @@
 	<ImageView
 		android:id="@+id/thumbnail"
 		android:layout_centerVertical="true"
-        android:src="@drawable/thumbnail_bg"
+        android:src="@drawable/thumbnail"
         android:layout_width="90dip"
 	    android:layout_height="50dip"
 		android:layout_alignParentLeft="true"
@@ -62,9 +62,10 @@
 	<ImageView 
  		android:id="@+id/info"  
   		android:layout_marginLeft="0dip"
-        android:background="@drawable/arrow"
-        android:layout_width="36dip"
-	    android:layout_height="36dip"
+        android:background="@drawable/arrow_btn"
+        android:layout_width="25dip"
+	    android:layout_height="56dip"
 	    android:layout_alignParentRight="true"
+	    android:layout_centerVertical="true"
   		/>
 </RelativeLayout>  

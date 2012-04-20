@@ -5,7 +5,7 @@
 	android:layout_height="fill_parent">
 	<ImageView
 		android:id="@+id/logo"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"			
 		android:background="@drawable/logo_bg"
 	/>
@@ -22,99 +22,139 @@
 		    	android:id="@+id/contact_layout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				>
-				<TableLayout  
-				    xmlns:android="http://schemas.android.com/apk/res/android"  
-				    android:id="@+id/tableLayout1"  
-				    android:layout_width="wrap_content"  
-				    android:layout_height="wrap_content"  
+				android:layout_height="wrap_content">
+				<TableLayout
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
 				    android:paddingTop="18dip"
-				    android:paddingBottom="8dip"
+				    android:paddingBottom="18dip"
 				    android:paddingLeft="10dip"
 				    android:paddingRight="10dip"
-				    android:shrinkColumns="*"  
-				    android:stretchColumns="*">  
-				    <TableRow  
-				        android:id="@+id/tableRow1"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent" 
-				        android:paddingBottom="5dip"
-				        android:gravity="center_horizontal">
-				        <ImageView
-				            android:id="@+id/facebook"
-				            android:layout_width="wrap_content"
-				            android:layout_height="wrap_content"
-				            android:src="@drawable/facebook_icon" />
-					    <ImageView
-					        android:id="@+id/twitter"
-					        android:layout_width="wrap_content"
-					        android:layout_height="wrap_content"
-					        android:layout_centerHorizontal="true"
-					        android:layout_centerVertical="true"
-					        android:src="@drawable/twitter_icon" />
-					    <ImageView
-					        android:id="@+id/chat"
-					        android:layout_width="wrap_content"
-					        android:layout_height="wrap_content"
-					        android:layout_centerHorizontal="true"
-					        android:layout_centerVertical="true"
-					        android:src="@drawable/chat_icon" />
-					    <ImageView
-					        android:id="@+id/call"
-					        android:layout_width="wrap_content"
-					        android:layout_height="wrap_content"
-					        android:layout_centerHorizontal="true"
-					        android:layout_centerVertical="true"
-					        android:src="@drawable/call_icon" />
-					</TableRow>
-					<TableRow  
-				        android:id="@+id/tableRow2"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent"
-				        android:paddingBottom="10dip"
-				        android:gravity="center_horizontal">  
-				        <TextView  
-				            android:id="@+id/TextView04"  
-				            android:layout_width="match_parent"  
-				            android:layout_height="wrap_content"  
-				            android:gravity="center"
-				            android:text="FACEBOOK"
-				            android:textSize="11dip"
-							android:textStyle="bold"
-							android:textColor="#000000"
-				        />  
-				        <TextView  
-				            android:id="@+id/TextView04"  
-				            android:layout_width="match_parent"  
-				            android:layout_height="wrap_content"  
-				            android:gravity="center"
-				            android:text="TWITTER" 
-				            android:textSize="11dip"
-							android:textStyle="bold"
-							android:textColor="#000000"
-				        />  
-				        <TextView  
-				            android:id="@+id/TextView03"  
-				            android:layout_width="match_parent"  
-				            android:layout_height="wrap_content"  
-				            android:gravity="center"
-				            android:text="CHAT"  
-				            android:textSize="11dip"
-							android:textStyle="bold"
-							android:textColor="#000000"
-				        />  
-				        <TextView  
-				            android:id="@+id/TextView04"  
-				            android:layout_width="match_parent"  
-				            android:layout_height="wrap_content"  
-				            android:gravity="center"
-				            android:text="CALL NOW"  
-				            android:textSize="11dip"
-							android:textStyle="bold"
-							android:textColor="#000000"
-				        />  
-				    </TableRow> 
+				    android:shrinkColumns="1">
+				    <TableRow            
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content">
+						<LinearLayout 
+				            android:orientation="horizontal"
+				            android:layout_height="match_parent"
+				            android:layout_weight="1">
+				            <LinearLayout 
+				                android:id="@+id/facebook_layout"
+					            android:orientation="vertical"
+					            android:gravity="center_horizontal"
+					            android:layout_width="fill_parent"
+					            android:layout_height="wrap_content">	
+								<ImageView
+						            android:id="@+id/facebook"
+						            android:layout_width="wrap_content"
+						            android:layout_height="wrap_content"
+						            android:src="@drawable/facebook_icon" />
+								<TextView  
+						            android:id="@+id/facebook_text"  
+						            android:layout_width="match_parent"  
+						            android:layout_height="wrap_content"  
+						            android:paddingTop="10dip"
+						            android:gravity="center"
+						            android:text="FACEBOOK"
+						            android:textSize="11dip"
+									android:textStyle="bold"
+									android:textColor="#000000" />  
+							</LinearLayout>
+				        </LinearLayout>
+				        <LinearLayout 
+				            android:orientation="horizontal"
+				            android:layout_height="match_parent"
+				            android:layout_weight="1">	
+				            <View
+				                android:layout_height="match_parent"
+				                android:layout_width="1dp"
+				                android:background="#dfdfdf"/>
+				            <LinearLayout 
+					            android:id="@+id/twitter_layout"
+					            android:orientation="vertical"
+					            android:gravity="center_horizontal"
+					            android:layout_width="fill_parent"
+					            android:layout_height="wrap_content">	
+						        <ImageView
+							        android:id="@+id/twitter"
+							        android:layout_width="wrap_content"
+							        android:layout_height="wrap_content"
+							        android:src="@drawable/twitter_icon" />
+						        <TextView  
+						            android:id="@+id/twitter_text"  
+						            android:layout_width="match_parent"  
+						            android:layout_height="wrap_content"
+						            android:paddingTop="10dip"
+						            android:gravity="center"
+						            android:text="TWITTER" 
+						            android:textSize="11dip"
+									android:textStyle="bold"
+									android:textColor="#000000" />  
+					        </LinearLayout>
+				        </LinearLayout>
+				        <LinearLayout 
+				            android:orientation="horizontal"
+				            android:layout_height="match_parent"
+				            android:layout_weight="1">	
+				            <View
+				                android:layout_height="match_parent"
+				                android:layout_width="1dp"
+				                android:background="#dfdfdf"/>
+				            <LinearLayout 
+					            android:id="@+id/chat_layout"
+					            android:orientation="vertical"
+					            android:gravity="center_horizontal"
+					            android:layout_width="fill_parent"
+					            android:layout_height="wrap_content">	
+						        <ImageView
+							        android:id="@+id/chat"
+							        android:layout_width="wrap_content"
+							        android:layout_height="wrap_content"
+							        android:src="@drawable/chat_icon" />
+						        <TextView  
+						            android:id="@+id/chat_text"  
+						            android:layout_width="match_parent"  
+						            android:layout_height="wrap_content"  
+						            android:paddingTop="10dip"
+						            android:gravity="center"
+						            android:text="CHAT"  
+						            android:textSize="11dip"
+									android:textStyle="bold"
+									android:textColor="#000000" />  
+						     </LinearLayout>
+				        </LinearLayout>
+				        <LinearLayout 
+				            android:orientation="horizontal"
+				            android:layout_height="match_parent"
+				            android:layout_weight="1">	
+				            <View
+				                android:layout_height="match_parent"
+				                android:layout_width="1dp"
+				                android:background="#dfdfdf"/>
+				            <LinearLayout 
+					            android:id="@+id/call_layout"
+					            android:orientation="vertical"
+					            android:gravity="center_horizontal"
+					            android:layout_width="fill_parent"
+					            android:layout_height="wrap_content">	
+						        <ImageView
+							        android:id="@+id/call"
+							        android:layout_width="wrap_content"
+							        android:layout_height="wrap_content"
+							        android:src="@drawable/call_icon" />
+						        <TextView  
+						            android:id="@+id/call_text"  
+						            android:layout_width="match_parent"  
+						            android:layout_height="wrap_content"  
+						            android:paddingTop="10dip"
+						            android:gravity="center"
+						            android:text="CALL NOW"  
+						            android:textSize="11dip"
+									android:textStyle="bold"
+									android:textColor="#000000" />  
+						     </LinearLayout>
+				        </LinearLayout>
+			      	</TableRow>  
 				</TableLayout>
 				<TextView
 					android:layout_width="fill_parent"
@@ -150,20 +190,58 @@
 				    android:paddingTop="7dip"
 				    android:paddingBottom="7dip"/>
 			</LinearLayout>
-		    <ListView
-			    android:id="@+id/list"
-			    android:layout_width="fill_parent"
-			    android:layout_height="fill_parent"
-			    android:layout_below="@+id/banner"
-			    android:drawSelectorOnTop="false"
-			    android:cacheColorHint="#00000000"
-			    android:divider="#d5d5d5"
-			    android:dividerHeight="0.5dip"
-			    android:footerDividersEnabled="false"
-			    android:headerDividersEnabled="false"
+			<RelativeLayout
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
+				<!--
+				<ListView
+				    android:id="@+id/list"
+				    android:layout_width="fill_parent"
+				    android:layout_height="fill_parent"
+				    android:drawSelectorOnTop="false"
+				    android:cacheColorHint="#00000000"
+				    android:divider="#d5d5d5"
+				    android:dividerHeight="0.5dip"
+				    android:footerDividersEnabled="false"
+				    android:headerDividersEnabled="false"
+				    />-->
+				    <!-- android:fadingEdge="none"  -->
+				<com.samsung.cares.custom.CustomListView
+			        android:id="@+id/list"
+				    android:layout_width="fill_parent"
+				    android:layout_height="fill_parent"
+				    android:drawSelectorOnTop="false"
+				    android:cacheColorHint="#00000000"
+				    android:divider="#d5d5d5"
+				    android:dividerHeight="0.5dip"
+				    android:footerDividersEnabled="false"
+				    android:headerDividersEnabled="false"
 			    />
-			    <!-- android:fadingEdge="none"  -->
-		</LinearLayout>
+				<LinearLayout
+					android:id="@+id/footer_button"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dip"
+					android:layout_marginRight="10dip"
+					android:gravity="right"
+					android:orientation="horizontal"
+					android:layout_alignParentBottom="true"
+	        		android:layout_alignParentLeft="true" >
+					<ImageButton
+						android:id="@+id/home_button"
+						android:background="@drawable/home_btn"
+						android:layout_width="76dip"
+						android:layout_height="31dip"/>
+					<ImageButton
+						android:id="@+id/back_button"
+						android:background="@drawable/back_btn"
+						android:layout_width="76dip"
+						android:layout_height="31dip"
+						android:layout_marginLeft="10dip"/>
+				</LinearLayout>
+			</RelativeLayout>
+		</LinearLayout>		
 	    <ProgressBar
 	    	android:layout_gravity="center"
 	    	android:layout_width="wrap_content"
@@ -173,3 +251,10 @@
 	    />
 	</FrameLayout>
 </LinearLayout>	
+
+
+	
+			
+
+	
+
