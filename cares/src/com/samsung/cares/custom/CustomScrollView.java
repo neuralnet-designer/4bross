@@ -15,10 +15,7 @@ public class CustomScrollView extends ScrollView {
 
 	public void onMeasure(int wspec, int hspec){
 	    super.onMeasure(wspec, hspec);
-	      
-	    //Logger.d("density"+Status.DENSITY);
-	    //Logger.d("density"+(int)(Status.DENSITY * 0.4375));
-	    this.setMeasuredDimension(this.getMeasuredWidth(), this.getMeasuredHeight() - (int)(Status.DENSITY * 0.4375)); // the padding you need. 
+	    this.setMeasuredDimension(this.getMeasuredWidth(), this.getMeasuredHeight() - (int)(Status.DENSITY * 0.34));
 	}
 	
 	/*

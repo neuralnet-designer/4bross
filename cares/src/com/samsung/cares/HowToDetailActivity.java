@@ -45,7 +45,7 @@ public class HowToDetailActivity extends ActivityGroup {
     protected String CHANNELID = "";
     protected String SCHEDULEID = "";
     
-    private LinearLayout footerButtonView;
+    //private LinearLayout footerButtonView;
     private ImageButton homeButton;
     private ImageButton backButton;
  
@@ -97,7 +97,7 @@ public class HowToDetailActivity extends ActivityGroup {
 		
 		Status.NETWORK = Util.checkNetworkStatus(this);
 		
-		footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
+		//footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
         
         homeButton = (ImageButton)findViewById(R.id.home_button);
         backButton = (ImageButton)findViewById(R.id.back_button);

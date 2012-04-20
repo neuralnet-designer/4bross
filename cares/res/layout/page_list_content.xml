@@ -11,8 +11,8 @@
 	>
 	<ImageView
 	    android:id="@+id/thumbnail"
-	    android:layout_width="46dip"
-	    android:layout_height="46dip"
+	    android:layout_width="40dip"
+	    android:layout_height="40dip"
 	    android:layout_alignParentLeft="true"
 	    android:layout_centerVertical="true"
 	    android:src="@drawable/thumbnail" />

@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
     	@Override
     	public void onClick(View v) {
     		Intent intent = new Intent(MainActivity.this, TrackingActivity.class);
-    		startActivity(intent);
+    		//startActivity(intent);
     	}
     };
     
@@ -147,6 +147,10 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 			int id = v.getId();
 			if(id == R.id.back_button) {
+				nowPage--;
+				pageCheck(nowPage);				
+			}
+			else if(id == R.id.home_button) {
 				nowPage--;
 				pageCheck(nowPage);				
 			}
@@ -243,6 +247,7 @@ public class MainActivity extends Activity {
                	samsungView.setOnClickListener(samsungListener);
                	
                	view.findViewById(R.id.back_button).setOnClickListener(pageListener);
+               	view.findViewById(R.id.home_button).setOnClickListener(pageListener);
             }
     		
             ((ViewPager) collection).addView(view, position);
@@ -315,26 +320,48 @@ public class MainActivity extends Activity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	protected void showAlertDialog(String title) {
+    protected void showAlertDialog(String title) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setTitle(title);
-        //alertDialog.setTitle("Attention");
+		alertDialog.setCancelable(true);
         
         if(title.equals("Network")) {
-        	alertDialog.setMessage("An error occurred while fetching data. Please try again later.");
-        	/*
-            alertDialog.setPositiveButton("Close",
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
 	        	new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) {
 	            	dialog.dismiss();
 	                finish();
 	            }
 	        });
-	        */
         }
-        if(title.equals("Exit")) {
-        	alertDialog.setMessage("Are you sure you want to exit the application?");
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
         	alertDialog.setPositiveButton("Yes",
             	new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {

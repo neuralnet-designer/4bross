@@ -80,7 +80,9 @@ public class ContentDetailActivity extends ActivityGroup {
 	ContentDetailPagerAdapter contentDetailPagerAdapter = null;
     Context context = null;
     
-    private LinearLayout footerButtonView;
+    //private LinearLayout footerButtonView;
+    private ImageButton contactButton;
+    private ImageButton faqButton;
     private ImageButton homeButton;
     private ImageButton backButton;
     
@@ -96,7 +98,7 @@ public class ContentDetailActivity extends ActivityGroup {
         Bundle bundle = getIntent().getExtras();
 		if(bundle != null) {
 				
-			XMLData xmlData = bundle.getParcelable("xmlData");
+			xmlData = bundle.getParcelable("xmlData");
 			
 			if(xmlData != null) {
 				
@@ -112,62 +114,105 @@ public class ContentDetailActivity extends ActivityGroup {
 		}
 		
 		activity = this;
-        
-        ViewGroup buttonView = (ViewGroup)findViewById(R.id.step_view);
-        
-        if(VIEW_PAGE_NUM > 1) {
-        	buttonView.setVisibility(View.VISIBLE);
-        	buttonView.requestFocus();
-	        for (int x = 0; x < VIEW_PAGE_NUM; x++) {
-	        	TextView button = (TextView)buttonView.getChildAt(x);
-	        	button.setVisibility(View.VISIBLE);
-		        button.setId(x);
-		        button.setText("Step " + (x + 1));
-		        button.setOnClickListener(onStepClickListener);
-	        }
-        }
-        
-        contentDetailPagerAdapter = new ContentDetailPagerAdapter(getApplicationContext());
-        
-        contentViewPager = (ViewPager)findViewById(R.id.contentViewPager);
-        contentViewPager.setAdapter(contentDetailPagerAdapter);
-        contentViewPager.setOffscreenPageLimit(VIEW_PAGE_NUM);
-        contentViewPager.setOnPageChangeListener(new OnPageChangeListener() {
-
-			@Override
-			public void onPageScrollStateChanged(int state) {}
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
-			@Override
-			public void onPageSelected(int position) {
-				pageCheck(position);				
-			}
-        });
-        
-        footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
-        
-        homeButton = (ImageButton)findViewById(R.id.home_button);
-        backButton = (ImageButton)findViewById(R.id.back_button);
-        
-        homeButton.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	viewMain();
-	        }
-	    });
-        
-        backButton.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	finish();
-	        }
-	    });
-        
-        loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
-        //loadingProgressBar.setVisibility(View.VISIBLE);
-        loadingProgressBar.setVisibility(View.GONE);
 		
 		Status.NETWORK = Util.checkNetworkStatus(this);
+        
+        if(Status.NETWORK == Status.NETWORK_NONE) {
+  			showAlertDialog("Connection");
+  		}
+  		else {
+        
+	        ViewGroup buttonView = (ViewGroup)findViewById(R.id.step_view);
+	        
+	        if(VIEW_PAGE_NUM > 1) {
+	        	buttonView.setVisibility(View.VISIBLE);
+	        	buttonView.requestFocus();
+		        for (int x = 0; x < VIEW_PAGE_NUM; x++) {
+		        	TextView button = (TextView)buttonView.getChildAt(x);
+		        	button.setVisibility(View.VISIBLE);
+			        button.setId(x);
+			        button.setText("Step " + (x + 1));
+			        button.setOnClickListener(onStepClickListener);
+		        }
+	        }
+	        
+	        contentDetailPagerAdapter = new ContentDetailPagerAdapter(getApplicationContext());
+	        
+	        contentViewPager = (ViewPager)findViewById(R.id.contentViewPager);
+	        contentViewPager.setAdapter(contentDetailPagerAdapter);
+	        contentViewPager.setOffscreenPageLimit(VIEW_PAGE_NUM);
+	        contentViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+	
+				@Override
+				public void onPageScrollStateChanged(int state) {}
+	
+				@Override
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+	
+				@Override
+				public void onPageSelected(int position) {
+					pageCheck(position);				
+				}
+	        });
+	        
+	        //footerButtonView = (LinearLayout)findViewById(R.id.footer_button);
+	        
+	        contactButton = (ImageButton)findViewById(R.id.contact_button);
+	        faqButton = (ImageButton)findViewById(R.id.faq_button);
+	        homeButton = (ImageButton)findViewById(R.id.home_button);
+	        backButton = (ImageButton)findViewById(R.id.back_button);
+	        
+	        if(TYPE.equals("FAQ") || TYPE.equals("WARRANTY")) {
+	        
+		        contactButton.setOnClickListener(new View.OnClickListener() {
+			        public void onClick(View v) {
+			        	if(xmlData != null) {
+				        	Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
+				        	xmlData.type = "CONTACT";
+				        	xmlData.contentId = "";
+				        	xmlData.contentURL = "";
+				        	intent.putExtra("xmlData", xmlData);
+				    		startActivity(intent);
+			        	}
+			        }
+			    });
+		        
+		        faqButton.setOnClickListener(new View.OnClickListener() {
+			        public void onClick(View v) {
+			        	if(xmlData != null) {
+				        	Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
+				        	xmlData.type = "FAQ";
+				        	xmlData.contentId = "";
+				        	xmlData.contentURL = "";
+				        	intent.putExtra("xmlData", xmlData);
+				    		startActivity(intent);
+			        	}
+			        }
+			    });
+	        }
+	        else {
+	        	contactButton.setVisibility(View.GONE);
+	        	faqButton.setVisibility(View.GONE);
+	        	homeButton.setImageResource(R.drawable.bottom_2_btn_home);
+	        	backButton.setImageResource(R.drawable.bottom_2_btn_back);
+	        }
+	        
+	        homeButton.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	viewMain();
+		        }
+		    });
+	        
+	        backButton.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	finish();
+		        }
+		    });
+	        
+	        loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
+	        //loadingProgressBar.setVisibility(View.VISIBLE);
+	        loadingProgressBar.setVisibility(View.GONE);
+  		}
     }
     
     OnClickListener onStepClickListener = new OnClickListener() {
@@ -222,22 +267,56 @@ public class ContentDetailActivity extends ActivityGroup {
     	return bitmap;
     }
     
-    private void showAlertDialog(String title) {
+    protected void showAlertDialog(String title) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(title);
+		alertDialog.setTitle(title);
+		alertDialog.setCancelable(true);
         
         if(title.equals("Network")) {
-        	alertDialog.setMessage("An error occurred while fetching data. Please try again later.");
-        	/*
-            alertDialog.setPositiveButton("Close",
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
 	        	new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) {
 	            	dialog.dismiss();
 	                finish();
 	            }
 	        });
-	        */
+        }
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
+        	alertDialog.setPositiveButton("Yes",
+            	new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	dialog.dismiss();
+                    finish();
+                }
+            });
+        	alertDialog.setNegativeButton("No", null);
         }
         
         alertDialog.show();
@@ -291,7 +370,7 @@ public class ContentDetailActivity extends ActivityGroup {
 	            public void onProgressChanged(WebView view, int progress) {
 	            	if(progress == 100) {
 	            		loadingProgressBar.setVisibility(View.GONE);
-	            		footerButtonView.setVisibility(View.VISIBLE);
+	            		//footerButtonView.setVisibility(View.VISIBLE);
 	            	}
 	            	else if(loadingProgressBar.getVisibility() != View.VISIBLE) {
 	            		loadingProgressBar.setVisibility(View.VISIBLE);

@@ -3,6 +3,8 @@ package com.samsung.cares;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -305,324 +307,341 @@ public class PageActivity extends Activity implements OnScrollListener {
     }
     
     protected void setHowToCategory() {
+    	
+    	Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK == Status.NETWORK_NONE) {
+  			showAlertDialog("Connection");
+  		}
+  		else {
 		
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				
-				String tag;
-		        XMLData xmlData = null;
-		        int selectedPosition = 0;
-		        
-		        try {
-		        	
-		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=HOWTO_CATEGORY&siteCode=" + Status.SITECODE + "&channelId=" + CHANNELID;
-		        	//Logger.d(XMLURL);
-		        	URL url = new URL(XMLURL);
-		            
-		            XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
-		            factory.setNamespaceAware(true); 
-		            XmlPullParser xpp = factory.newPullParser(); 
-		            
-		            InputStream in = url.openStream();
-		            xpp.setInput(in, "utf-8");
-		         
-		            int eventType = xpp.getEventType();
-		            int index = 1;
-		            
-		            while(eventType != XmlPullParser.END_DOCUMENT) { 
-		            	if(eventType == XmlPullParser.START_DOCUMENT) {
-		            	}
-		            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
-		            	}
-		            	else if(eventType == XmlPullParser.START_TAG) {
-		            		
-		            		tag = xpp.getName();                  
-		                  
-		            		if(tag.equals("channel")) {
-		            		}  
-		            		if(tag.equals("item")) {
-		            			xmlData = new XMLData();
-		            		}
-		            		if(tag.equals("channelId")) {
-		            			xmlData.channelId = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("categoryId")) {
-		            			xmlData.categoryId = xpp.nextText();
-		            			if( !xmlData.channelId.equals("") && CHANNELID.equals(xmlData.channelId) &&
-		            				!xmlData.categoryId.equals("") && CATEGORYID.equals(xmlData.categoryId)) {
-		            				selectedPosition = index;
-		            			}
-		            		} 
-		            		if(tag.equals("title")) {                      
-		            			xmlData.title = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("count")) {                      
-		            			xmlData.count = xpp.nextText() ;
-		            		}
-		            	}
-		            	else if(eventType == XmlPullParser.END_TAG) { 
-		            		tag = xpp.getName();
-		            		if(tag.equals("item")) {
-		            			categoryList.add(xmlData);
-		            			xmlData = null;
-		            			index++;
-		            		}
-		            	}
-		            	else if(eventType == XmlPullParser.TEXT) {
-		            	} 
-		            	
-		            	eventType = xpp.next(); 
-		            }
-		            
-		          //loadingProgressBar.setVisibility(View.GONE);
-			        spinnerAdapter.notifyDataSetChanged();
-			        pageListView.setVisibility(View.INVISIBLE);
-			        if(selectedPosition > 0) {
-			        	categorySpinner.setSelection(selectedPosition);
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					
+					String tag;
+			        XMLData xmlData = null;
+			        int selectedPosition = 0;
+			        
+			        try {
+			        	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=HOWTO_CATEGORY&siteCode=" + Status.SITECODE + "&channelId=" + CHANNELID;
+			        	//Logger.d(XMLURL);
+			        	URL url = new URL(XMLURL);
+			            
+			            XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+			            factory.setNamespaceAware(true); 
+			            XmlPullParser xpp = factory.newPullParser(); 
+			            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+			         
+			            int eventType = xpp.getEventType();
+			            int index = 1;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("channel")) {
+			            		}  
+			            		if(tag.equals("item")) {
+			            			xmlData = new XMLData();
+			            		}
+			            		if(tag.equals("channelId")) {
+			            			xmlData.channelId = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("categoryId")) {
+			            			xmlData.categoryId = xpp.nextText();
+			            			if( !xmlData.channelId.equals("") && CHANNELID.equals(xmlData.channelId) &&
+			            				!xmlData.categoryId.equals("") && CATEGORYID.equals(xmlData.categoryId)) {
+			            				selectedPosition = index;
+			            			}
+			            		} 
+			            		if(tag.equals("title")) {                      
+			            			xmlData.title = xpp.nextText() ;
+			            		}
+			            		if(tag.equals("count")) {                      
+			            			xmlData.count = xpp.nextText() ;
+			            		}
+			            	}
+			            	else if(eventType == XmlPullParser.END_TAG) { 
+			            		tag = xpp.getName();
+			            		if(tag.equals("item")) {
+			            			categoryList.add(xmlData);
+			            			xmlData = null;
+			            			index++;
+			            		}
+			            	}
+			            	else if(eventType == XmlPullParser.TEXT) {
+			            	} 
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			            
+			          //loadingProgressBar.setVisibility(View.GONE);
+				        spinnerAdapter.notifyDataSetChanged();
+				        pageListView.setVisibility(View.INVISIBLE);
+				        if(selectedPosition > 0) {
+				        	categorySpinner.setSelection(selectedPosition);
+				        }
+				        if(index > 1) { //there is no category, so layout should not be displayed.
+					        categoryLayout.setVisibility(View.VISIBLE);
+					        //categorySpinner.setVisibility(View.VISIBLE);
+				        }
 			        }
-			        if(index > 1) { //there is no category, so layout should not be displayed.
-				        categoryLayout.setVisibility(View.VISIBLE);
-				        //categorySpinner.setVisibility(View.VISIBLE);
+			        catch (Exception e) {
+			        	Logger.d("Page - setHowToCategory - Exception");
+			        	//e.printStackTrace();
 			        }
-		        }
-		        catch (Exception e) {
-		        	Logger.d("Page - setHowToCategory - Exception");
-		        	//e.printStackTrace();
-		        }
-			}
-		};
-		
-		Handler handler = new Handler();
-		handler.postDelayed(run, 1000);
+				}
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
 	}
 	
 	protected void addItems() {
-		lockListView = true;
-		PAGENO++;
 		
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				
-				String tag;
-		        XMLData xmlData = null;
-		        
-		        try {
-
-		            String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=" + TYPE + "&subType=" + SUBTYPE + "&level=" + LEVEL + "&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&pageNo=" + PAGENO + "&productId=" + PRODUCTID + "&channelId=" + CHANNELID + "&categoryId=" + CATEGORYID;
-		            Logger.d(XMLURL);
-		            URL url = new URL(XMLURL);
-		            
-		            XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
-		            factory.setNamespaceAware(true); 
-		            XmlPullParser xpp = factory.newPullParser(); 
-		            
-		            InputStream in = url.openStream();
-		            xpp.setInput(in, "utf-8");
-		         
-		            int eventType = xpp.getEventType();
-		            boolean isNetworkError = true;
-		            
-		            while(eventType != XmlPullParser.END_DOCUMENT) { 
-		            	if(eventType == XmlPullParser.START_DOCUMENT) {
-		            	}
-		            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
-		            	}
-		            	else if(eventType == XmlPullParser.START_TAG) {
-		            		
-		            		tag = xpp.getName();                  
-		                  
-		            		if(tag.equals("channel")) {
-		            			String strTotalCount = xpp.getAttributeValue(1);
-		            			String strRowsPerPage = xpp.getAttributeValue(2);
-		            			String strPageCount = xpp.getAttributeValue(3);
-		                	  
-		            			try {
-		            				TOTALCOUNT = Integer.parseInt(strTotalCount);
-		            			}
-		            			catch(NumberFormatException nfe) {
-		            			}
-		                	  
-		            			try {
-		            				ROWSPERPAGE = Integer.parseInt(strRowsPerPage);
-		            			}
-		            			catch(NumberFormatException nfe) {
-		            			}
-		                	  
-		            			try {
-		            				PAGECOUNT = Integer.parseInt(strPageCount);
-		            			}
-		            			catch(NumberFormatException nfe) {
-		            			}
-		            			
-		            			Logger.d("-------------------------------------");
-		            			Logger.d("PAGENO : " + PAGENO);
-		            			Logger.d("TOTALCOUNT : " + TOTALCOUNT);
-		            			Logger.d("ROWSPERPAGE : " + ROWSPERPAGE);
-		            			Logger.d("PAGECOUNT : " + PAGECOUNT);
-		            		}    
-		            		if(tag.equals("item")) {
-		            			xmlData = new XMLData();
-		            		} 
-		            		
-		            		if(tag.equals("type")) {
-		            			xmlData.type = xpp.nextText();
-		            		}
-		            		if(tag.equals("subType")) {
-		            			xmlData.subType = xpp.nextText();		                      
-		            		}
-		            		if(tag.equals("level")) {
-		            			xmlData.level = xpp.nextText();		                      
-		            		}  
-		            		if(tag.equals("count")) {
-		            			xmlData.count = xpp.nextText();		                      
-		            		}
-		            		
-		            		if(tag.equals("orgType")) {
-		            			xmlData.orgType = xpp.nextText();		                      
-		            		}
-		            		if(tag.equals("orgContentId")) {
-		            			xmlData.orgContentId = xpp.nextText();		                      
-		            		}
-		            			
-		            		if(tag.equals("productId")) {
-		            			xmlData.productId = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("productName")) {
-		            			xmlData.productName = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("productImage")) {
-		            			xmlData.productImage = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("facebookURL")) {
-		            			xmlData.facebookURL = xpp.nextText();	
-		            		}
-		            		if(tag.equals("twitterURL")) {
-		            			xmlData.twitterURL = xpp.nextText();	
-		            		} 
-		            		if(tag.equals("chatURL")) {
-		            			xmlData.chatURL = xpp.nextText();
-		            		} 
-		            		if(tag.equals("callNumber")) {
-		            			xmlData.callNumber = xpp.nextText();			            			
-		            		} 
-		            		if(tag.equals("callYN")) {
-		            			xmlData.callYN = xpp.nextText();
-		            		} 
-		            		
-		            		if(tag.equals("contentId")) {
-		            			xmlData.contentId = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("title")) {
-		            			xmlData.title = xpp.nextText();		                      
-		            		}
-		            		if(tag.equals("contentURL")) {
-		            			xmlData.contentURL = xpp.nextText();		                      
-		            		}
-		            		if(tag.equals("stepCount")) {
-		            			xmlData.stepCount = xpp.nextText();		                      
-		            		}
-		            		
-		            		if(tag.equals("channelGroup")) {
-		            			xmlData.channelGroup = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("channelTitle")) {
-		            			xmlData.channelTitle = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("channelId")) {
-		            			xmlData.channelId = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("categoryId")) {
-		            			xmlData.categoryId = xpp.nextText();
-		            		} 
-		            		if(tag.equals("scheduleId")) {
-		            			xmlData.scheduleId = xpp.nextText();
-		            		}
-		            		if(tag.equals("scheduleImage")) {
-		            			xmlData.scheduleImage = xpp.nextText();
-		            		}
-		            		//if(tag.equals("title")) {                      
-		            		//	xmlData.title = xpp.nextText() ;
-		            		//}
-		            		if(tag.equals("fileURL")) {
-		            			xmlData.fileURL = xpp.nextText();
-		            		}
-		            		if(tag.equals("HQFileURL")) {
-		            			xmlData.HQFileURL = xpp.nextText();
-		            		}
-		            		if(tag.equals("description")) {
-		            			xmlData.description = xpp.nextText();
-		            		}  
-		            		if(tag.equals("JPG")) {
-		            			xmlData.JPG = xpp.nextText();
-		            		}  
-		            		if(tag.equals("thumbnail")) {
-		            			xmlData.thumbnail = xpp.nextText();
-		            		}
-		            		if(tag.equals("scheduleDate")) {
-		            			/*
-		            			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		            			Date date = new Date(xpp.nextText());
-		            			String dateString = sdf.format(date);
-		            			xmlData.scheduleDate = dateString;
-		            			*/
-		            			xmlData.scheduleDate = xpp.nextText();
-		            		}
-		            		if(tag.equals("scheduleTime")) {
-		            			xmlData.scheduleTime = xpp.nextText();
-		            		}
-		            	}
-		            	else if(eventType == XmlPullParser.END_TAG) { 
-		            		tag = xpp.getName();
-		            		if(tag.equals("item")) {
-		            			xmlDataList.add(xmlData);
-		            			xmlData = null;
-		            		}
-		            		isNetworkError = false;
-		            	}
-		            	else if(eventType == XmlPullParser.TEXT) {
-		            	} 
-		            	
-		            	eventType = xpp.next(); 
-		            }
-		            
-		            if(isNetworkError) {
-		            	showAlertDialog("Network");
-		            }
-		        }
-		        catch (Exception e) {
-		        	Logger.d("Page - addItems - Exception");
-		        	showAlertDialog("Network");
-		        	e.printStackTrace();
-		        }
-				
-		        if(PAGENO == 1) {					
-					loadingProgressBar.setVisibility(View.GONE);
-					if(PAGECOUNT > PAGENO) {
-						//footerView.setVisibility(View.VISIBLE);
-						footerLoadingView.setVisibility(View.VISIBLE);
+		Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK == Status.NETWORK_NONE) {
+  			showAlertDialog("Connection");
+  		}
+  		else {
+  			
+			lockListView = true;
+			PAGENO++;
+			
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					
+					String tag;
+			        XMLData xmlData = null;
+			        
+			        try {
+	
+			            String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=" + TYPE + "&subType=" + SUBTYPE + "&level=" + LEVEL + "&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&pageNo=" + PAGENO + "&productId=" + PRODUCTID + "&channelId=" + CHANNELID + "&categoryId=" + CATEGORYID;
+			            Logger.d(XMLURL);
+			            URL url = new URL(XMLURL);
+			            
+			            XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+			            factory.setNamespaceAware(true); 
+			            XmlPullParser xpp = factory.newPullParser(); 
+			            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+			         
+			            int eventType = xpp.getEventType();
+			            boolean isNetworkError = true;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("channel")) {
+			            			String strTotalCount = xpp.getAttributeValue(1);
+			            			String strRowsPerPage = xpp.getAttributeValue(2);
+			            			String strPageCount = xpp.getAttributeValue(3);
+			                	  
+			            			try {
+			            				TOTALCOUNT = Integer.parseInt(strTotalCount);
+			            			}
+			            			catch(NumberFormatException nfe) {
+			            			}
+			                	  
+			            			try {
+			            				ROWSPERPAGE = Integer.parseInt(strRowsPerPage);
+			            			}
+			            			catch(NumberFormatException nfe) {
+			            			}
+			                	  
+			            			try {
+			            				PAGECOUNT = Integer.parseInt(strPageCount);
+			            			}
+			            			catch(NumberFormatException nfe) {
+			            			}
+			            			
+			            			Logger.d("-------------------------------------");
+			            			Logger.d("PAGENO : " + PAGENO);
+			            			Logger.d("TOTALCOUNT : " + TOTALCOUNT);
+			            			Logger.d("ROWSPERPAGE : " + ROWSPERPAGE);
+			            			Logger.d("PAGECOUNT : " + PAGECOUNT);
+			            		}    
+			            		if(tag.equals("item")) {
+			            			xmlData = new XMLData();
+			            		} 
+			            		
+			            		if(tag.equals("type")) {
+			            			xmlData.type = xpp.nextText();
+			            		}
+			            		if(tag.equals("subType")) {
+			            			xmlData.subType = xpp.nextText();		                      
+			            		}
+			            		if(tag.equals("level")) {
+			            			xmlData.level = xpp.nextText();		                      
+			            		}  
+			            		if(tag.equals("count")) {
+			            			xmlData.count = xpp.nextText();		                      
+			            		}
+			            		
+			            		if(tag.equals("orgType")) {
+			            			xmlData.orgType = xpp.nextText();		                      
+			            		}
+			            		if(tag.equals("orgContentId")) {
+			            			xmlData.orgContentId = xpp.nextText();		                      
+			            		}
+			            			
+			            		if(tag.equals("productId")) {
+			            			xmlData.productId = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("productName")) {
+			            			xmlData.productName = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("productImage")) {
+			            			xmlData.productImage = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("facebookURL")) {
+			            			xmlData.facebookURL = xpp.nextText();	
+			            		}
+			            		if(tag.equals("twitterURL")) {
+			            			xmlData.twitterURL = xpp.nextText();	
+			            		} 
+			            		if(tag.equals("chatURL")) {
+			            			xmlData.chatURL = xpp.nextText();
+			            		} 
+			            		if(tag.equals("callNumber")) {
+			            			xmlData.callNumber = xpp.nextText();			            			
+			            		} 
+			            		if(tag.equals("callYN")) {
+			            			xmlData.callYN = xpp.nextText();
+			            		} 
+			            		
+			            		if(tag.equals("contentId")) {
+			            			xmlData.contentId = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("title")) {
+			            			xmlData.title = xpp.nextText();		                      
+			            		}
+			            		if(tag.equals("contentURL")) {
+			            			xmlData.contentURL = xpp.nextText();		                      
+			            		}
+			            		if(tag.equals("stepCount")) {
+			            			xmlData.stepCount = xpp.nextText();		                      
+			            		}
+			            		
+			            		if(tag.equals("channelGroup")) {
+			            			xmlData.channelGroup = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("channelTitle")) {
+			            			xmlData.channelTitle = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("channelId")) {
+			            			xmlData.channelId = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("categoryId")) {
+			            			xmlData.categoryId = xpp.nextText();
+			            		} 
+			            		if(tag.equals("scheduleId")) {
+			            			xmlData.scheduleId = xpp.nextText();
+			            		}
+			            		if(tag.equals("scheduleImage")) {
+			            			xmlData.scheduleImage = xpp.nextText();
+			            		}
+			            		//if(tag.equals("title")) {                      
+			            		//	xmlData.title = xpp.nextText() ;
+			            		//}
+			            		if(tag.equals("fileURL")) {
+			            			xmlData.fileURL = xpp.nextText();
+			            		}
+			            		if(tag.equals("HQFileURL")) {
+			            			xmlData.HQFileURL = xpp.nextText();
+			            		}
+			            		if(tag.equals("description")) {
+			            			xmlData.description = xpp.nextText();
+			            		}  
+			            		if(tag.equals("JPG")) {
+			            			xmlData.JPG = xpp.nextText();
+			            		}  
+			            		if(tag.equals("thumbnail")) {
+			            			xmlData.thumbnail = xpp.nextText();
+			            		}
+			            		if(tag.equals("scheduleDate")) {
+			            			/*
+			            			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			            			Date date = new Date(xpp.nextText());
+			            			String dateString = sdf.format(date);
+			            			xmlData.scheduleDate = dateString;
+			            			*/
+			            			xmlData.scheduleDate = xpp.nextText();
+			            		}
+			            		if(tag.equals("scheduleTime")) {
+			            			xmlData.scheduleTime = xpp.nextText();
+			            		}
+			            	}
+			            	else if(eventType == XmlPullParser.END_TAG) { 
+			            		tag = xpp.getName();
+			            		if(tag.equals("item")) {
+			            			xmlDataList.add(xmlData);
+			            			xmlData = null;
+			            		}
+			            		isNetworkError = false;
+			            	}
+			            	else if(eventType == XmlPullParser.TEXT) {
+			            	} 
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			            
+			            if(isNetworkError) {
+			            	showAlertDialog("Network");
+			            }
+			        }
+			        catch (Exception e) {
+			        	Logger.d("Page - addItems - Exception");
+			        	showAlertDialog("Network");
+			        	e.printStackTrace();
+			        }
+					
+			        if(PAGENO == 1) {					
+						loadingProgressBar.setVisibility(View.GONE);
+						if(PAGECOUNT > PAGENO) {
+							//footerView.setVisibility(View.VISIBLE);
+							footerLoadingView.setVisibility(View.VISIBLE);
+						}
+						else {
+							//listView.removeFooterView(footerView);
+							footerLoadingView.setVisibility(View.GONE);
+						}
 					}
-					else {
+					else if(PAGECOUNT <= PAGENO) {
 						//listView.removeFooterView(footerView);
 						footerLoadingView.setVisibility(View.GONE);
 					}
+			        
+			        //footerButtonView.setVisibility(View.VISIBLE);
+					
+			        pageAdapter.notifyDataSetChanged();
+			        pageListView.setVisibility(View.VISIBLE);
+					lockListView = false;
 				}
-				else if(PAGECOUNT <= PAGENO) {
-					//listView.removeFooterView(footerView);
-					footerLoadingView.setVisibility(View.GONE);
-				}
-		        
-		        //footerButtonView.setVisibility(View.VISIBLE);
-				
-		        pageAdapter.notifyDataSetChanged();
-		        pageListView.setVisibility(View.VISIBLE);
-				lockListView = false;
-			}
-		};
-		
-		Handler handler = new Handler();
-		handler.postDelayed(run, 1000);
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
 	}
 	
 	protected void clearItems() {
@@ -656,22 +675,44 @@ public class PageActivity extends Activity implements OnScrollListener {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setTitle(title);
-        //alertDialog.setTitle("Attention");
+		alertDialog.setCancelable(true);
         
         if(title.equals("Network")) {
-        	alertDialog.setMessage("An error occurred while fetching data. Please try again later.");
-        	/*
-            alertDialog.setPositiveButton("Close",
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
 	        	new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int which) {
 	            	dialog.dismiss();
 	                finish();
 	            }
 	        });
-	        */
         }
-        if(title.equals("Exit")) {
-        	alertDialog.setMessage("Are you sure you want to exit the application?");
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
         	alertDialog.setPositiveButton("Yes",
             	new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
