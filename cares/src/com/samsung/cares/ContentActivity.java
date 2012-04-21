@@ -1,6 +1,7 @@
 package com.samsung.cares;
 
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,6 +73,13 @@ public class ContentActivity extends PageActivity {
 	protected void viewPage(XMLData xmlData) {
 		if(!xmlData.contentId.equals("") && !xmlData.contentURL.equals("")) {
 			Intent intent = new Intent(this, ContentDetailActivity.class);
+			intent.putExtra("xmlData", xmlData);
+			startActivity(intent);
+		}
+		else if(xmlData.type.equals("WARRANTY") && !xmlData.warrantyId.equals("") && !xmlData.warrantyURL.equals("")) {
+			Intent intent = new Intent(this, ContentDetailActivity.class);
+			xmlData.contentId = xmlData.warrantyId;
+			xmlData.contentURL = xmlData.warrantyURL;
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
 		}

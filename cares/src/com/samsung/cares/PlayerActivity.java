@@ -134,6 +134,8 @@ public class PlayerActivity extends Activity
 		//setTitle(xmlData.title);
 		TextView title = (TextView)titleView.findViewById(R.id.text_title); 
 		title.setText(xmlData.title);
+		
+		Logger.d("Video URL : " + LINK);
 			
 		setBroadCastReceiver();
 		setLog();
