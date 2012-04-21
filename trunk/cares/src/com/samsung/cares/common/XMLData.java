@@ -23,6 +23,7 @@ public class XMLData implements Parcelable {
 	public String twitterURL = "";
 	public String chatURL = "";
 	public String callNumber = "";
+	public String warrantyId = "";
 	public String warrantyURL = "";
 	public String callYN = "";
 	public String lastYN = "";
@@ -102,6 +103,7 @@ public class XMLData implements Parcelable {
 		chatURL = in.readString();
 		callNumber = in.readString();
 		callYN = in.readString();
+		warrantyId = in.readString();
 		warrantyURL = in.readString();
 		lastYN = in.readString();
 			
@@ -181,6 +183,7 @@ public class XMLData implements Parcelable {
 		out.writeString(chatURL);
 		out.writeString(callNumber);
 		out.writeString(callYN);
+		out.writeString(warrantyId);
 		out.writeString(warrantyURL);
 		out.writeString(lastYN);
 			

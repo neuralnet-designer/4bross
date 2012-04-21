@@ -79,6 +79,8 @@ public class PageActivity extends Activity implements OnScrollListener {
     protected String CHAT_URL = "";
     protected String CALL_NUMBER = "";
     protected String CALL_YN = "";
+    protected String WARRANTY_ID = "";
+    protected String WARRANTY_URL = "";
     
     protected String PRODUCTID = "";
     
@@ -293,6 +295,8 @@ public class PageActivity extends Activity implements OnScrollListener {
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP 
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);    	
     	intent.putExtra("xmlData", xmlData);
+    	
+    	Status.SCREEN = Status.SCREEN_ON;
     	
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     	startActivity(intent);
@@ -528,6 +532,12 @@ public class PageActivity extends Activity implements OnScrollListener {
 			            		if(tag.equals("callYN")) {
 			            			xmlData.callYN = xpp.nextText();
 			            		} 
+			            		if(tag.equals("warrantyId")) {
+			            			xmlData.warrantyId = xpp.nextText();
+			            		} 
+			            		if(tag.equals("warrantyURL")) {
+			            			xmlData.warrantyURL = xpp.nextText();
+			            		} 
 			            		
 			            		if(tag.equals("contentId")) {
 			            			xmlData.contentId = xpp.nextText();		                      
@@ -749,17 +759,6 @@ public class PageActivity extends Activity implements OnScrollListener {
 	protected void call(String phoneNumber) {
     	
     	Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
-    	
-    	/*
-    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP 
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    	intent.putExtra("xmlData", xmlData);
-    	
-    	Status.SCREEN = Status.SCREEN_ON;
-    	
-    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    	*/
     	startActivity(intent);
     	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }

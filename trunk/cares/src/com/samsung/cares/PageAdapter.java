@@ -80,6 +80,9 @@ public class PageAdapter extends BaseAdapter {
     	Logger.d("[" + position + "] orgType : " + xmlData.orgType);
     	Logger.d("[" + position + "] subType : " + xmlData.subType);
     	Logger.d("[" + position + "] contentId : " + xmlData.contentId);
+    	Logger.d("[" + position + "] contentURL : " + xmlData.contentURL);
+    	Logger.d("[" + position + "] warrantyId : " + xmlData.warrantyId);
+    	Logger.d("[" + position + "] warrantyURL : " + xmlData.warrantyURL);
     	Logger.d("[" + position + "] scheduleId : " + xmlData.scheduleId);
     	Logger.d("[" + position + "] fileURL : " + xmlData.fileURL);
     	

@@ -65,6 +65,7 @@ public class ContentDetailActivity extends ActivityGroup {
 	
 	private String TYPE = "";
 	private String SUBTYPE = "";
+	private String ORGTYPE = "";
 	private int LEVEL = 0;
 	private int COUNT = 0;
     
@@ -83,6 +84,7 @@ public class ContentDetailActivity extends ActivityGroup {
     //private LinearLayout footerButtonView;
     private ImageButton contactButton;
     private ImageButton faqButton;
+    private ImageButton warrantyButton;
     private ImageButton homeButton;
     private ImageButton backButton;
     
@@ -104,6 +106,7 @@ public class ContentDetailActivity extends ActivityGroup {
 				
 				TYPE = xmlData.type;
 				SUBTYPE = xmlData.subType;
+				ORGTYPE = xmlData.orgType;
 				LEVEL = Util.parseInt(xmlData.level, 0);
 				COUNT = Util.parseInt(xmlData.count, 0);
 				VIEW_PAGE_NUM = Util.parseInt(xmlData.stepCount, 1);				
@@ -159,40 +162,73 @@ public class ContentDetailActivity extends ActivityGroup {
 	        
 	        contactButton = (ImageButton)findViewById(R.id.contact_button);
 	        faqButton = (ImageButton)findViewById(R.id.faq_button);
+	        warrantyButton = (ImageButton)findViewById(R.id.warranty_button);
 	        homeButton = (ImageButton)findViewById(R.id.home_button);
 	        backButton = (ImageButton)findViewById(R.id.back_button);
 	        
 	        if(TYPE.equals("FAQ") || TYPE.equals("WARRANTY")) {
-	        
-		        contactButton.setOnClickListener(new View.OnClickListener() {
-			        public void onClick(View v) {
-			        	if(xmlData != null) {
-				        	Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
-				        	xmlData.type = "CONTACT";
-				        	xmlData.contentId = "";
-				        	xmlData.contentURL = "";
-				        	intent.putExtra("xmlData", xmlData);
-				    		startActivity(intent);
-			        	}
-			        }
-			    });
+	        	
+	        	if(ORGTYPE.equals("CONTACT")) {
+	        		contactButton.setVisibility(View.GONE);
+	        	}
+	        	else {	        
+			        contactButton.setOnClickListener(new View.OnClickListener() {
+				        public void onClick(View v) {
+				        	if(xmlData != null) {
+					        	Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
+					        	xmlData.type = "CONTACT";
+					        	xmlData.contentId = "";
+					        	xmlData.contentURL = "";
+					        	intent.putExtra("xmlData", xmlData);
+					    		startActivity(intent);
+				        	}
+				        }
+				    });
+	        	}
+	        	
+	        	if(!ORGTYPE.equals("CONTACT") && TYPE.equals("FAQ")) {
+	        		faqButton.setVisibility(View.GONE);
+	        	}
+	        	else {
 		        
-		        faqButton.setOnClickListener(new View.OnClickListener() {
-			        public void onClick(View v) {
-			        	if(xmlData != null) {
-				        	Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
-				        	xmlData.type = "FAQ";
-				        	xmlData.contentId = "";
-				        	xmlData.contentURL = "";
-				        	intent.putExtra("xmlData", xmlData);
-				    		startActivity(intent);
-			        	}
-			        }
-			    });
+			        faqButton.setOnClickListener(new View.OnClickListener() {
+				        public void onClick(View v) {
+				        	if(xmlData != null) {
+				        		Intent intent = new Intent(ContentDetailActivity.this, ContentActivity.class);
+					        	xmlData.type = "FAQ";
+					        	xmlData.contentId = "";
+					        	xmlData.contentURL = "";
+					        	intent.putExtra("xmlData", xmlData);
+					    		startActivity(intent);
+				        	}
+				        }
+				    });
+	        	}
+	        	
+	        	if(TYPE.equals("WARRANTY")) {
+	        		warrantyButton.setVisibility(View.GONE);
+	        	}
+	        	else {
+		        
+			        warrantyButton.setOnClickListener(new View.OnClickListener() {
+				        public void onClick(View v) {
+				        	if(xmlData != null) {
+					        	Intent intent = new Intent(ContentDetailActivity.this, ContentDetailActivity.class);
+					        	xmlData.type = "WARRANTY";
+					        	xmlData.orgType = "";
+					        	xmlData.contentId = xmlData.warrantyId;
+					        	xmlData.contentURL = xmlData.warrantyURL;
+					        	intent.putExtra("xmlData", xmlData);
+					    		startActivity(intent);
+				        	}
+				        }
+				    });
+	        	}
 	        }
 	        else {
 	        	contactButton.setVisibility(View.GONE);
 	        	faqButton.setVisibility(View.GONE);
+	        	warrantyButton.setVisibility(View.GONE);
 	        	homeButton.setImageResource(R.drawable.bottom_2_btn_home);
 	        	backButton.setImageResource(R.drawable.bottom_2_btn_back);
 	        }
