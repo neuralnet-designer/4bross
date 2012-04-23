@@ -12,8 +12,10 @@
     <string name="msg_network_error">An error occurred while fetching data. Please try again later.</string>
     <string name="msg_no_connection">A network connection is required to complete this task. Please connect to a Wi-Fi or data network.</string>
     <string name="msg_exit">Are you sure you want to exit the application?</string>
-    
-    
+    <string name="msg_contact_alert1">If you are calling in regards to the phone you are currently using, please call</string>
+    <string name="msg_contact_alert2">from an alternate device to that Samsung can provide you with the best troubleshooting experience.</string>
+    <string name="button_call">Call Now</string>
+    <string name="button_cancel">Cancel</string>
     <string name="button_update">Update</string>
     <string name="button_exit">Exit</string>
     <string name="button_ok">OK</string>
