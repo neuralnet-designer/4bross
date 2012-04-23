@@ -233,7 +233,7 @@
 					android:layout_height="wrap_content"/>
 				<ImageButton
 					android:id="@+id/warranty_button"
-					android:background="@drawable/bottom_4_btn_faq"
+					android:background="@drawable/bottom_4_btn_warranty"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 				<ImageButton

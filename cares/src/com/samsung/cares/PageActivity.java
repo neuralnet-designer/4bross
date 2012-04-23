@@ -78,6 +78,7 @@ public class PageActivity extends Activity implements OnScrollListener {
     protected String TWITTER_URL = "";
     protected String CHAT_URL = "";
     protected String CALL_NUMBER = "";
+    protected String CALL_FULL_NUMBER = "";
     protected String CALL_YN = "";
     protected String WARRANTY_ID = "";
     protected String WARRANTY_URL = "";
@@ -184,6 +185,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 			            			TWITTER_URL = xmlData.twitterURL;
 			            			CHAT_URL = xmlData.chatURL;
 			            			CALL_NUMBER = xmlData.callNumber;
+			            			CALL_FULL_NUMBER = xmlData.callFullNumber;
 			            			CALL_YN = xmlData.callYN;
 								}
 							}
@@ -528,6 +530,9 @@ public class PageActivity extends Activity implements OnScrollListener {
 			            		} 
 			            		if(tag.equals("callNumber")) {
 			            			xmlData.callNumber = xpp.nextText();			            			
+			            		} 
+			            		if(tag.equals("callFullNumber")) {
+			            			xmlData.callFullNumber = xpp.nextText();			            			
 			            		} 
 			            		if(tag.equals("callYN")) {
 			            			xmlData.callYN = xpp.nextText();

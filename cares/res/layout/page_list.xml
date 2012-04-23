@@ -173,7 +173,7 @@
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:background="@drawable/title_bg"
+				android:background="@drawable/category_bg"
 				android:paddingTop="8dip"
 				android:paddingBottom="8dip"
 				>
