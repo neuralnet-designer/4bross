@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
     	@Override
     	public void onClick(View v) {
     		Intent intent = new Intent(MainActivity.this, TrackingActivity.class);
-    		//startActivity(intent);
+    		startActivity(intent);
     	}
     };
     

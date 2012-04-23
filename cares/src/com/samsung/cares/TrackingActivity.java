@@ -1,8 +1,5 @@
 package com.samsung.cares;
 
-import java.lang.reflect.Method;
-import java.util.Calendar;
-
 import com.samsung.cares.common.XMLData;
 import com.samsung.cares.util.Util;
 
@@ -11,19 +8,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.AbsListView.OnScrollListener;
+import android.widget.TextView;
 
 public class TrackingActivity extends Activity {
 	
@@ -52,28 +45,20 @@ public class TrackingActivity extends Activity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         
         ticketNoText = (EditText)findViewById(R.id.ticketNo);
-        ticketNoText.setInputType(0);
-        ticketNoText.setText("4114427808");
         imm.showSoftInput(ticketNoText, InputMethodManager.SHOW_IMPLICIT);
         
-        ticketNoText.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                EditText et = (EditText)findViewById(R.id.ticketNo);
-                et.setInputType(1);
-            }
-        });
-        
         phoneNoText = (EditText)findViewById(R.id.phoneNo);
-        phoneNoText.setInputType(0);
-        phoneNoText.setText("7327545137");
-        phoneNoText.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                EditText et = (EditText)findViewById(R.id.phoneNo);
-                et.setInputType(1);
-            }
-        });
+        
+        phoneNoText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if( actionId==EditorInfo.IME_ACTION_DONE || 
+						event!=null && event.getKeyCode()==KeyEvent.KEYCODE_ENTER ) {
+					continueButton.performClick();
+				}				
+				return false;
+			}
+		});
         
         findButton = (ImageButton)findViewById(R.id.find_button);
         continueButton = (ImageButton)findViewById(R.id.continue_button);
