@@ -53,9 +53,11 @@ public class TrackingAdapter extends BaseAdapter {
 		TransactionHolder holder = new TransactionHolder();
     	holder.ticketNo = (TextView)view.findViewById(R.id.ticketno);
     	holder.modelCode = (TextView)view.findViewById(R.id.modelcode);
+    	holder.requestDate = (TextView)view.findViewById(R.id.requestDate);
     		
     	holder.ticketNo.setText(xmlData.ticketNo);
     	holder.modelCode.setText(xmlData.modelCode);
+    	holder.requestDate.setText(xmlData.postingDate);
     	
     	view.setTag(holder);
     	
