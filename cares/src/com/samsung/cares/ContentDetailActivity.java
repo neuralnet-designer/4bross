@@ -41,6 +41,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -52,6 +53,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -76,6 +78,9 @@ public class ContentDetailActivity extends ActivityGroup {
 	
 	public int VIEW_PAGE_NUM;
     int nowPage = 0;
+    
+    private int[] stepLayoutIds = {R.id.step1_layout, R.id.step2_layout, R.id.step3_layout, R.id.step4_layout, R.id.step5_layout, R.id.step6_layout};
+	private int[] stepTextIds = {R.id.step1_text, R.id.step2_text, R.id.step3_text, R.id.step4_text, R.id.step5_text, R.id.step6_text};
     
 	ViewPager contentViewPager = null;
 	ContentDetailPagerAdapter contentDetailPagerAdapter = null;
@@ -125,17 +130,24 @@ public class ContentDetailActivity extends ActivityGroup {
   		}
   		else {
         
-	        ViewGroup buttonView = (ViewGroup)findViewById(R.id.step_view);
-	        
-	        if(VIEW_PAGE_NUM > 1) {
-	        	buttonView.setVisibility(View.VISIBLE);
-	        	buttonView.requestFocus();
+  			TableLayout tableLayout = (TableLayout)findViewById(R.id.step_view);
+  			
+  			if(VIEW_PAGE_NUM > 1) {
+	        	tableLayout.setVisibility(View.VISIBLE);
+	        	//tableLayout.requestFocus();
 		        for (int x = 0; x < VIEW_PAGE_NUM; x++) {
-		        	TextView button = (TextView)buttonView.getChildAt(x);
-		        	button.setVisibility(View.VISIBLE);
-			        button.setId(x);
-			        button.setText("Step " + (x + 1));
-			        button.setOnClickListener(onStepClickListener);
+		        	LinearLayout stepLayout = (LinearLayout)findViewById(stepLayoutIds[x]);
+		        	TextView stepText = (TextView)findViewById(stepTextIds[x]);
+		        	stepLayout.setVisibility(View.VISIBLE);
+		        	stepLayout.setId(x);
+			        stepText.setText("Step " + (x + 1));
+			        if(x > 0) {
+			        	stepText.setBackgroundResource(R.drawable.step_bg);
+			        }
+			        else {
+			        	stepText.setBackgroundColor(Color.WHITE);
+			        }
+		        	stepLayout.setOnClickListener(onStepClickListener);
 		        }
 	        }
 	        
@@ -270,16 +282,15 @@ public class ContentDetailActivity extends ActivityGroup {
     }
 	
 	public void pageCheck(int pageNum){
-		/*
-		if(pageNum <= 0){
-			bt_prev.setEnabled(false);
-		}else if(pageNum >= VIEW_PAGE_NUM-1){
-			bt_next.setEnabled(false);
-		}else{
-			bt_prev.setEnabled(true);			
-			bt_next.setEnabled(true);
-		}
-		*/
+		for (int x = 0; x < VIEW_PAGE_NUM; x++) {
+			TextView stepText = (TextView)findViewById(stepTextIds[x]);
+	        if(x == pageNum) {
+	        	stepText.setBackgroundColor(Color.WHITE);
+	        }
+	        else {
+	        	stepText.setBackgroundResource(R.drawable.step_bg);
+	        }
+        }
 		nowPage = pageNum;
     }
     
@@ -390,7 +401,7 @@ public class ContentDetailActivity extends ActivityGroup {
         public Object instantiateItem(View collection, int position) {
     		View view = null;
     		
-    		Logger.d("=====================================instantiateItem");
+    		Logger.d("instantiateItem : " + position);
 
     		view = layoutInflater.inflate(R.layout.content_detail_webview, null);			
     		CustomWebView webView = (CustomWebView)view.findViewById(R.id.webView);
