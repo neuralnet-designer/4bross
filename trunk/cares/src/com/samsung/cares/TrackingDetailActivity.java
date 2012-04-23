@@ -1,41 +1,33 @@
 package com.samsung.cares;
 
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import com.samsung.cares.common.XMLData;
-import com.samsung.cares.util.Logger;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.telephony.TelephonyManager;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.TextView;
 
-public class TrackingDetailActivity extends Activity {
+import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+
+public class TrackingDetailActivity extends Activity implements OnScrollListener {
 	
 	private ProgressBar loadingProgressBar;
 	
@@ -47,13 +39,6 @@ public class TrackingDetailActivity extends Activity {
 	private XMLData trackingDetailData;
 	
 	private LinearLayout detailLayout;
-	
-	private TextView ticketNoView;
-	private TextView statusDescView; 
-	private TextView ascNameView; 
-	private TextView postingDateView; 
-	private TextView scheduleDateView; 
-	private TextView completeDateView; 
 	
 	private ImageButton callButton;
 	private ImageButton uploadButton;
@@ -68,7 +53,6 @@ public class TrackingDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.page_tracking_detail);
-        
         loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
         loadingProgressBar.setVisibility(View.VISIBLE);
         
@@ -85,14 +69,7 @@ public class TrackingDetailActivity extends Activity {
 		}
 		
 		detailLayout = (LinearLayout)findViewById(R.id.detailLayout);
-        
-        ticketNoView = (TextView)findViewById(R.id.ticketNo);
-        statusDescView = (TextView)findViewById(R.id.statusDesc);
-        ascNameView = (TextView)findViewById(R.id.ascName);
-        postingDateView = (TextView)findViewById(R.id.postingDate);
-        scheduleDateView = (TextView)findViewById(R.id.scheduleDate);
-        completeDateView = (TextView)findViewById(R.id.completeDate);
-        
+       
         callButton = (ImageButton)findViewById(R.id.call_button);
         uploadButton = (ImageButton)findViewById(R.id.upload_button);
         
@@ -316,23 +293,55 @@ public class TrackingDetailActivity extends Activity {
 	}
 	
 	private void setTrackingDetail(XMLData xmlData) {
-		
 		detailLayout.setVisibility(View.VISIBLE);
 		
-		//if(xmlData.serviceType.equals("IH")) {
-			//inHomeLayout.setVisibility(View.VISIBLE);
-			//depotLayout.setVisibility(View.GONE);
-			ticketNoView.setText(xmlData.ticketNo);
-	        statusDescView.setText(xmlData.statusDesc);
-	        ascNameView.setText(xmlData.ascName);
-	        postingDateView.setText(xmlData.postingDate);
-	        scheduleDateView.setText(xmlData.scheduleDate);
-	        completeDateView.setText(xmlData.completeDate);
-	        if(xmlData != null && xmlData.ascPhone != null) {
-	        	callButton.setVisibility(View.VISIBLE);
-	        }
-		//}
-	        
+        ((TextView)findViewById(R.id.ticketNo)).setText(xmlData.ticketNo);
+        ((TextView)findViewById(R.id.statusDesc)).setText(xmlData.statusDesc);
+    	((TextView)findViewById(R.id.requestDate)).setText(xmlData.postingDate);
+
+        if(xmlData.serviceType.equals("IH")) {
+        	findViewById(R.id.tableRow_ServiceCenter).setVisibility(View.VISIBLE);
+        	findViewById(R.id.tableRow_ScheduleDate).setVisibility(View.VISIBLE);
+        	findViewById(R.id.tableRow_CompleteDate).setVisibility(View.VISIBLE);
+        	
+        	findViewById(R.id.tableRow_ReceivedDate).setVisibility(View.GONE);
+        	findViewById(R.id.tableRow_ShipDate).setVisibility(View.GONE);
+        	findViewById(R.id.tableRow_TrackingInfo).setVisibility(View.GONE);
+        
+        	((TextView)findViewById(R.id.ascName)).setText(xmlData.ascName);
+        	((TextView)findViewById(R.id.scheduleDate)).setText(xmlData.scheduleDate);
+        	((TextView)findViewById(R.id.completeDate)).setText(xmlData.completeDate);
+
+            if(xmlData != null && xmlData.ascPhone != null) {
+            	callButton.setVisibility(View.VISIBLE);
+            }
+
+		}else{
+        	findViewById(R.id.tableRow_ServiceCenter).setVisibility(View.GONE);
+        	findViewById(R.id.tableRow_ScheduleDate).setVisibility(View.GONE);
+        	findViewById(R.id.tableRow_CompleteDate).setVisibility(View.GONE);
+        	
+        	findViewById(R.id.tableRow_ReceivedDate).setVisibility(View.VISIBLE);
+        	findViewById(R.id.tableRow_ShipDate).setVisibility(View.VISIBLE);
+        	findViewById(R.id.tableRow_TrackingInfo).setVisibility(View.VISIBLE);	
+        	
+        	((TextView)findViewById(R.id.receivedDate)).setText(xmlData.receiveDate);
+        	((TextView)findViewById(R.id.shipDate)).setText(xmlData.shipDate);
+        	((TextView)findViewById(R.id.trackingInfo)).setText(xmlData.trackingNo);
+		} 
+         
 	    
+	}
+
+	@Override
+	public void onScroll(AbsListView arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
 	}
 }
