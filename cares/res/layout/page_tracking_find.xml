@@ -10,209 +10,206 @@
 		android:layout_height="wrap_content"			
 		android:background="@drawable/logo_bg"
 	/>	
-	<ScrollView 
-		android:orientation="vertical"
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:background="#ffffff"
-		>
-		<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:background="#ffffff">
+		android:layout_height="fill_parent">
 			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			   	android:id="@+id/detailLayout"
 				android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:paddingTop="20dip"
-				android:paddingLeft="20dip"
-				android:paddingRight="20dip">
-				<TextView
-					android:layout_width="wrap_content"
+				android:layout_height="wrap_content">			
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				   	android:id="@+id/detailLayout"
+					android:orientation="vertical"
+					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:paddingBottom="10dip"
-					android:text="Find Transaction Number"
-					android:textColor="#000000"
-					android:textSize="16dip"
-					android:textStyle="bold" />
-				<TableLayout  
-				    xmlns:android="http://schemas.android.com/apk/res/android"  
-				    android:id="@+id/tableLayout1"  
-				    android:layout_width="wrap_content"  
-				    android:layout_height="wrap_content"  
-				    android:paddingTop="20dip"
-				    android:paddingLeft="10dip"
-				    android:paddingRight="10dip"
-				    android:background="#f5f1f0"
-				    android:shrinkColumns="*"  
-				    android:stretchColumns="*">  
-				    <TableRow  
-				        android:id="@+id/tableRow1"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent" 
-				        android:paddingBottom="5dip"
-				        android:gravity="center_horizontal">
-				        <TextView
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:text="Home Phone : "
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-				        <EditText
-							android:id="@+id/phoneNo"  
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:hint=""
-							android:lines="1"
-							android:maxLength="200"
-							android:singleLine="true"
-							android:text=""
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-					</TableRow>
-					<TableRow  
-				        android:id="@+id/tableRow1"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent" 
+					android:paddingTop="20dip"
+					android:paddingLeft="20dip"
+					android:paddingRight="20dip">
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingBottom="10dip"
+						android:text="Find Transaction Number"
+						android:textColor="#000000"
+						android:textSize="16dip"
+						android:textStyle="bold" />
+					<TableLayout  
+					    xmlns:android="http://schemas.android.com/apk/res/android"  
+					    android:id="@+id/tableLayout1"  
+					    android:layout_width="wrap_content"  
+					    android:layout_height="wrap_content"  
+					    android:paddingTop="20dip"
+					    android:paddingLeft="10dip"
+					    android:paddingRight="10dip"
+					    android:background="#f5f1f0"
+					    android:shrinkColumns="*"  
+					    android:stretchColumns="*">  
+					    <TableRow  
+					        android:id="@+id/tableRow1"  
+					        android:layout_height="wrap_content"  
+					        android:layout_width="match_parent" 
+					        android:paddingBottom="5dip"
+					        android:gravity="center_horizontal">
+					        <TextView
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:text="Home Phone : "
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+					        <EditText
+								android:id="@+id/phoneNo"  
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:hint=""
+								android:lines="1"
+								android:maxLength="200"
+								android:singleLine="true"
+								android:text=""
+								android:inputType="number"
+								android:digits="0123456789"							
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+						</TableRow>
+						<TableRow  
+					        android:id="@+id/tableRow1"  
+					        android:layout_height="wrap_content"  
+					        android:layout_width="match_parent" 
+					        android:paddingTop="10dip"
+					        android:paddingBottom="5dip"
+					        android:gravity="center_horizontal">
+					        <TextView
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:text="First Name : "
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+					        <EditText
+								android:id="@+id/firstName"  
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:hint=""
+								android:lines="1"
+								android:maxLength="200"
+								android:singleLine="true"
+								android:text=""
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+						</TableRow>
+						<TableRow  
+					        android:id="@+id/tableRow1"  
+					        android:layout_height="wrap_content"  
+					        android:layout_width="match_parent" 
+					        android:paddingTop="10dip"
+					        android:paddingBottom="5dip"
+					        android:gravity="center_horizontal">
+					        <TextView
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:text="Last Name : "
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+					        <EditText
+								android:id="@+id/lastName"  
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:hint=""
+								android:lines="1"
+								android:maxLength="200"
+								android:singleLine="true"
+								android:text=""
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+						</TableRow>
+						<TableRow  
+					        android:id="@+id/tableRow1"  
+					        android:layout_height="wrap_content"  
+					        android:layout_width="match_parent" 
+					        android:paddingTop="10dip"
+					        android:paddingBottom="5dip"
+					        android:gravity="center_horizontal">
+					        <TextView
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:text="Zip Code : "
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+					        <EditText
+								android:id="@+id/zipCode"  
+								android:layout_weight="1"
+								android:layout_width="0dip"
+								android:layout_height="wrap_content"
+								android:paddingBottom="10dip"
+								android:hint=""
+								android:lines="1"
+								android:maxLength="200"
+								android:singleLine="true"
+								android:text=""
+								android:inputType="number"
+								android:digits="0123456789"									
+								android:textColor="#000000"
+								android:textSize="16dip"
+								android:textStyle="normal" />
+						</TableRow>
+					</TableLayout>
+					<LinearLayout
+				    	android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:orientation="horizontal"
 				        android:paddingTop="10dip"
-				        android:paddingBottom="5dip"
-				        android:gravity="center_horizontal">
-				        <TextView
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:text="First Name : "
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-				        <EditText
-							android:id="@+id/firstName"  
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:hint=""
-							android:lines="1"
-							android:maxLength="200"
-							android:singleLine="true"
-							android:text=""
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-					</TableRow>
-					<TableRow  
-				        android:id="@+id/tableRow1"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent" 
-				        android:paddingTop="10dip"
-				        android:paddingBottom="5dip"
-				        android:gravity="center_horizontal">
-				        <TextView
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:text="Last Name : "
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-				        <EditText
-							android:id="@+id/lastName"  
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:hint=""
-							android:lines="1"
-							android:maxLength="200"
-							android:singleLine="true"
-							android:text=""
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-					</TableRow>
-					<TableRow  
-				        android:id="@+id/tableRow1"  
-				        android:layout_height="wrap_content"  
-				        android:layout_width="match_parent" 
-				        android:paddingTop="10dip"
-				        android:paddingBottom="5dip"
-				        android:gravity="center_horizontal">
-				        <TextView
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:text="Zip Code : "
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-				        <EditText
-							android:id="@+id/zipCode"  
-							android:layout_weight="1"
-							android:layout_width="0dip"
-							android:layout_height="wrap_content"
-							android:paddingBottom="10dip"
-							android:hint=""
-							android:lines="1"
-							android:maxLength="200"
-							android:singleLine="true"
-							android:text=""
-							android:textColor="#000000"
-							android:textSize="16dip"
-							android:textStyle="normal" />
-					</TableRow>
-				</TableLayout>
-				<LinearLayout
-			    	android:layout_width="fill_parent"
-			        android:layout_height="wrap_content"
-			        android:orientation="horizontal"
-			        android:paddingTop="10dip"
-			        android:gravity="right">
-				    <ImageButton
-						android:id="@+id/submit_button"
-						android:background="@drawable/submit_btn"
-						android:layout_width="66dip"
-						android:layout_height="33dip"/>
-				</LinearLayout>
-				<LinearLayout
-				    android:layout_width="fill_parent"
-				    android:layout_height="match_parent"
-				    android:layout_marginTop="20dip"
-				    android:layout_marginRight="20dip"
-				    android:gravity="right"
-				    android:orientation="horizontal"
-				    android:visibility="visible" >
-					<ImageButton
-						android:id="@+id/home_button"
-						android:background="@drawable/home_btn"
-						android:layout_width="76dip"
-						android:layout_height="31dip"/>
-					<ImageButton
-						android:id="@+id/back_button"
-						android:background="@drawable/back_btn"
-						android:layout_width="76dip"
-						android:layout_height="31dip"
-						android:layout_marginLeft="10dip"/>
+				        android:gravity="right">
+					    <ImageButton
+							android:id="@+id/submit_button"
+							android:background="@drawable/submit_btn"
+							android:layout_width="66dip"
+							android:layout_height="33dip"/>
+					</LinearLayout>
 				</LinearLayout>
 			</LinearLayout>
-			<ProgressBar
-			   	android:layout_width="wrap_content" 
+			<LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:layout_alignParentBottom="true">
+				<ImageButton
+					android:id="@+id/home_button"
+					android:background="@drawable/bottom_2_btn_home"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+				<ImageButton
+					android:id="@+id/back_button"
+					android:background="@drawable/bottom_2_btn_back"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+			</LinearLayout>	
+	</RelativeLayout>
+	<ProgressBar
+	   	android:layout_width="wrap_content" 
         android:layout_height="wrap_content"    
         android:layout_gravity="center"
-			   	android:id="@+id/loading_progress"
-			   	android:indeterminateDrawable="@drawable/progress_medium"
-			   	
-						android:visibility="gone"
-			/>
-		</FrameLayout>
-	</ScrollView>
+	   	android:id="@+id/loading_progress"
+	   	android:indeterminateDrawable="@drawable/progress_medium"
+		android:visibility="gone"
+	/>	
 </LinearLayout>	
