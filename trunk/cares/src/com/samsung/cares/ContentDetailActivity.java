@@ -67,13 +67,13 @@ public class ContentDetailActivity extends ActivityGroup {
 	
 	private String TYPE = "";
 	private String SUBTYPE = "";
-	private String ORGTYPE = "";
 	private int LEVEL = 0;
 	private int COUNT = 0;
     
 	private String PRODUCT_ID = "";
-    
 	private String CONTENT_ID = "";
+	private String ORG_TYPE = "";
+	private String ORG_CONTENT_ID = "";
 	private String CONTENT_URL = "";
 	
 	public int VIEW_PAGE_NUM;
@@ -111,12 +111,13 @@ public class ContentDetailActivity extends ActivityGroup {
 				
 				TYPE = xmlData.type;
 				SUBTYPE = xmlData.subType;
-				ORGTYPE = xmlData.orgType;
 				LEVEL = Util.parseInt(xmlData.level, 0);
 				COUNT = Util.parseInt(xmlData.count, 0);
 				VIEW_PAGE_NUM = Util.parseInt(xmlData.stepCount, 1);				
 				PRODUCT_ID = xmlData.productId;
 				CONTENT_ID = xmlData.contentId;
+				ORG_TYPE = xmlData.orgType;
+				ORG_CONTENT_ID = xmlData.orgContentId;
 				CONTENT_URL = xmlData.contentURL;
 			}
 		}
@@ -129,7 +130,7 @@ public class ContentDetailActivity extends ActivityGroup {
   			showAlertDialog("Connection");
   		}
   		else {
-        
+  			
   			TableLayout tableLayout = (TableLayout)findViewById(R.id.step_view);
   			
   			if(VIEW_PAGE_NUM > 1) {
@@ -180,7 +181,7 @@ public class ContentDetailActivity extends ActivityGroup {
 	        
 	        if(TYPE.equals("FAQ") || TYPE.equals("WARRANTY")) {
 	        	
-	        	if(ORGTYPE.equals("CONTACT")) {
+	        	if(ORG_TYPE.equals("CONTACT")) {
 	        		contactButton.setVisibility(View.GONE);
 	        	}
 	        	else {	        
@@ -198,7 +199,7 @@ public class ContentDetailActivity extends ActivityGroup {
 				    });
 	        	}
 	        	
-	        	if(!ORGTYPE.equals("CONTACT") && TYPE.equals("FAQ")) {
+	        	if(!ORG_TYPE.equals("CONTACT") && TYPE.equals("FAQ")) {
 	        		faqButton.setVisibility(View.GONE);
 	        	}
 	        	else {

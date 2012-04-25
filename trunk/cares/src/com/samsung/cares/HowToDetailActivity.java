@@ -142,6 +142,8 @@ public class HowToDetailActivity extends ActivityGroup {
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     	startActivity(intent);
     	overridePendingTransition(R.anim.fade, R.anim.hold);
+    	
+    	setContentLog(xmlData.type, xmlData.productId, xmlData.scheduleId, xmlData.orgType, xmlData.orgContentId);
     }
     
     private void setPoll(int isHelpful) {
@@ -191,6 +193,64 @@ public class HowToDetailActivity extends ActivityGroup {
         	e.printStackTrace();
         }
     }
+    
+    protected void setContentLog(final String contentType, final String productId, final String contentId, final String orgContentType, final String orgContentId) {
+		
+		Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK != Status.NETWORK_NONE) {
+		
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+			        
+			        try {
+			        	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
+			        	Logger.d(XMLURL);
+	
+			        	URL url = new URL(XMLURL);
+			        	
+			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+				        factory.setNamespaceAware(true); 
+				        XmlPullParser xpp = factory.newPullParser(); 
+				            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+				         
+			            int eventType = xpp.getEventType();
+			            String tag;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("channel")) {
+			            			String strStatus = xpp.getAttributeValue(0);
+			            			String strMessage = xpp.getAttributeValue(1);
+			            		}  
+			            	}
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			        }
+			        catch(Exception e) {
+			        	Logger.d("Player - Exception");
+			        	//showAlertDialog("Network");
+			        	//e.printStackTrace();
+			        }
+				}
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
+	}
 
     private Bitmap getRemoteImage(String imageURL) {
     	Bitmap bitmap = null;
