@@ -79,9 +79,9 @@ public class TrackingFindActivity extends Activity {
 	        	String zipCode = zipCodeText.getText().toString().trim();
 
 	        	if( phoneNo.equals("") ) {
-	        		showResultDialog("Error", "Please input Home Phone No.");
+	        		showResultDialog("Error", "Please input Home Phone Number.");
 	        	} else if(!Util.isNumeric(phoneNo) || phoneNo.length() != 10) {
-		        	showResultDialog("Error", "Home Phone No must be valid.");
+		        	showResultDialog("Error", "Home Phone Number must be valid.");
 	        	} else if( firstName.equals("") ) {
 	        		showResultDialog("Error", "Please input First Name.");
 	        	} else if( lastName.equals("") ) {
@@ -96,7 +96,8 @@ public class TrackingFindActivity extends Activity {
     }
 	
 	private void viewMain() {
-    	Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     }
 	
