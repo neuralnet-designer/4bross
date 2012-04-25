@@ -8,7 +8,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,9 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
 import com.samsung.cares.custom.CustomListView;
 import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
 
 public class TrackingResultActivity extends Activity implements OnScrollListener {
 	
@@ -55,7 +59,7 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.page_tracking_result);
+        setContentView(R.layout.tracking_page_list);
         loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
         loadingProgressBar.setVisibility(View.VISIBLE);
         
@@ -110,90 +114,103 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
     }
 	
 	
-	private void listTickets(){
+	private void listTickets() {
+		
+		Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK == Status.NETWORK_NONE) {
+  			showAlertDialog("Connection");
+  		}
+  		else {
 
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				
-				String tag;
-				com.samsung.cares.common.XMLData xmlData = null;
-				int index = 0;
-				
-		        try {
-		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=tracking_find" 
-		        						+ "&phoneNo=" + phoneNo
-		        						+ "&firstName=" + firstName
-		        						+ "&lastName=" + lastName
-		        						+ "&zipCode=" + zipCode
-		        						;
-		        	
-		        	//Logger.d(XMLURL);
-		        	URL url = new URL(XMLURL);
-		        	
-		        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
-		            factory.setNamespaceAware(true); 
-		            XmlPullParser xpp = factory.newPullParser(); 
-		            
-		            InputStream in = url.openStream();
-		            xpp.setInput(in, "utf-8");
-		         
-		            int eventType = xpp.getEventType();		            
-		            
-		            while(eventType != XmlPullParser.END_DOCUMENT) { 
-		            	if(eventType == XmlPullParser.START_DOCUMENT) {
-		            	}
-		            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
-		            	}
-		            	else if(eventType == XmlPullParser.START_TAG) {
-		            		
-		            		tag = xpp.getName();                  
-		                  
-		            		if(tag.equals("item")) {
-		            			xmlData = new com.samsung.cares.common.XMLData();
-		            		} 
-		            		if(tag.equals("ticketNo")) {
-		            			xmlData.ticketNo = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("modelCode")) {
-		            			xmlData.modelCode = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("postingDate")) {
-		            			xmlData.postingDate = xpp.nextText();
-		            		} 
-		            	}
-		            	else if(eventType == XmlPullParser.END_TAG) { 
-		            		tag = xpp.getName();
-		            		if(tag.equals("item")) {
-		            			trList.add(xmlData);
-		            			index++;
-		            		}
-		            	}
-		            	else if(eventType == XmlPullParser.TEXT) {
-		            	} 
-		            	
-		            	eventType = xpp.next(); 
-		            }
-
-		        }
-		        catch (Exception e) {
-		        	Logger.d("Page - getTrackingDetail - Exception");
-		        	e.printStackTrace();
-		        }
-		        
-				listView.setAdapter(trAdapter);
-				if(index>0){
-					listView.setVisibility(View.VISIBLE);
-				}else{
-					noResult.setVisibility(View.VISIBLE);
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					
+					String tag;
+					XMLData xmlData = null;
+					int index = 0;
+					
+			        try {
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=TRACKING_FIND" 
+			        						+ "&phoneNo=" + phoneNo
+			        						+ "&firstName=" + firstName
+			        						+ "&lastName=" + lastName
+			        						+ "&zipCode=" + zipCode
+			        						;
+			        	
+			        	//Logger.d(XMLURL);
+			        	URL url = new URL(XMLURL);
+			        	
+			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+			            factory.setNamespaceAware(true); 
+			            XmlPullParser xpp = factory.newPullParser(); 
+			            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+			         
+			            int eventType = xpp.getEventType();		          
+			            boolean isNetworkError = true;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("item")) {
+			            			xmlData = new com.samsung.cares.common.XMLData();
+			            		} 
+			            		if(tag.equals("ticketNo")) {
+			            			xmlData.ticketNo = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("modelCode")) {
+			            			xmlData.modelCode = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("postingDate")) {
+			            			xmlData.postingDate = xpp.nextText();
+			            		} 
+			            	}
+			            	else if(eventType == XmlPullParser.END_TAG) { 
+			            		tag = xpp.getName();
+			            		if(tag.equals("item")) {
+			            			trList.add(xmlData);
+			            			index++;
+			            		}
+			            		isNetworkError = false;
+			            	}
+			            	else if(eventType == XmlPullParser.TEXT) {
+			            	} 
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			            
+			            if(isNetworkError) {
+			            	showAlertDialog("Network");
+			            }
+	
+			        }
+			        catch (Exception e) {
+			        	Logger.d("Page - getTrackingDetail - Exception");
+			        	e.printStackTrace();
+			        }
+			        
+					listView.setAdapter(trAdapter);
+					if(index>0){
+						listView.setVisibility(View.VISIBLE);
+					}else{
+						noResult.setVisibility(View.VISIBLE);
+					}
+			        loadingProgressBar.setVisibility(View.GONE);
 				}
-		        loadingProgressBar.setVisibility(View.GONE);
-			}
-		};
-		
-		Handler handler = new Handler();
-		handler.postDelayed(run, 1000);
-		
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
 	}
 	
 	protected void viewMain() {
@@ -221,4 +238,59 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void showAlertDialog(String title) {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle(title);
+		alertDialog.setCancelable(true);
+        
+        if(title.equals("Network")) {
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
+	        	new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	            	dialog.dismiss();
+	                finish();
+	            }
+	        });
+        }
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
+        	alertDialog.setPositiveButton("Yes",
+            	new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	dialog.dismiss();
+                    finish();
+                }
+            });
+        	alertDialog.setNegativeButton("No", null);
+        }
+        
+        alertDialog.show();
+    }
 }

@@ -49,7 +49,7 @@ public class TrackingAdapter extends BaseAdapter {
     	View view = convertView;
     	XMLData xmlData = (XMLData)xmlDataList.get(position);
     	
-    	view = inflater.inflate(R.layout.page_tracking_transaction, null);
+    	view = inflater.inflate(R.layout.page_list_tracking, null);
 		TransactionHolder holder = new TransactionHolder();
     	holder.ticketNo = (TextView)view.findViewById(R.id.ticketno);
     	holder.modelCode = (TextView)view.findViewById(R.id.modelcode);

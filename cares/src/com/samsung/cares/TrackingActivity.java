@@ -33,7 +33,7 @@ public class TrackingActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.page_tracking);
+        setContentView(R.layout.tracking);
         
         LinearLayout trackingLayout = (LinearLayout)findViewById(R.id.tracking_layout);
         trackingLayout.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +60,19 @@ public class TrackingActivity extends Activity {
 			}
 		});
         
+        //for testing
+        ticketNoText.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	viewDetail("4114489516", "7346042229");
+	        }
+        });
+        phoneNoText.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	viewDetail("4114491356", "5152560250");
+	        }
+        });
+        //////////////////////
+        
         findButton = (ImageButton)findViewById(R.id.find_button);
         continueButton = (ImageButton)findViewById(R.id.continue_button);
         homeButton = (ImageButton)findViewById(R.id.home_button);
@@ -76,16 +89,16 @@ public class TrackingActivity extends Activity {
 	        	String ticketNo = ticketNoText.getText().toString().trim();
 	        	String phoneNo = phoneNoText.getText().toString().trim();
 	        	if(ticketNo == "") {
-	        		showResultDialog("Error", "Please input the Transaction No.");
+	        		showResultDialog("Error", "Please input the Transaction Number.");
 	        	}
 	        	else if(ticketNo.length() != 10) {
-	        		showResultDialog("Error", "Transaction No must be valid.");
+	        		showResultDialog("Error", "Transaction Number must be valid.");
 	        	}
 	        	else if(phoneNo == "") {
-	        		showResultDialog("Error", "Please input Phone No.");
+	        		showResultDialog("Error", "Please input Phone Number.");
 	        	}
 	        	else if(!Util.isNumeric(phoneNo) || phoneNo.length() != 10) {
-	        		showResultDialog("Error", "Phone No must be valid.");
+	        		showResultDialog("Error", "Phone Number must be valid.");
 	        	}
 	        	else {
 	        		viewDetail(ticketNo, phoneNo);
