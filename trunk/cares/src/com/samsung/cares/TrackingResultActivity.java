@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.custom.CustomListView;
 import com.samsung.cares.util.Logger;
 
 public class TrackingResultActivity extends Activity implements OnScrollListener {
@@ -34,7 +35,7 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 	private String zipCode = "";	
 	
 	protected ProgressBar loadingProgressBar;
-	//protected LinearLayout listLayout;
+	//protected CustomListView listView;
 	protected ListView listView;
 	protected TrackingAdapter trAdapter;
 	private ArrayList<XMLData> trList;
@@ -75,7 +76,6 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 	        }
 	    });
         
-        //listLayout = (LinearLayout)findViewById(R.id.lnrLayout_list);
         listView = (ListView)findViewById(R.id.list);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
