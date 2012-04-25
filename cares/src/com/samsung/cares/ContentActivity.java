@@ -1,13 +1,23 @@
 package com.samsung.cares;
 
+import java.io.InputStream;
+import java.net.URL;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
 import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +47,7 @@ public class ContentActivity extends PageActivity {
         	facebookView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                 	if(FACEBOOK_URL != null && !FACEBOOK_URL.equals("")) {
-                		//insert log
+                		setContactLog("FACEBOOK");
            	        	openBrowser(FACEBOOK_URL);
                 	}
                 }
@@ -46,7 +56,7 @@ public class ContentActivity extends PageActivity {
         	twitterView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                 	if(TWITTER_URL != null && !TWITTER_URL.equals("")) {
-                		//insert log
+                		setContactLog("TWITTER");
            	        	openBrowser(TWITTER_URL);
                 	}
                 }
@@ -55,7 +65,7 @@ public class ContentActivity extends PageActivity {
         	chatView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                 	if(CHAT_URL != null && !CHAT_URL.equals("")) {
-                		//insert log
+                		setContactLog("CHAT");
            	        	openBrowser(CHAT_URL);
                 	}
                 }
@@ -65,7 +75,7 @@ public class ContentActivity extends PageActivity {
                 public void onClick(View v) {
                 	if(CALL_NUMBER != null && !CALL_NUMBER.equals("")) {
                 		if(CALL_YN != null && CALL_YN.equals("Y")) {
-		       	        	//insert log
+                			setContactLog("CALL");
 		       	        	call(CALL_NUMBER);
                 		}
                 		else {
@@ -82,6 +92,7 @@ public class ContentActivity extends PageActivity {
                 	        //builder.setIcon(R.drawable.icon);
                 	        builder.setPositiveButton(getString(R.string.button_call), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
+                                	setContactLog("CALL");
                                 	call(CALL_NUMBER);
                                 }
                             });
@@ -111,6 +122,7 @@ public class ContentActivity extends PageActivity {
 			Intent intent = new Intent(this, ContentDetailActivity.class);
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
+			setContentLog(xmlData.type, xmlData.productId, xmlData.contentId, xmlData.orgType, xmlData.orgContentId);
 		}
 		else if(xmlData.type.equals("WARRANTY") && !xmlData.warrantyId.equals("") && !xmlData.warrantyURL.equals("")) {
 			Intent intent = new Intent(this, ContentDetailActivity.class);
@@ -118,6 +130,7 @@ public class ContentActivity extends PageActivity {
 			xmlData.contentURL = xmlData.warrantyURL;
 			intent.putExtra("xmlData", xmlData);
 			startActivity(intent);
+			setContentLog(xmlData.type, xmlData.productId, xmlData.contentId, xmlData.orgType, xmlData.orgContentId);
 		}
 		else {
 			Intent intent = new Intent(this, ContentActivity.class);
@@ -125,4 +138,10 @@ public class ContentActivity extends PageActivity {
 			startActivity(intent);
 		}
 	}
+	
+	protected void viewVideo(XMLData xmlData) {
+    	
+    	super.viewVideo(xmlData);
+    	setContentLog(xmlData.type, PRODUCTID, xmlData.scheduleId, xmlData.orgType, xmlData.orgContentId);
+    }
 }

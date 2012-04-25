@@ -1,10 +1,19 @@
 package com.samsung.cares;
 
+import java.io.InputStream;
+import java.net.URL;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 public class HowToActivity extends PageActivity {
 	
@@ -45,4 +54,10 @@ public class HowToActivity extends PageActivity {
 		intent.putExtra("xmlData", xmlData);
         startActivity(intent);
 	}
+	
+	protected void viewVideo(XMLData xmlData) {
+    	
+    	super.viewVideo(xmlData);
+    	setContentLog(xmlData.type, xmlData.productId, xmlData.scheduleId, xmlData.orgType, xmlData.orgContentId);
+    }
 }
