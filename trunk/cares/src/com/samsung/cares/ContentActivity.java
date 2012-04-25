@@ -4,12 +4,14 @@ import com.samsung.cares.common.XMLData;
 import com.samsung.cares.util.Logger;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -91,6 +93,18 @@ public class ContentActivity extends PageActivity {
             });
         }
     }
+	
+	/*
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+	    super.onPrepareDialog(id, dialog);
+	    AlertDialog alertDialog = (AlertDialog)dialog;
+	    Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+	    button.setCompoundDrawablesWithIntrinsicBounds(this.getResources().getDrawable(
+	            R.drawable.icon), null, null, null);
+
+	}
+	*/
 	
 	protected void viewPage(XMLData xmlData) {
 		if(!xmlData.contentId.equals("") && !xmlData.contentURL.equals("")) {

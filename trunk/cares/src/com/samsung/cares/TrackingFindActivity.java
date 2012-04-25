@@ -5,12 +5,15 @@ import com.samsung.cares.util.Logger;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.samsung.cares.util.Util;
 
@@ -29,18 +32,31 @@ public class TrackingFindActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.page_tracking_find);
+        setContentView(R.layout.tracking_find);
+        
+        LinearLayout trackingLayout = (LinearLayout)findViewById(R.id.tracking_layout);
+        trackingLayout.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		hideSoftKeyboard();
+            }
+        });
         
         homePhoneText = (EditText)findViewById(R.id.phoneNo);
         firstNameText = (EditText)findViewById(R.id.firstName);
         lastNameText = (EditText)findViewById(R.id.lastName);
-        zipCodeText = (EditText)findViewById(R.id.zipCode);       
+        zipCodeText = (EditText)findViewById(R.id.zipCode);
         
+      //for testing
+        homePhoneText.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	findTickets("9206993358", "matt", "wilson", "53549");
+	        }
+        });
+        //////////////////////
         
         homeButton = (ImageButton)findViewById(R.id.home_button);
         backButton = (ImageButton)findViewById(R.id.back_button);
         submitButton = (ImageButton)findViewById(R.id.submit_button);
-        
         
         homeButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
@@ -108,5 +124,12 @@ public class TrackingFindActivity extends Activity {
             }
         });
         alertDialog.show();
+    }
+	
+	private void hideSoftKeyboard(){
+        if(getCurrentFocus()!=null && getCurrentFocus() instanceof EditText){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(homePhoneText.getWindowToken(), 0);
+        }
     }
 }

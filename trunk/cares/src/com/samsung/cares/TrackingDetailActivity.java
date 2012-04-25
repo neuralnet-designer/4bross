@@ -7,6 +7,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -24,14 +26,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
 import com.samsung.cares.util.Logger;
+import com.samsung.cares.util.Util;
 
 public class TrackingDetailActivity extends Activity implements OnScrollListener {
 	
 	private ProgressBar loadingProgressBar;
 	
-	private String TYPE = "tracking_detail";
+	private String TYPE = "TRACKING_DETAIL";
 	
 	private String ticketNo;
 	private String phoneNo;
@@ -52,7 +56,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.page_tracking_detail);
+        setContentView(R.layout.tracking_detail);
         loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
         loadingProgressBar.setVisibility(View.VISIBLE);
         
@@ -172,124 +176,138 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	
 	private void getTrackingDetail() {
 		
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				
-				String tag;
-		        
-		        try {
-		        	
-		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?siteCode=us&type=" + TYPE + "&ticketNo=" + ticketNo + "&phoneNo=" + phoneNo;
-		        	//Logger.d(XMLURL);
-		        	URL url = new URL(XMLURL);
-		        	
-		        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
-		            factory.setNamespaceAware(true); 
-		            XmlPullParser xpp = factory.newPullParser(); 
+		Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK == Status.NETWORK_NONE) {
+  			showAlertDialog("Connection");
+  		}
+  		else {
+		
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					
+					String tag;
+					int index = 0;
 		            
-		            InputStream in = url.openStream();
-		            xpp.setInput(in, "utf-8");
-		         
-		            int eventType = xpp.getEventType();
-		            int index = 0;
-		            
-		            while(eventType != XmlPullParser.END_DOCUMENT) { 
-		            	if(eventType == XmlPullParser.START_DOCUMENT) {
-		            	}
-		            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
-		            	}
-		            	else if(eventType == XmlPullParser.START_TAG) {
-		            		
-		            		tag = xpp.getName();                  
-		                  
-		            		if(tag.equals("item")) {
-		            			trackingDetailData = new XMLData();
-		            		} 
-		            		if(tag.equals("ticketNo")) {
-		            			trackingDetailData.ticketNo = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("company")) {
-		            			trackingDetailData.company = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("serviceType")) {
-		            			trackingDetailData.serviceType = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("status")) {
-		            			trackingDetailData.status = xpp.nextText();
-		            		} 
-		            		if(tag.equals("statusDesc")) {
-		            			trackingDetailData.statusDesc = xpp.nextText();
-		            		}
-		            		if(tag.equals("delayReason")) {
-		            			trackingDetailData.delayReason = xpp.nextText();
-		            		}
-		            		if(tag.equals("delayReasonDesc")) {                      
-		            			trackingDetailData.delayReasonDesc = xpp.nextText() ;
-		            		}
-		            		if(tag.equals("ascNo")) {
-		            			trackingDetailData.ascNo = xpp.nextText();
-		            		}
-		            		if(tag.equals("ascName")) {
-		            			trackingDetailData.ascName = xpp.nextText();
-		            		}
-		            		if(tag.equals("ascPhone")) {
-		            			trackingDetailData.ascPhone = xpp.nextText();
-		            		}
-		            		if(tag.equals("postingDate")) {
-		            			trackingDetailData.postingDate = xpp.nextText();
-		            		}  
-		            		if(tag.equals("scheduleDate")) {
-		            			trackingDetailData.scheduleDate = xpp.nextText();
-		            		}  
-		            		if(tag.equals("completeDate")) {
-		            			trackingDetailData.completeDate = xpp.nextText();
-		            		}
-		            		if(tag.equals("receiveDate")) {
-		            			trackingDetailData.receiveDate = xpp.nextText();
-		            		}
-		            		if(tag.equals("shipDate")) {
-		            			trackingDetailData.shipDate = xpp.nextText();		                      
-		            		}  
-		            		if(tag.equals("trackingNo")) {
-		            			trackingDetailData.trackingNo = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("trackingURL")) {
-		            			trackingDetailData.trackingURL = xpp.nextText();		                      
-		            		} 
-		            		if(tag.equals("receiptFileName")) {
-		            			trackingDetailData.receiptFileName = xpp.nextText();		                      
-		            		} 
-		            	}
-		            	else if(eventType == XmlPullParser.END_TAG) { 
-		            		tag = xpp.getName();
-		            		if(tag.equals("item")) {
-		            			//trackingDetailData = null;
-		            			index++;
-		            		}
-		            	}
-		            	else if(eventType == XmlPullParser.TEXT) {
-		            	} 
-		            	
-		            	eventType = xpp.next(); 
-		            }
-		            
-		            loadingProgressBar.setVisibility(View.GONE);
+			        try {
+			        	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?siteCode=us&type=" + TYPE + "&ticketNo=" + ticketNo + "&phoneNo=" + phoneNo;
+			        	//Logger.d(XMLURL);
+			        	URL url = new URL(XMLURL);
+			        	
+			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+			            factory.setNamespaceAware(true); 
+			            XmlPullParser xpp = factory.newPullParser(); 
+			            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+			         
+			            int eventType = xpp.getEventType();
+			            boolean isNetworkError = true;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("item")) {
+			            			trackingDetailData = new XMLData();
+			            		} 
+			            		if(tag.equals("ticketNo")) {
+			            			trackingDetailData.ticketNo = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("company")) {
+			            			trackingDetailData.company = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("serviceType")) {
+			            			trackingDetailData.serviceType = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("status")) {
+			            			trackingDetailData.status = xpp.nextText();
+			            		} 
+			            		if(tag.equals("statusDesc")) {
+			            			trackingDetailData.statusDesc = xpp.nextText();
+			            		}
+			            		if(tag.equals("delayReason")) {
+			            			trackingDetailData.delayReason = xpp.nextText();
+			            		}
+			            		if(tag.equals("delayReasonDesc")) {                      
+			            			trackingDetailData.delayReasonDesc = xpp.nextText() ;
+			            		}
+			            		if(tag.equals("ascNo")) {
+			            			trackingDetailData.ascNo = xpp.nextText();
+			            		}
+			            		if(tag.equals("ascName")) {
+			            			trackingDetailData.ascName = xpp.nextText();
+			            		}
+			            		if(tag.equals("ascPhone")) {
+			            			trackingDetailData.ascPhone = xpp.nextText();
+			            		}
+			            		if(tag.equals("postingDate")) {
+			            			trackingDetailData.postingDate = xpp.nextText();
+			            		}  
+			            		if(tag.equals("scheduleDate")) {
+			            			trackingDetailData.scheduleDate = xpp.nextText();
+			            		}  
+			            		if(tag.equals("completeDate")) {
+			            			trackingDetailData.completeDate = xpp.nextText();
+			            		}
+			            		if(tag.equals("receiveDate")) {
+			            			trackingDetailData.receiveDate = xpp.nextText();
+			            		}
+			            		if(tag.equals("shipDate")) {
+			            			trackingDetailData.shipDate = xpp.nextText();		                      
+			            		}  
+			            		if(tag.equals("trackingNo")) {
+			            			trackingDetailData.trackingNo = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("trackingURL")) {
+			            			trackingDetailData.trackingURL = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("receiptFileName")) {
+			            			trackingDetailData.receiptFileName = xpp.nextText();		                      
+			            		} 
+			            	}
+			            	else if(eventType == XmlPullParser.END_TAG) { 
+			            		tag = xpp.getName();
+			            		if(tag.equals("item")) {
+			            			//trackingDetailData = null;
+			            			index++;
+			            		}
+			            		isNetworkError = false;
+			            	}
+			            	else if(eventType == XmlPullParser.TEXT) {
+			            	} 
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			            
+			            if(isNetworkError) {
+			            	showAlertDialog("Network");
+			            }
+			        }
+			        catch (Exception e) {
+			        	Logger.d("Page - getTrackingDetail - Exception");
+			        	e.printStackTrace();
+			        }
+			        
+			        loadingProgressBar.setVisibility(View.GONE);
 		            Logger.d("Tracking Count:"+index);
 			        //pageListView.setVisibility(View.INVISIBLE);
 			        if(index > 0) { //there is no gallery, so layout should not be displayed.
 			        	setTrackingDetail(trackingDetailData);
 			        }
-		        }
-		        catch (Exception e) {
-		        	Logger.d("Page - getTrackingDetail - Exception");
-		        	e.printStackTrace();
-		        }
-			}
-		};
-		
-		Handler handler = new Handler();
-		handler.postDelayed(run, 1000);
+				}
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
 	}
 	
 	private void setTrackingDetail(XMLData xmlData) {
@@ -344,4 +362,59 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void showAlertDialog(String title) {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle(title);
+		alertDialog.setCancelable(true);
+        
+        if(title.equals("Network")) {
+        	alertDialog.setMessage(getString(R.string.msg_network_error));
+        	alertDialog.setPositiveButton("Close",
+	        	new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	            	dialog.dismiss();
+	                finish();
+	            }
+	        });
+        }
+        else if(title.equals("Connection")) {
+			alertDialog.setMessage(getString(R.string.msg_no_connection));
+			alertDialog.setPositiveButton("Close",
+		        	new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	dialog.dismiss();
+		                finish();
+		            }
+		        });
+			
+			/*
+			final AlertDialog dlg = alertDialog.create();
+
+            dlg.show();
+
+            final Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                public void run() {
+                    dlg.dismiss(); // when the task active then close the dialog
+                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                }
+            }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+            */
+        }
+        else if(title.equals("Exit")) {
+        	alertDialog.setMessage(getString(R.string.msg_exit));
+        	alertDialog.setPositiveButton("Yes",
+            	new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	dialog.dismiss();
+                    finish();
+                }
+            });
+        	alertDialog.setNegativeButton("No", null);
+        }
+        
+        alertDialog.show();
+    }
 }
