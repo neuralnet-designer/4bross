@@ -35,8 +35,9 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 	private String zipCode = "";	
 	
 	protected ProgressBar loadingProgressBar;
-	//protected CustomListView listView;
-	protected ListView listView;
+	protected LinearLayout noResult;
+	protected CustomListView listView;
+	//protected ListView listView;
 	protected TrackingAdapter trAdapter;
 	private ArrayList<XMLData> trList;
 	
@@ -57,6 +58,8 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
         setContentView(R.layout.page_tracking_result);
         loadingProgressBar = (ProgressBar)findViewById(R.id.loading_progress);
         loadingProgressBar.setVisibility(View.VISIBLE);
+        
+        noResult = (LinearLayout)findViewById(R.id.noresult);
 
         inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);        
         footerView = inflater.inflate(R.layout.page_list_footer, null); 
@@ -76,7 +79,7 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 	        }
 	    });
         
-        listView = (ListView)findViewById(R.id.list);
+        listView = (CustomListView)findViewById(R.id.list);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
         	@Override
@@ -115,7 +118,8 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 				
 				String tag;
 				com.samsung.cares.common.XMLData xmlData = null;
-		        
+				int index = 0;
+				
 		        try {
 		        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=tracking_find" 
 		        						+ "&phoneNo=" + phoneNo
@@ -134,8 +138,7 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 		            InputStream in = url.openStream();
 		            xpp.setInput(in, "utf-8");
 		         
-		            int eventType = xpp.getEventType();
-		            int index = 0;
+		            int eventType = xpp.getEventType();		            
 		            
 		            while(eventType != XmlPullParser.END_DOCUMENT) { 
 		            	if(eventType == XmlPullParser.START_DOCUMENT) {
@@ -179,6 +182,11 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 		        }
 		        
 				listView.setAdapter(trAdapter);
+				if(index>0){
+					listView.setVisibility(View.VISIBLE);
+				}else{
+					noResult.setVisibility(View.VISIBLE);
+				}
 		        loadingProgressBar.setVisibility(View.GONE);
 			}
 		};
