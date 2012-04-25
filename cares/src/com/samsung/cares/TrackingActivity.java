@@ -135,7 +135,8 @@ public class TrackingActivity extends Activity {
     }
 	
 	private void viewMain() {
-    	Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     }
 	

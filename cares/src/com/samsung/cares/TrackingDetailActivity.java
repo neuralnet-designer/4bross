@@ -45,8 +45,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	private LinearLayout detailLayout;
 	
 	private ImageButton callButton;
+	private ImageButton callUnableButton;
 	private ImageButton uploadButton;
-	
 	private ImageButton homeButton;
 	private ImageButton backButton;
 	
@@ -75,8 +75,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		detailLayout = (LinearLayout)findViewById(R.id.detailLayout);
        
         callButton = (ImageButton)findViewById(R.id.call_button);
+        callUnableButton = (ImageButton)findViewById(R.id.call_unable_button);
         uploadButton = (ImageButton)findViewById(R.id.upload_button);
-        
         homeButton = (ImageButton)findViewById(R.id.home_button);
         backButton = (ImageButton)findViewById(R.id.back_button);
         
@@ -117,7 +117,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
     }
 	
 	private void viewMain() {
-    	Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity(intent);
     }
 	
@@ -318,13 +319,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
     	((TextView)findViewById(R.id.requestDate)).setText(xmlData.postingDate);
 
         if(xmlData.serviceType.equals("IH")) {
-        	findViewById(R.id.tableRow_ServiceCenter).setVisibility(View.VISIBLE);
-        	findViewById(R.id.tableRow_ScheduleDate).setVisibility(View.VISIBLE);
-        	findViewById(R.id.tableRow_CompleteDate).setVisibility(View.VISIBLE);
-        	
-        	findViewById(R.id.tableRow_ReceivedDate).setVisibility(View.GONE);
-        	findViewById(R.id.tableRow_ShipDate).setVisibility(View.GONE);
-        	findViewById(R.id.tableRow_TrackingInfo).setVisibility(View.GONE);
+        	setTrackingDetailVisible(true);
         
         	((TextView)findViewById(R.id.ascName)).setText(xmlData.ascName);
         	((TextView)findViewById(R.id.scheduleDate)).setText(xmlData.scheduleDate);
@@ -332,16 +327,18 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 
             if(xmlData != null && xmlData.ascPhone != null) {
             	callButton.setVisibility(View.VISIBLE);
+            	callUnableButton.setVisibility(View.GONE);
+            }
+            else {
+            	callButton.setVisibility(View.GONE);
+            	callUnableButton.setVisibility(View.VISIBLE);
             }
 
 		}else{
-        	findViewById(R.id.tableRow_ServiceCenter).setVisibility(View.GONE);
-        	findViewById(R.id.tableRow_ScheduleDate).setVisibility(View.GONE);
-        	findViewById(R.id.tableRow_CompleteDate).setVisibility(View.GONE);
-        	
-        	findViewById(R.id.tableRow_ReceivedDate).setVisibility(View.VISIBLE);
-        	findViewById(R.id.tableRow_ShipDate).setVisibility(View.VISIBLE);
-        	findViewById(R.id.tableRow_TrackingInfo).setVisibility(View.VISIBLE);	
+			setTrackingDetailVisible(false);
+			
+			callButton.setVisibility(View.GONE);
+        	callUnableButton.setVisibility(View.VISIBLE);
         	
         	((TextView)findViewById(R.id.receivedDate)).setText(xmlData.receiveDate);
         	((TextView)findViewById(R.id.shipDate)).setText(xmlData.shipDate);
@@ -417,4 +414,31 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         
         alertDialog.show();
     }
+	
+	private void setTrackingDetailVisible(boolean isIH) {
+		
+		int visible = isIH ? View.VISIBLE : View.GONE;
+		
+		findViewById(R.id.ascNameDiv).setVisibility(visible);
+		findViewById(R.id.ascNameTitle).setVisibility(visible);
+    	findViewById(R.id.ascName).setVisibility(visible);
+    	findViewById(R.id.scheduleDateDiv).setVisibility(visible);
+    	findViewById(R.id.scheduleDateTitle).setVisibility(visible);
+    	findViewById(R.id.scheduleDate).setVisibility(visible);
+    	findViewById(R.id.completeDateDiv).setVisibility(visible);
+    	findViewById(R.id.completeDateTitle).setVisibility(visible);
+    	findViewById(R.id.completeDate).setVisibility(visible);
+    	
+    	visible = isIH ? View.GONE : View.VISIBLE;
+    	
+    	findViewById(R.id.receivedDateDiv).setVisibility(visible);
+    	findViewById(R.id.receivedDateTitle).setVisibility(visible);
+    	findViewById(R.id.receivedDate).setVisibility(visible);
+    	findViewById(R.id.shipDateDiv).setVisibility(visible);
+    	findViewById(R.id.shipDateTitle).setVisibility(visible);    	
+    	findViewById(R.id.shipDate).setVisibility(visible);
+    	findViewById(R.id.trackingInfoDiv).setVisibility(visible);
+    	findViewById(R.id.trackingInfoTitle).setVisibility(visible);
+    	findViewById(R.id.trackingInfo).setVisibility(visible);
+	}
 }
