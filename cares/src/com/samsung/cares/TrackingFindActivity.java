@@ -26,7 +26,7 @@ public class TrackingFindActivity extends Activity {
 	
 	private ImageButton homeButton;
 	private ImageButton backButton;
-	private ImageButton submitButton;
+	private ImageButton continueButton;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,17 +46,19 @@ public class TrackingFindActivity extends Activity {
         lastNameText = (EditText)findViewById(R.id.lastName);
         zipCodeText = (EditText)findViewById(R.id.zipCode);
         
-      //for testing
+        //for testing
+        /*
         homePhoneText.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
 	        	findTickets("9206993358", "matt", "wilson", "53549");
 	        }
         });
+        */
         //////////////////////
         
         homeButton = (ImageButton)findViewById(R.id.home_button);
         backButton = (ImageButton)findViewById(R.id.back_button);
-        submitButton = (ImageButton)findViewById(R.id.submit_button);
+        continueButton = (ImageButton)findViewById(R.id.continue_button);
         
         homeButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
@@ -70,7 +72,7 @@ public class TrackingFindActivity extends Activity {
 	        }
 	    });
         
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        continueButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 	        	String phoneNo = homePhoneText.getText().toString().trim();

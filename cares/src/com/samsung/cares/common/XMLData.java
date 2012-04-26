@@ -38,10 +38,12 @@ public class XMLData implements Parcelable {
 	//for tracking
 	public String ticketNo = "";
 	public String phoneNo = "";
+	public String emailAddress = "";
 	public String firstName = "";
 	public String lastName = "";
 	public String zipCode = "";
 	public String modelCode = "";
+	public String serialNo = "";
 	public String postingDate = "";
 	public String company = "";
 	public String serviceType = "";
@@ -118,10 +120,12 @@ public class XMLData implements Parcelable {
 		//for tracking
 		ticketNo = in.readString();
 		phoneNo = in.readString();
+		emailAddress = in.readString();
 		firstName = in.readString();
 		lastName = in.readString();
 		zipCode = in.readString();
 		modelCode = in.readString();
+		serialNo = in.readString();
 		postingDate = in.readString();
 		company = in.readString();
 		serviceType = in.readString();
@@ -199,10 +203,12 @@ public class XMLData implements Parcelable {
 		//for tracking
 		out.writeString(ticketNo);
 		out.writeString(phoneNo);
+		out.writeString(emailAddress);
 		out.writeString(firstName);
 		out.writeString(lastName);
 		out.writeString(zipCode);
 		out.writeString(modelCode);
+		out.writeString(serialNo);
 		out.writeString(postingDate);
 		out.writeString(company);
 		out.writeString(serviceType);

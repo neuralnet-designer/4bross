@@ -61,6 +61,7 @@ public class TrackingActivity extends Activity {
 		});
         
         //for testing
+        /*
         ticketNoText.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
 	        	viewDetail("4114489516", "7346042229");
@@ -71,6 +72,7 @@ public class TrackingActivity extends Activity {
 	        	viewDetail("4114491356", "5152560250");
 	        }
         });
+        */
         //////////////////////
         
         findButton = (ImageButton)findViewById(R.id.find_button);
