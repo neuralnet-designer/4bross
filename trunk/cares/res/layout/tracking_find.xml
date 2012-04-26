@@ -143,8 +143,8 @@
 					    <ImageButton
 							android:id="@+id/submit_button"
 							android:background="@drawable/continue_btn"
-							android:layout_width="131dip"
-							android:layout_height="41dip"/>
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"/>
 					</LinearLayout>
 				</LinearLayout>				
 			</com.samsung.cares.custom.CustomScrollView>			
