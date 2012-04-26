@@ -1,8 +1,23 @@
 package com.samsung.cares;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -13,21 +28,25 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.samsung.cares.common.Status;
 import com.samsung.cares.common.XMLData;
+import com.samsung.cares.custom.CustomImageView;
 import com.samsung.cares.util.Logger;
 import com.samsung.cares.util.Util;
 
@@ -43,6 +62,14 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	private XMLData trackingDetailData;
 	
 	private LinearLayout detailLayout;
+	private LinearLayout trackingLayout;
+	private LinearLayout receiptLayout;
+	private LinearLayout receiptImageButtonLayout;
+	
+	private CustomImageView receiptView;
+	private Button receiptUploadButton;
+	private Button receiptCancelButton;
+	private Bitmap receiptBitmap;
 	
 	private ImageButton callButton;
 	private ImageButton callUnableButton;
@@ -73,7 +100,10 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		}
 		
 		detailLayout = (LinearLayout)findViewById(R.id.detailLayout);
-       
+		trackingLayout = (LinearLayout)findViewById(R.id.trackingLayout);
+		receiptLayout = (LinearLayout)findViewById(R.id.receiptLayout);
+		receiptImageButtonLayout = (LinearLayout)findViewById(R.id.receiptImageButtonLayout);
+		
         callButton = (ImageButton)findViewById(R.id.call_button);
         callUnableButton = (ImageButton)findViewById(R.id.call_unable_button);
         uploadButton = (ImageButton)findViewById(R.id.upload_button);
@@ -102,18 +132,42 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         
         backButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
-	        	finish();
+	        	if(receiptLayout.getVisibility() == View.VISIBLE) {
+	        		receiptLayout.setVisibility(View.GONE);
+					//trackingLayout.setVisibility(View.VISIBLE);
+					detailLayout.setVisibility(View.VISIBLE);
+	        	}
+	        	else {
+	        		finish();
+	        	}
 	        }
 	    });
         
-        //for uploading test
-        ImageView logo = (ImageView)findViewById(R.id.logo);
-        logo.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	Intent intent = new Intent(TrackingDetailActivity.this, ImageUploadActivity.class);
-	        	startActivity(intent);
-	        }
-	    });
+        receiptView = (CustomImageView)findViewById(R.id.receiptImageView);
+        receiptUploadButton = (Button) findViewById(R.id.receiptImageUpload);        
+        receiptUploadButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				if(receiptBitmap == null) {
+					Toast.makeText(getApplicationContext(), "Please select receipt image.", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					receiptImageButtonLayout.setVisibility(View.INVISIBLE);
+					loadingProgressBar.setVisibility(View.VISIBLE);
+					new ImageUploadTask().execute();
+				}
+			}
+		});
+        
+        receiptCancelButton = (Button) findViewById(R.id.receiptImageCancel);
+        receiptCancelButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				receiptLayout.setVisibility(View.GONE);
+				//trackingLayout.setVisibility(View.VISIBLE);
+				detailLayout.setVisibility(View.VISIBLE);
+			}
+		});
     }
 	
 	private void viewMain() {
@@ -141,7 +195,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	    switch(requestCode) { 
 	    case SELECT_RECEIPT:
 	        if(resultCode == RESULT_OK){  
-	            Uri selectedImage = imageReturnedIntent.getData();
+	            /*
+	        	Uri selectedImage = imageReturnedIntent.getData();
 	            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
 	            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -152,7 +207,41 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	            cursor.close();
 
 	            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-	            
+	            */
+	        	Uri selectedImageUri = imageReturnedIntent.getData();
+				String filePath = null;
+
+				try {
+					// OI FILE Manager
+					String filemanagerstring = selectedImageUri.getPath();
+
+					// MEDIA GALLERY
+					String selectedImagePath = getPath(selectedImageUri);
+
+					if(selectedImagePath != null) {
+						filePath = selectedImagePath;
+					}
+					else if(filemanagerstring != null) {
+						filePath = filemanagerstring;
+					}
+					else {
+						Toast.makeText(getApplicationContext(), "There is no image path.", Toast.LENGTH_LONG).show();
+					}
+
+					if(filePath != null) {
+						decodeFile(filePath);
+					}
+					else {
+						receiptBitmap = null;
+					}
+				} catch (Exception e) {
+					/*
+					Toast.makeText(getApplicationContext(), "Internal error",
+							Toast.LENGTH_LONG).show();
+					Log.e(e.getClass().getName(), e.getMessage(), e);
+					*/
+					e.printStackTrace();
+				}
 	        }
 	    }
 	}
@@ -180,7 +269,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		Status.NETWORK = Util.checkNetworkStatus(this);
   		
   		if(Status.NETWORK == Status.NETWORK_NONE) {
-  			showAlertDialog("Connection");
+  			showAlertDialog("Connection", false);
   		}
   		else {
 		
@@ -221,6 +310,15 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			            		} 
 			            		if(tag.equals("ticketNo")) {
 			            			trackingDetailData.ticketNo = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("emailAddress")) {
+			            			trackingDetailData.emailAddress = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("modelCode")) {
+			            			trackingDetailData.modelCode = xpp.nextText();		                      
+			            		} 
+			            		if(tag.equals("serialNo")) {
+			            			trackingDetailData.serialNo = xpp.nextText();		                      
 			            		} 
 			            		if(tag.equals("company")) {
 			            			trackingDetailData.company = xpp.nextText();		                      
@@ -289,7 +387,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			            }
 			            
 			            if(isNetworkError) {
-			            	showAlertDialog("Network");
+			            	showAlertDialog("Network", false);
 			            }
 			        }
 			        catch (Exception e) {
@@ -344,8 +442,6 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         	((TextView)findViewById(R.id.shipDate)).setText(xmlData.shipDate);
         	((TextView)findViewById(R.id.trackingInfo)).setText(xmlData.trackingNo);
 		} 
-         
-	    
 	}
 
 	@Override
@@ -360,7 +456,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		
 	}
 	
-	private void showAlertDialog(String title) {
+	private void showAlertDialog(String title, boolean isSuccess) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setTitle(title);
@@ -375,18 +471,30 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	                finish();
 	            }
 	        });
+        	
+        	alertDialog.show();
         }
         else if(title.equals("Connection")) {
 			alertDialog.setMessage(getString(R.string.msg_no_connection));
 			alertDialog.setPositiveButton("Close",
-		        	new DialogInterface.OnClickListener() {
-		            public void onClick(DialogInterface dialog, int which) {
+		       	new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
 		            	dialog.dismiss();
 		                finish();
 		            }
-		        });
+		        }
+			);
 			
-			/*
+			alertDialog.show();
+        }
+        else if(title.equals("Receipt")) {
+			if(isSuccess) {
+				alertDialog.setMessage(getString(R.string.msg_receipt_upload_success));
+			}
+			else {
+				alertDialog.setMessage(getString(R.string.msg_receipt_upload_fail));
+			}
+			
 			final AlertDialog dlg = alertDialog.create();
 
             dlg.show();
@@ -398,21 +506,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
                     t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
                 }
             }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
-            */
         }
-        else if(title.equals("Exit")) {
-        	alertDialog.setMessage(getString(R.string.msg_exit));
-        	alertDialog.setPositiveButton("Yes",
-            	new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                	dialog.dismiss();
-                    finish();
-                }
-            });
-        	alertDialog.setNegativeButton("No", null);
-        }
-        
-        alertDialog.show();
     }
 	
 	private void setTrackingDetailVisible(boolean isIH) {
@@ -440,5 +534,154 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
     	findViewById(R.id.trackingInfoDiv).setVisibility(visible);
     	findViewById(R.id.trackingInfoTitle).setVisibility(visible);
     	findViewById(R.id.trackingInfo).setVisibility(visible);
+	}
+	
+	public String getPath(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		if (cursor != null) {
+			// HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+			// THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+			int column_index = cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		} else
+			return null;
+	}
+
+	public void decodeFile(String filePath) {
+		// Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(filePath, o);
+
+		// The new size we want to scale to
+		final int REQUIRED_SIZE = 1024;
+
+		// Find the correct scale value. It should be the power of 2.
+		int width_tmp = o.outWidth, height_tmp = o.outHeight;
+		int scale = 1;
+		while(true) {
+			if(width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+				break;
+			width_tmp /= 2;
+			height_tmp /= 2;
+			scale *= 2;
+		}
+
+		// Decode with inSampleSize
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		receiptBitmap = BitmapFactory.decodeFile(filePath, o2);
+		receiptView.setImageBitmap(receiptBitmap);
+		
+		receiptLayout.setVisibility(View.VISIBLE);
+		//trackingLayout.setVisibility(View.GONE);
+		detailLayout.setVisibility(View.GONE);
+	}
+	
+	class ImageUploadTask extends AsyncTask <Void, Void, String> {
+		@Override
+		protected String doInBackground(Void... unsued) {
+			try {
+				HttpClient httpClient = new DefaultHttpClient();
+				HttpContext localContext = new BasicHttpContext();
+				HttpPost httpPost = new HttpPost("http://www.samsungsupport.com/feed/rss/cares_upload.jsp?object_id=" + trackingDetailData.ticketNo + "&email=" + trackingDetailData.emailAddress + "&model=" + trackingDetailData.modelCode + "&serial=" + trackingDetailData.serialNo + "&receipt_filename=" + trackingDetailData.receiptFileName);
+				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				receiptBitmap.compress(CompressFormat.JPEG, 100, bos);
+				byte[] data = bos.toByteArray();
+				/*
+				entity.addPart("object_id", new StringBody(trackingDetailData.ticketNo));
+				entity.addPart("email", new StringBody(trackingDetailData.emailAddress));
+				entity.addPart("model", new StringBody(trackingDetailData.modelCode));
+				entity.addPart("serial", new StringBody(trackingDetailData.serialNo));
+				entity.addPart("receipt_filename", new StringBody(trackingDetailData.receiptFileName));
+				entity.addPart("returnformat", new StringBody("json"));
+				*/
+				entity.addPart("uploaded", new ByteArrayBody(data, "cares.jpg"));
+				httpPost.setEntity(entity);
+				HttpResponse response = httpClient.execute(httpPost, localContext);
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(
+								response.getEntity().getContent(), "UTF-8"));
+				
+				String resultJson = "";
+				String thisLine = "";
+				while ((thisLine = reader.readLine()) != null) {
+					resultJson += thisLine;
+			    }
+				
+				return resultJson.trim();
+				
+			}
+			catch (Exception e) {
+				
+				loadingProgressBar.setVisibility(View.GONE);
+				/*
+				if (dialog.isShowing())
+					dialog.dismiss();
+				*/
+				/*
+				Toast.makeText(getApplicationContext(),
+						e.getMessage(),
+						Toast.LENGTH_LONG).show();
+				Log.e(e.getClass().getName(), e.getMessage(), e);
+				*/
+				e.printStackTrace();
+				return null;
+			}
+
+			// (null);
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... unsued) {
+
+		}
+
+		@Override
+		protected void onPostExecute(String resultJson) {
+			try {
+				/*
+				if (dialog.isShowing())
+					dialog.dismiss();
+				*/
+				
+				if (resultJson != null) {
+					Logger.d("resultJson : " + resultJson);
+					JSONObject jsonObject = new JSONObject(resultJson);
+					
+					String status = jsonObject.getString("status");
+					String message = jsonObject.getString("message");
+					String receiptFileName = jsonObject.getString("receiptFileName");
+					
+					if(status != null && status.equals("ok")) { //success
+						trackingDetailData.receiptFileName = receiptFileName; 
+						showAlertDialog("Receipt", true);
+					}
+					else {
+						showAlertDialog("Receipt", false);	
+					}
+				}
+			} catch (Exception e) {
+				/*
+				Toast.makeText(getApplicationContext(),
+						e.getMessage(),
+						Toast.LENGTH_LONG).show();
+				Log.e(e.getClass().getName(), e.getMessage(), e);
+				*/
+				e.printStackTrace();
+			}
+			
+			loadingProgressBar.setVisibility(View.GONE);
+			
+			receiptLayout.setVisibility(View.GONE);
+			receiptImageButtonLayout.setVisibility(View.VISIBLE);
+			//trackingLayout.setVisibility(View.VISIBLE);
+			detailLayout.setVisibility(View.VISIBLE);
+		}
 	}
 }
