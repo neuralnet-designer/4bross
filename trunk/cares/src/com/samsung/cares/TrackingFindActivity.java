@@ -81,15 +81,15 @@ public class TrackingFindActivity extends Activity {
 	        	String zipCode = zipCodeText.getText().toString().trim();
 
 	        	if( phoneNo.equals("") ) {
-	        		showResultDialog("Error", "Please input Home Phone Number.");
+	        		showResultDialog("Error", "Please input the Home Phone number.");
 	        	} else if(!Util.isNumeric(phoneNo) || phoneNo.length() != 10) {
 		        	showResultDialog("Error", "Home Phone Number must be valid.");
 	        	} else if( firstName.equals("") ) {
-	        		showResultDialog("Error", "Please input First Name.");
+	        		showResultDialog("Error", "Please input the First Name.");
 	        	} else if( lastName.equals("") ) {
-	        		showResultDialog("Error", "Please input Last Name.");
+	        		showResultDialog("Error", "Please input the Last Name.");
 	        	} else if( zipCode.equals("") ){
-	        		showResultDialog("Error", "Please input Zip Code.");
+	        		showResultDialog("Error", "Please input the Zip Code.");
 	        	} else {
 	        		findTickets(phoneNo, firstName, lastName, zipCode);
 	        	}		

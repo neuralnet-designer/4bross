@@ -132,13 +132,7 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 					int index = 0;
 					
 			        try {
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=TRACKING_FIND" 
-			        						+ "&phoneNo=" + phoneNo
-			        						+ "&firstName=" + firstName
-			        						+ "&lastName=" + lastName
-			        						+ "&zipCode=" + zipCode
-			        						;
-			        	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=TRACKING_FIND&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&phoneNo=" + Util.urlEncoder(phoneNo) + "&firstName=" + Util.urlEncoder(firstName) + "&lastName=" + Util.urlEncoder(lastName) + "&zipCode=" + Util.urlEncoder(zipCode);
 			        	//Logger.d(XMLURL);
 			        	URL url = new URL(XMLURL);
 			        	
@@ -194,14 +188,15 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
 	
 			        }
 			        catch (Exception e) {
-			        	Logger.d("Page - getTrackingDetail - Exception");
+			        	Logger.d("Page - listTickets - Exception");
 			        	e.printStackTrace();
 			        }
 			        
 					listView.setAdapter(trAdapter);
-					if(index>0){
+					if(index>0) {
 						listView.setVisibility(View.VISIBLE);
-					}else{
+					}
+					else {
 						noResult.setVisibility(View.VISIBLE);
 					}
 			        loadingProgressBar.setVisibility(View.GONE);

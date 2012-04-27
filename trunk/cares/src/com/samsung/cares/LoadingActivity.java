@@ -23,7 +23,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -56,14 +55,17 @@ public class LoadingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading);
         
-        TelephonyManager phoneManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        
         Status.SITECODE = getSiteCode();
+        Status.USERID = getUserId();
         Status.VERSION = Build.VERSION.RELEASE;
         Status.MANUFACTURER = Build.MANUFACTURER;
         Status.MODEL = Build.MODEL;
+        /*
+        TelephonyManager phoneManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        
         Status.SERIAL = phoneManager.getDeviceId();
         Status.PHONE = phoneManager.getLine1Number();
+        */
         Status.NETWORK = Util.checkNetworkStatus(this);
         Status.DEVICE = isTabletDevice() ? Status.DEVICE_TABLET : Status.DEVICE_PHONE;
         
@@ -80,17 +82,6 @@ public class LoadingActivity extends Activity {
         catch(PackageManager.NameNotFoundException e) {
         }
         
-        Logger.d("VERSION : " + Status.VERSION);
-        Logger.d("MANUFACTURER : " + Status.MANUFACTURER);
-        Logger.d("MODEL : " + Status.MODEL);
-        Logger.d("SERIAL : " + Status.SERIAL);
-        Logger.d("PHONE : " + Status.PHONE);
-        Logger.d("NETWORK : " + Status.NETWORK);
-        Logger.d("DEVICE : " + Status.DEVICE);
-        Logger.d("DENSITY : " + Status.DENSITY);
-        Logger.d("CURRENT_VERSION_CODE : " + Status.CURRENT_VERSION_CODE);
-        Logger.d("CURRENT_VERSION_NAME : " + Status.CURRENT_VERSION_NAME);
-        
         Account[] accounts = AccountManager.get(this).getAccounts();
         if(accounts.length > 0) {
         	for(int i = 0; i < accounts.length; i++) {
@@ -100,6 +91,20 @@ public class LoadingActivity extends Activity {
 	        	}
         	}
         }
+        
+        /*
+        Logger.d("VERSION : " + Status.VERSION);
+        Logger.d("MANUFACTURER : " + Status.MANUFACTURER);
+        Logger.d("MODEL : " + Status.MODEL);
+        Logger.d("SERIAL : " + Status.SERIAL);
+        Logger.d("PHONE : " + Status.PHONE);
+        Logger.d("EMAIL : " + Status.EMAIL);
+        Logger.d("NETWORK : " + Status.NETWORK);
+        Logger.d("DEVICE : " + Status.DEVICE);
+        Logger.d("DENSITY : " + Status.DENSITY);
+        Logger.d("CURRENT_VERSION_CODE : " + Status.CURRENT_VERSION_CODE);
+        Logger.d("CURRENT_VERSION_NAME : " + Status.CURRENT_VERSION_NAME);
+        */
         
         Status.SCREEN = Status.SCREEN_ON;
 
@@ -221,7 +226,8 @@ public class LoadingActivity extends Activity {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=USER&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL);
+			        	//String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=USER&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL);
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=USER&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&version=" + Util.urlEncoder(Status.VERSION);
 			        	URL url = new URL(XMLURL);
 			        	
 			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
@@ -246,6 +252,12 @@ public class LoadingActivity extends Activity {
 			            		if(tag.equals("channel")) {
 			            			String strStatus = xpp.getAttributeValue(0);
 			            			String strMessage = xpp.getAttributeValue(1);
+			            		}
+			            		if(tag.equals("userId")) {
+			            			String strUserId = xpp.nextText();
+			            			if(strUserId != null && !strUserId.equals(Status.USERID)) {
+			            				setUserId(strUserId);
+			            			}
 			            		}
 			            		if(tag.equals("lastVersionCode")) {
 			            			String strLastVersion = xpp.nextText();
@@ -332,17 +344,25 @@ public class LoadingActivity extends Activity {
     }
     
     private String getSiteCode() {
-    	//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	//return prefs.getString(PreferencesActivity.KEY_SITECODE, "");
-    	return "us";
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	return prefs.getString("SAMSUNG_CARES_SITECODE", "us");
     }
     
     private void setSiteCode(String siteCode) {
-    	/*
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		prefs.edit().putString(PreferencesActivity.KEY_SITECODE, siteCode).commit();
+		prefs.edit().putString("SAMSUNG_CARES_SITECODE", siteCode).commit();
 		Status.SITECODE = siteCode;
-		*/
+    }
+    
+    private String getUserId() {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	return prefs.getString("SAMSUNG_CARES_USERID", "");
+    }
+    
+    private void setUserId(String userId) {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.edit().putString("SAMSUNG_CARES_USERID", userId).commit();
+		Status.USERID = userId;
     }
     
     private void launchIntent(Intent intent) {

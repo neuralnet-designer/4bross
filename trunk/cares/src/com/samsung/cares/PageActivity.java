@@ -330,7 +330,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=HOWTO_CATEGORY&siteCode=" + Status.SITECODE + "&channelId=" + CHANNELID;
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=HOWTO_CATEGORY&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&channelId=" + CHANNELID;
 			        	//Logger.d(XMLURL);
 			        	URL url = new URL(XMLURL);
 			            
@@ -433,8 +433,8 @@ public class PageActivity extends Activity implements OnScrollListener {
 			        
 			        try {
 	
-			            String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=" + TYPE + "&subType=" + SUBTYPE + "&level=" + LEVEL + "&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&pageNo=" + PAGENO + "&productId=" + PRODUCTID + "&channelId=" + CHANNELID + "&categoryId=" + CATEGORYID;
-			            Logger.d(XMLURL);
+			            String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=" + TYPE + "&subType=" + SUBTYPE + "&level=" + LEVEL + "&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&version=" + Util.urlEncoder(Status.VERSION) + "&productId=" + PRODUCTID + "&channelId=" + CHANNELID + "&categoryId=" + CATEGORYID + "&pageNo=" + PAGENO;
+			            //Logger.d(XMLURL);
 			            URL url = new URL(XMLURL);
 			            
 			            XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
@@ -670,7 +670,7 @@ public class PageActivity extends Activity implements OnScrollListener {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTACT_LOG&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&contentType=" + TYPE + "&productId=" + PRODUCTID + "&contactType=" + contactType;
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTACT_LOG&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&contentType=" + TYPE + "&productId=" + PRODUCTID + "&contactType=" + contactType;
 			        	
 			        	URL url = new URL(XMLURL);
 			        	
@@ -727,9 +727,8 @@ public class PageActivity extends Activity implements OnScrollListener {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
-			        	Logger.d(XMLURL);
-	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
+			        	//Logger.d(XMLURL);	
 			        	URL url = new URL(XMLURL);
 			        	
 			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 

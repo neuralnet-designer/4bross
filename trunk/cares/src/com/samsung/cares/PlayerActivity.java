@@ -462,7 +462,7 @@ public class PlayerActivity extends Activity
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=VIDEO_LOG&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&version=" + Util.urlEncoder(Status.VERSION) + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID;
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=VIDEO_LOG&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&version=" + Util.urlEncoder(Status.VERSION) + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID;
 			        	//Logger.d(XMLURL);
 	
 			        	URL url = new URL(XMLURL);

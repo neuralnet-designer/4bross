@@ -150,12 +150,12 @@ public class HowToDetailActivity extends ActivityGroup {
     	
     	try {
         	
-        	String XMLURL = "http://www.samsungsupport.com/spstv/rss/android.jsp?type=POLL&manufacturer=" + Status.MANUFACTURER + "&model=" + Status.MODEL + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID + "&isHelpful=" + isHelpful;
+        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=POLL&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&channelId=" + CHANNELID + "&scheduleId=" + SCHEDULEID + "&isHelpful=" + isHelpful;
             
         	URL url = new URL(XMLURL);
-        	Logger.d(XMLURL);
-        	Logger.d("CHANNELID:"+CHANNELID);
-        	Logger.d("SCHEDULEID:"+SCHEDULEID);
+        	//Logger.d(XMLURL);
+        	//Logger.d("CHANNELID:"+CHANNELID);
+        	//Logger.d("SCHEDULEID:"+SCHEDULEID);
             
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
             factory.setNamespaceAware(true); 
@@ -206,7 +206,7 @@ public class HowToDetailActivity extends ActivityGroup {
 			        
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&version=" + Util.urlEncoder(Status.VERSION) + "&manufacturer=" + Util.urlEncoder(Status.MANUFACTURER) + "&model=" + Util.urlEncoder(Status.MODEL) + "&serial=" + Util.urlEncoder(Status.SERIAL) + "&phone=" + Util.urlEncoder(Status.PHONE) + "&email=" + Util.urlEncoder(Status.EMAIL) + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
 			        	Logger.d(XMLURL);
 	
 			        	URL url = new URL(XMLURL);

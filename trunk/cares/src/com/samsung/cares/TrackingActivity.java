@@ -97,7 +97,7 @@ public class TrackingActivity extends Activity {
 	        		showResultDialog("Error", "Transaction Number must be valid.");
 	        	}
 	        	else if(phoneNo == "") {
-	        		showResultDialog("Error", "Please input Phone Number.");
+	        		showResultDialog("Error", "Please input the Phone Number.");
 	        	}
 	        	else if(!Util.isNumeric(phoneNo) || phoneNo.length() != 10) {
 	        		showResultDialog("Error", "Phone Number must be valid.");
