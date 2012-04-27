@@ -2,6 +2,7 @@ package com.samsung.cares;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -32,6 +33,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
@@ -39,6 +41,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -77,7 +80,11 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	private ImageButton homeButton;
 	private ImageButton backButton;
 	
+	private Uri takenPictureUri;
+	
 	private static final int SELECT_RECEIPT = 100;
+	private static final int TAKE_PICTURE = 200;
+	private static final int CROP_PICTURE = 300;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +175,15 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 				detailLayout.setVisibility(View.VISIBLE);
 			}
 		});
+        
+        
+        //for uploading test
+        ImageView logo = (ImageView)findViewById(R.id.logo);
+        logo.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	takePicture();
+	        }
+	    });        
     }
 	
 	private void viewMain() {
@@ -187,6 +203,17 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		intent.setAction(Intent.ACTION_GET_CONTENT);
 		startActivityForResult(
 				Intent.createChooser(intent, "Select Receipt"), SELECT_RECEIPT);
+	}
+	
+	private void takePicture() {
+		// filepath to save picture.
+	    String url = "care_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+	    takenPictureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+	    
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, takenPictureUri);
+	    intent.putExtra("return-data", true);
+	    startActivityForResult(intent, TAKE_PICTURE);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
@@ -243,6 +270,46 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 					e.printStackTrace();
 				}
 	        }
+	        break;
+	        
+	    case TAKE_PICTURE :
+	    	if(resultCode == RESULT_OK){
+//	    		String imagePath = getPath(takenPictureUri);
+//	    		decodeFile(imagePath);
+	    		
+		        Intent intent = new Intent("com.android.camera.action.CROP");
+		        intent.setDataAndType(takenPictureUri, "image/*");
+		  
+		        intent.putExtra("outputX", 90);
+		        intent.putExtra("outputY", 90);
+		        intent.putExtra("aspectX", 1);
+		        intent.putExtra("aspectY", 1);
+		        intent.putExtra("scale", true);
+		        intent.putExtra("return-data", true);
+		        startActivityForResult(intent, CROP_PICTURE);
+	    	}	        
+	    	break;
+	    	
+	    case CROP_PICTURE :
+	    	if(resultCode == RESULT_OK){
+	    		final Bundle extras = imageReturnedIntent.getExtras();
+	    		  
+	            if(extras != null){
+	              Bitmap photo = extras.getParcelable("data");
+	              
+		      		receiptView.setImageBitmap(photo);
+		    		receiptLayout.setVisibility(View.VISIBLE);
+		    		detailLayout.setVisibility(View.GONE);	              
+	            }
+	      
+	            // delete temporary file.
+	            File f = new File(takenPictureUri.getPath());
+	            if( f.exists() ) {
+	            	f.delete();
+	            }
+	    	}
+	    	break;    	
+	    	
 	    }
 	}
 	
