@@ -86,6 +86,8 @@ public class ContentDetailActivity extends ActivityGroup {
 	ContentDetailPagerAdapter contentDetailPagerAdapter = null;
     Context context = null;
     
+    private TableLayout tableLayout;
+    
     //private LinearLayout footerButtonView;
     private ImageButton contactButton;
     private ImageButton faqButton;
@@ -131,7 +133,7 @@ public class ContentDetailActivity extends ActivityGroup {
   		}
   		else {
   			
-  			TableLayout tableLayout = (TableLayout)findViewById(R.id.step_view);
+  			tableLayout = (TableLayout)findViewById(R.id.step_view);
   			
   			if(VIEW_PAGE_NUM > 1) {
 	        	tableLayout.setVisibility(View.VISIBLE);
@@ -231,8 +233,10 @@ public class ContentDetailActivity extends ActivityGroup {
 					        	xmlData.orgType = "";
 					        	xmlData.contentId = xmlData.warrantyId;
 					        	xmlData.contentURL = xmlData.warrantyURL;
+					        	xmlData.stepCount = "";
 					        	intent.putExtra("xmlData", xmlData);
 					    		startActivity(intent);
+					    		setContentLog(xmlData.type, xmlData.productId, xmlData.contentId, xmlData.orgType, xmlData.orgContentId);
 				        	}
 				        }
 				    });
@@ -466,4 +470,61 @@ public class ContentDetailActivity extends ActivityGroup {
         public void startUpdate(View v) {
         }
     }
+    
+    protected void setContentLog(final String contentType, final String productId, final String contentId, final String orgContentType, final String orgContentId) {
+		
+		Status.NETWORK = Util.checkNetworkStatus(this);
+  		
+  		if(Status.NETWORK != Status.NETWORK_NONE) {
+		
+			Runnable run = new Runnable() {
+				@Override
+				public void run() {
+			        
+			        try {
+			        	
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=CONTENT_LOG&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&contentType=" + contentType + "&productId=" + productId + "&contentId=" + contentId + "&orgContentType=" + orgContentType + "&orgContentId=" + orgContentId;
+			        	//Logger.d(XMLURL);	
+			        	URL url = new URL(XMLURL);
+			        	
+			        	XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
+				        factory.setNamespaceAware(true); 
+				        XmlPullParser xpp = factory.newPullParser(); 
+				            
+			            InputStream in = url.openStream();
+			            xpp.setInput(in, "utf-8");
+				         
+			            int eventType = xpp.getEventType();
+			            String tag;
+			            
+			            while(eventType != XmlPullParser.END_DOCUMENT) { 
+			            	if(eventType == XmlPullParser.START_DOCUMENT) {
+			            	}
+			            	else if(eventType == XmlPullParser.END_DOCUMENT) { 
+			            	}
+			            	else if(eventType == XmlPullParser.START_TAG) {
+			            		
+			            		tag = xpp.getName();                  
+			                  
+			            		if(tag.equals("channel")) {
+			            			String strStatus = xpp.getAttributeValue(0);
+			            			String strMessage = xpp.getAttributeValue(1);
+			            		}  
+			            	}
+			            	
+			            	eventType = xpp.next(); 
+			            }
+			        }
+			        catch(Exception e) {
+			        	Logger.d("Player - Exception");
+			        	//showAlertDialog("Network");
+			        	//e.printStackTrace();
+			        }
+				}
+			};
+			
+			Handler handler = new Handler();
+			handler.postDelayed(run, 1000);
+  		}
+	}
 } 
