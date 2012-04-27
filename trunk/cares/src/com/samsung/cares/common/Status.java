@@ -3,6 +3,7 @@ package com.samsung.cares.common;
 public class Status {
 	
 	public static String SITECODE;
+	public static String USERID;
 	public static String VERSION;
 	public static String MANUFACTURER;
 	public static String MODEL;
