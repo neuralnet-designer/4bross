@@ -49,7 +49,7 @@ public class LoadingActivity extends Activity {
 	private static final String MARKET_REFERRER_SUFFIX =
 	      "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
 	
-	private static int SLEEP_TIME = 10;
+	private static int SLEEP_TIME = 50;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
