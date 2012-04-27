@@ -77,6 +77,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	private ImageButton callButton;
 	private ImageButton callUnableButton;
 	private ImageButton uploadButton;
+	private ImageButton uploadUnableButton;
 	private ImageButton homeButton;
 	private ImageButton backButton;
 	
@@ -114,6 +115,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         callButton = (ImageButton)findViewById(R.id.call_button);
         callUnableButton = (ImageButton)findViewById(R.id.call_unable_button);
         uploadButton = (ImageButton)findViewById(R.id.upload_button);
+        uploadUnableButton = (ImageButton)findViewById(R.id.upload_unable_button);
         homeButton = (ImageButton)findViewById(R.id.home_button);
         backButton = (ImageButton)findViewById(R.id.back_button);
         
@@ -178,12 +180,14 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         
         
         //for uploading test
+        /*
         ImageView logo = (ImageView)findViewById(R.id.logo);
         logo.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View v) {
 	        	takePicture();
 	        }
-	    });        
+	    });
+	    */        
     }
 	
 	private void viewMain() {
@@ -336,7 +340,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		Status.NETWORK = Util.checkNetworkStatus(this);
   		
   		if(Status.NETWORK == Status.NETWORK_NONE) {
-  			showAlertDialog("Connection", false);
+  			showAlertDialog("Connection", "", false);
   		}
   		else {
 		
@@ -346,10 +350,12 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 					
 					String tag;
 					int index = 0;
+					String strStatus = "";
+		            String strMessage = "";
 		            
 			        try {
 			        	
-			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?siteCode=us&type=" + TYPE + "&ticketNo=" + ticketNo + "&phoneNo=" + phoneNo;
+			        	String XMLURL = "http://www.samsungsupport.com/feed/rss/cares.jsp?type=" + TYPE + "&siteCode=" + Status.SITECODE + "&userId=" + Status.USERID + "&ticketNo=" + Util.urlEncoder(ticketNo) + "&phoneNo=" + Util.urlEncoder(phoneNo);
 			        	//Logger.d(XMLURL);
 			        	URL url = new URL(XMLURL);
 			        	
@@ -372,6 +378,10 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			            		
 			            		tag = xpp.getName();                  
 			                  
+			            		if(tag.equals("channel")) {
+			            			strStatus = xpp.getAttributeValue(0);
+			            			strMessage = xpp.getAttributeValue(1);
+			            		}  
 			            		if(tag.equals("item")) {
 			            			trackingDetailData = new XMLData();
 			            		} 
@@ -454,7 +464,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			            }
 			            
 			            if(isNetworkError) {
-			            	showAlertDialog("Network", false);
+			            	showAlertDialog("Network", "", false);
 			            }
 			        }
 			        catch (Exception e) {
@@ -467,6 +477,11 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			        //pageListView.setVisibility(View.INVISIBLE);
 			        if(index > 0) { //there is no gallery, so layout should not be displayed.
 			        	setTrackingDetail(trackingDetailData);
+			        }
+			        else {
+			        	if(strStatus.equals("fail")) {
+			        		showAlertDialog("Tracking", strMessage, false);
+			        	}
 			        }
 				}
 			};
@@ -499,7 +514,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
             	callUnableButton.setVisibility(View.VISIBLE);
             }
 
-		}else{
+		}
+        else {
 			setTrackingDetailVisible(false);
 			
 			callButton.setVisibility(View.GONE);
@@ -509,6 +525,9 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         	((TextView)findViewById(R.id.shipDate)).setText(xmlData.shipDate);
         	((TextView)findViewById(R.id.trackingInfo)).setText(xmlData.trackingNo);
 		} 
+        
+        uploadButton.setVisibility(View.VISIBLE);
+        uploadUnableButton.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -523,7 +542,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		
 	}
 	
-	private void showAlertDialog(String title, boolean isSuccess) {
+	private void showAlertDialog(String title, String message, boolean isSuccess) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setTitle(title);
@@ -573,6 +592,19 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
                     t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
                 }
             }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
+        }
+        else if(title.equals("Tracking")) {
+			alertDialog.setMessage(message);
+			alertDialog.setPositiveButton("Close",
+			   	new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+			           	dialog.dismiss();
+			            finish();
+			        }
+			    }
+			);
+				
+			alertDialog.show();
         }
     }
 	
@@ -654,7 +686,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			try {
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpContext localContext = new BasicHttpContext();
-				HttpPost httpPost = new HttpPost("http://www.samsungsupport.com/feed/rss/cares_upload.jsp?object_id=" + trackingDetailData.ticketNo + "&email=" + trackingDetailData.emailAddress + "&model=" + trackingDetailData.modelCode + "&serial=" + trackingDetailData.serialNo + "&receipt_filename=" + trackingDetailData.receiptFileName);
+				String XMLURL = "http://www.samsungsupport.com/feed/rss/cares_upload.jsp?siteCode=" + com.samsung.cares.common.Status.SITECODE + "&userId=" + com.samsung.cares.common.Status.USERID + "&object_id=" + Util.urlEncoder(trackingDetailData.ticketNo) + "&email=" + Util.urlEncoder(trackingDetailData.emailAddress) + "&model=" + Util.urlEncoder(trackingDetailData.modelCode) + "&serial=" + Util.urlEncoder(trackingDetailData.serialNo) + "&receipt_filename=" + Util.urlEncoder(trackingDetailData.receiptFileName);
+	        	HttpPost httpPost = new HttpPost(XMLURL);
 				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -727,10 +760,10 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 					
 					if(status != null && status.equals("ok")) { //success
 						trackingDetailData.receiptFileName = receiptFileName; 
-						showAlertDialog("Receipt", true);
+						showAlertDialog("Receipt", "", true);
 					}
 					else {
-						showAlertDialog("Receipt", false);	
+						showAlertDialog("Receipt", "", false);	
 					}
 				}
 			} catch (Exception e) {
