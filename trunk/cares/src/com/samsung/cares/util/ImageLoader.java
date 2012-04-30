@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
 
+import com.samsung.cares.common.Status;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,8 +25,6 @@ public class ImageLoader {
     private int stubId;
     private File cacheDir;
     
-    private final String TAG = "CARES";
-    
     public ImageLoader(Context context, int stubId) {
         this.stubId = stubId;
     	//Make the background thread low priority. This way it will not affect the UI performance
@@ -32,7 +32,7 @@ public class ImageLoader {
         
         //Find the dir to save cached images
         if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), TAG);
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), Status.TAG);
         }
         else {
             cacheDir = context.getCacheDir();
