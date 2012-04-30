@@ -14,67 +14,78 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:background="#ffffff">
-		<LinearLayout
-			android:id="@+id/receiptLayout"
-			android:orientation="vertical"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="#f2f2f2"
-			android:layout_gravity="center_horizontal"
-			android:layout_centerVertical="true"
-			android:layout_marginLeft="10dip"
-			android:layout_marginRight="10dip"
-			android:layout_marginTop="20dip"
-			android:paddingTop="10dip"
-			android:paddingLeft="10dip"
-			android:paddingRight="10dip"
-			android:visibility="gone">
-			<com.samsung.cares.custom.CustomImageView
-			    android:id="@+id/receiptImageView"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			   	android:layout_centerInParent="true"
-			   	android:layout_marginBottom="10dip" />
+		<ScrollView 
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content">
 			<LinearLayout
-			    android:id="@+id/receiptImageButtonLayout"
-				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:id="@+id/receiptLayout"
+				android:orientation="vertical"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right"
-				android:layout_centerVertical="true"
-				android:layout_marginTop="10dip"
-				android:layout_marginBottom="10dip">
-				<Button
-				    android:id="@+id/receiptImageCancel"
+				android:visibility="gone">
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:background="#f2f2f2"
+					android:layout_gravity="center_horizontal"
+					android:layout_centerVertical="true"
+					android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip"
+					android:layout_marginTop="20dip"
+					android:paddingTop="10dip"
+					android:paddingLeft="10dip"
+					android:paddingRight="10dip">
+					<com.samsung.cares.custom.CustomImageView
+					    android:id="@+id/receiptImageView"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					   	android:layout_centerInParent="true"
+					   	android:layout_marginBottom="10dip" />
+				</LinearLayout>
+				<LinearLayout
+				    android:id="@+id/receiptImageButtonLayout"
+					android:orientation="horizontal"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/button_cancel" />
-				<Button
-				    android:id="@+id/receiptImageUpload"
-				    android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/button_upload"
-					android:layout_marginLeft="5dip" />
+					android:layout_gravity="right"
+					android:layout_centerVertical="true"
+					android:paddingRight="10dip"
+					android:layout_marginTop="10dip"
+					android:layout_marginBottom="10dip">
+					<Button
+					    android:id="@+id/receiptImageCancel"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/button_cancel" />
+					<Button
+					    android:id="@+id/receiptImageUpload"
+					    android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/button_upload"
+						android:layout_marginLeft="5dip" />
+				</LinearLayout>
 			</LinearLayout>
-		</LinearLayout>
+		</ScrollView>
 		<RelativeLayout
 			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/detailLayout"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
+			android:layout_height="fill_parent"
+			android:visibility="invisible">
 			<com.samsung.cares.custom.CustomScrollView 
 			    android:orientation="vertical"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content">
 				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				   	android:id="@+id/detailLayout"
-					android:orientation="vertical"
+				   	android:orientation="vertical"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:paddingTop="20dip"
 					android:paddingLeft="20dip"
 					android:paddingRight="20dip"
-					android:paddingBottom="20dip"
-					android:visibility="invisible">
+					android:paddingBottom="20dip">
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
