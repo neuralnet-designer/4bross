@@ -3,8 +3,12 @@ package com.samsung.cares;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,6 +48,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +69,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	
 	private XMLData trackingDetailData;
 	
-	private LinearLayout detailLayout;
+	private RelativeLayout detailLayout;
 	private LinearLayout trackingLayout;
 	private LinearLayout receiptLayout;
 	private LinearLayout receiptImageButtonLayout;
@@ -83,8 +88,8 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	
 	private Uri takenPictureUri;
 	
-	private static final int SELECT_RECEIPT = 100;
-	private static final int TAKE_PICTURE = 200;
+	private static final int CHOOSE_CALLERY = 100;
+	private static final int CAPTURE_PICTURE = 200;
 	private static final int CROP_PICTURE = 300;
 	
 	@Override
@@ -107,7 +112,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			}
 		}
 		
-		detailLayout = (LinearLayout)findViewById(R.id.detailLayout);
+		detailLayout = (RelativeLayout)findViewById(R.id.detailLayout);
 		trackingLayout = (LinearLayout)findViewById(R.id.trackingLayout);
 		receiptLayout = (LinearLayout)findViewById(R.id.receiptLayout);
 		receiptImageButtonLayout = (LinearLayout)findViewById(R.id.receiptImageButtonLayout);
@@ -177,17 +182,6 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 				detailLayout.setVisibility(View.VISIBLE);
 			}
 		});
-        
-        
-        //for uploading test
-        /*
-        ImageView logo = (ImageView)findViewById(R.id.logo);
-        logo.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	takePicture();
-	        }
-	    });
-	    */        
     }
 	
 	private void viewMain() {
@@ -202,43 +196,63 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		photoPickerIntent.setType("image/*");
 		startActivityForResult(photoPickerIntent, SELECT_PHOTO);  
 		*/
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(
-				Intent.createChooser(intent, "Select Receipt"), SELECT_RECEIPT);
+		
+		final CharSequence[] items = {"Choose from Gallery", "Capture a photo"};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Upload Receipt");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int item) {
+		    	if(item == 0) {
+			    	/*
+		    		Intent intent = new Intent();
+					intent.setType("image/*");
+					intent.setAction(Intent.ACTION_GET_CONTENT);
+					startActivityForResult(Intent.createChooser(intent, "Select Receipt"), CHOOSE_CALLERY);
+					*/
+		    		chooseGallery();
+		    	}
+		    	else {
+		    		/*
+		    		String fileName = "care_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+		    	    takenPictureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName));
+		    	    
+		    		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		    	    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, takenPictureUri);
+		    	    //intent.putExtra("return-data", true);
+		    	    startActivityForResult(intent, CAPTURE_PICTURE);
+		    	    */
+		    		capturePicture();
+		    	}
+		    }
+		});
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
 	}
 	
-	private void takePicture() {
-		// filepath to save picture.
-	    String url = "care_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-	    takenPictureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
-	    
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, takenPictureUri);
-	    intent.putExtra("return-data", true);
-	    startActivityForResult(intent, TAKE_PICTURE);
-	}
+	private void capturePicture()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takenPictureUri = createSaveCropFile();
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, takenPictureUri);
+        startActivityForResult(intent, CAPTURE_PICTURE);
+    }
+ 
+    private void chooseGallery()
+    {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, CHOOSE_CALLERY);
+    }
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
 	    super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
 
 	    switch(requestCode) { 
-	    case SELECT_RECEIPT:
-	        if(resultCode == RESULT_OK){  
-	            /*
-	        	Uri selectedImage = imageReturnedIntent.getData();
-	            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-	            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-	            cursor.moveToFirst();
-
-	            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-	            String filePath = cursor.getString(columnIndex);
-	            cursor.close();
-
-	            Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-	            */
+	    case CHOOSE_CALLERY:
+	        /*
+	    	if(resultCode == RESULT_OK){  
+	        	
 	        	Uri selectedImageUri = imageReturnedIntent.getData();
 				String filePath = null;
 
@@ -265,23 +279,30 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 					else {
 						receiptBitmap = null;
 					}
-				} catch (Exception e) {
-					/*
-					Toast.makeText(getApplicationContext(), "Internal error",
-							Toast.LENGTH_LONG).show();
-					Log.e(e.getClass().getName(), e.getMessage(), e);
-					*/
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 	        }
 	        break;
-	        
-	    case TAKE_PICTURE :
+	        */
+	    	if(resultCode == RESULT_OK) {  
+		    	takenPictureUri = imageReturnedIntent.getData();
+	            File original_file = getImageFile(takenPictureUri);
+	             
+	            takenPictureUri = createSaveCropFile();
+	            File cpoy_file = new File(takenPictureUri.getPath()); 
+	 
+	            copyFile(original_file, cpoy_file);
+	    	}
+	    	
+	    case CAPTURE_PICTURE :
 	    	if(resultCode == RESULT_OK){
-//	    		String imagePath = getPath(takenPictureUri);
-//	    		decodeFile(imagePath);
+	    		//String imagePath = getPath(takenPictureUri);
+	    		//decodeFile(imagePath);
 	    		
-		        Intent intent = new Intent("com.android.camera.action.CROP");
+		        /*
+	    		Intent intent = new Intent("com.android.camera.action.CROP");
 		        intent.setDataAndType(takenPictureUri, "image/*");
 		  
 		        intent.putExtra("outputX", 90);
@@ -290,27 +311,52 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		        intent.putExtra("aspectY", 1);
 		        intent.putExtra("scale", true);
 		        intent.putExtra("return-data", true);
+		        
 		        startActivityForResult(intent, CROP_PICTURE);
+		        */
+	    		
+	    		Intent intent = new Intent("com.android.camera.action.CROP");
+	            intent.setDataAndType(takenPictureUri, "image/*"); 
+	             
+	            intent.putExtra("output", takenPictureUri);
+	             
+	            //intent.putExtra("return-data", true); 
+	            startActivityForResult(intent, CROP_PICTURE);
 	    	}	        
 	    	break;
 	    	
 	    case CROP_PICTURE :
 	    	if(resultCode == RESULT_OK){
+	    		/*
 	    		final Bundle extras = imageReturnedIntent.getExtras();
 	    		  
 	            if(extras != null){
-	              Bitmap photo = extras.getParcelable("data");
-	              
-		      		receiptView.setImageBitmap(photo);
+	            	receiptBitmap = extras.getParcelable("data");
+		      		receiptView.setImageBitmap(receiptBitmap);
 		    		receiptLayout.setVisibility(View.VISIBLE);
 		    		detailLayout.setVisibility(View.GONE);	              
 	            }
 	      
 	            // delete temporary file.
 	            File f = new File(takenPictureUri.getPath());
-	            if( f.exists() ) {
+	            if(f.exists()) {
 	            	f.delete();
 	            }
+	            */
+	    		String full_path = takenPictureUri.getPath();
+	            String photo_path = full_path.substring(4, full_path.length());
+	            
+	            Logger.d("full_path:" + full_path);
+	            Logger.d("photo_path:" + photo_path);
+	             
+	            //Bitmap photo = BitmapFactory.decodeFile(photo_path);
+	            receiptBitmap = BitmapFactory.decodeFile(full_path);
+	            receiptView.setImageBitmap(receiptBitmap);
+	    		
+	    		receiptLayout.setVisibility(View.VISIBLE);
+	    		//trackingLayout.setVisibility(View.GONE);
+	    		detailLayout.setVisibility(View.GONE);
+	    		
 	    	}
 	    	break;    	
 	    	
@@ -649,6 +695,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			return null;
 	}
 
+	/*
 	public void decodeFile(String filePath) {
 		// Decode image size
 		BitmapFactory.Options o = new BitmapFactory.Options();
@@ -679,6 +726,89 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 		//trackingLayout.setVisibility(View.GONE);
 		detailLayout.setVisibility(View.GONE);
 	}
+	*/
+	
+	private Uri createSaveCropFile(){
+        
+        File cacheDir;
+        if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), Status.TAG);
+        }
+        else {
+            cacheDir = this.getCacheDir();
+        }
+        
+        if(!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+        
+        Uri uri;
+        String filePath = Status.TAG + "/cares_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), filePath));
+        
+        return uri;
+    }
+    
+    private File getImageFile(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        if (uri == null) {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        }
+ 
+        Cursor mCursor = getContentResolver().query(uri, projection, null, null, 
+                MediaStore.Images.Media.DATE_MODIFIED + " desc");
+        if(mCursor == null || mCursor.getCount() < 1) {
+            return null; // no cursor or no record
+        }
+        int column_index = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        mCursor.moveToFirst();
+ 
+        String path = mCursor.getString(column_index);
+ 
+        if (mCursor !=null ) {
+            mCursor.close();
+            mCursor = null;
+        }
+ 
+        return new File(path);
+    }
+ 
+    public static boolean copyFile(File srcFile, File destFile) {
+        boolean result = false;
+        try {
+            InputStream in = new FileInputStream(srcFile);
+            try {
+                result = copyToFile(in, destFile);
+            } finally  {
+                in.close();
+            }
+        } catch (IOException e) {
+            result = false;
+        }
+        return result;
+    }
+ 
+    /**
+     * Copy data from a source stream to destFile.
+     * Return true if succeed, return false if failed.
+     */
+    private static boolean copyToFile(InputStream inputStream, File destFile) {
+        try {
+            OutputStream out = new FileOutputStream(destFile);
+            try {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) >= 0) {
+                    out.write(buffer, 0, bytesRead);
+                }
+            } finally {
+                out.close();
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 	
 	class ImageUploadTask extends AsyncTask <Void, Void, String> {
 		@Override

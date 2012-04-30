@@ -2,6 +2,8 @@ package com.samsung.cares.common;
 
 public class Status {
 	
+	public static final String TAG = "CARES";
+	
 	public static String SITECODE;
 	public static String USERID;
 	public static String VERSION;
