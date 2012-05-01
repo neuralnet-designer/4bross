@@ -2,10 +2,12 @@ package com.samsung.cares;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -437,7 +439,15 @@ public class ContentDetailActivity extends ActivityGroup {
 			}
 			Logger.d("URL[" + position + "] : " + CONTENT_URL + param);
 			
-			webView.loadUrl(CONTENT_URL + param);    		
+			if(TYPE.equals("ABOUT")) {
+				String urlContent = getURLContent(CONTENT_URL + param);
+				urlContent = urlContent.replace("#CARES_VERSION#", Status.CURRENT_VERSION_NAME);
+				webView.loadData(URLEncoder.encode(urlContent).replaceAll("\\+"," "), "text/html", "utf-8");
+			}
+			else {
+				webView.loadUrl(CONTENT_URL + param);    	
+			}
+			
             ((ViewPager)collection).addView(view, position);
             
             return view;
@@ -527,4 +537,34 @@ public class ContentDetailActivity extends ActivityGroup {
 			handler.postDelayed(run, 1000);
   		}
 	}
+    
+    public String getURLContent(String URL) {
+    	URL url = null;
+    	StringBuffer urlContent = new StringBuffer();
+    	try {
+    		url = new URL(URL);
+    	 
+    		InputStream is = url.openStream();
+    		InputStreamReader isr = new InputStreamReader(is);
+    		BufferedReader br = new BufferedReader(isr);
+    	 
+    		while(true) {
+    			String inStr = br.readLine();
+    			if(inStr == null) break;
+    			urlContent.append(inStr + "\r\n");
+    		}
+    	 
+    		br.close();
+    		isr.close();
+    		is.close();
+    	}
+    	catch(FileNotFoundException e) {
+    		e.printStackTrace();
+    	}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return urlContent.toString();
+    }
 } 
