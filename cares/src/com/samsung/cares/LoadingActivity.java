@@ -45,8 +45,8 @@ public class LoadingActivity extends Activity {
 	
 	private static final String PACKAGE_NAME = "com.samsung.cares";
 	private static final String MARKET_URI_PREFIX = "market://details?id=";
-	private static final String MARKET_REFERRER_SUFFIX =
-	      "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
+	//private static final String MARKET_REFERRER_SUFFIX = "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
+	private static final String MARKET_REFERRER_SUFFIX = "";
 	
 	private static int SLEEP_TIME = 50;
     
@@ -61,6 +61,7 @@ public class LoadingActivity extends Activity {
         Status.MANUFACTURER = Build.MANUFACTURER;
         Status.MODEL = Build.MODEL;
         /*
+         * need android.permission.READ_PHONE_STATE
         TelephonyManager phoneManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         
         Status.SERIAL = phoneManager.getDeviceId();
