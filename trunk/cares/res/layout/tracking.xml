@@ -82,7 +82,7 @@
 				android:layout_height="50dip"
 				android:hint=""
 				android:lines="1"
-				android:maxLength="200"
+				android:maxLength="20"
 				android:singleLine="true"
 				android:text=""
 				android:inputType="phone"
