@@ -41,6 +41,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -561,7 +562,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
   		}
 	}
 	
-	private void setTrackingDetail(XMLData xmlData) {
+	private void setTrackingDetail(final XMLData xmlData) {
 		detailLayout.setVisibility(View.VISIBLE);
 		
         ((TextView)findViewById(R.id.ticketNo)).setText(xmlData.ticketNo);
@@ -593,12 +594,27 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
         	
         	((TextView)findViewById(R.id.receivedDate)).setText(xmlData.receiveDate);
         	((TextView)findViewById(R.id.shipDate)).setText(xmlData.shipDate);
-        	((TextView)findViewById(R.id.trackingInfo)).setText(xmlData.trackingNo);
+        	TextView trackingInfo = ((TextView)findViewById(R.id.trackingInfo));
+        	//trackingInfo.setText(xmlData.trackingNo);
+        	trackingInfo.setText(Html.fromHtml("<font color=\"blue\"><u>" + xmlData.trackingNo + "</u></font>"));
+        	if(xmlData.trackingURL != null && !xmlData.trackingURL.equals("")) {
+	        	trackingInfo.setOnClickListener(new View.OnClickListener() {
+	    			public void onClick(View v) {
+	    				openBrowser(xmlData.trackingURL);
+	    			}
+	    		});
+        	}
 		} 
         
         uploadButton.setVisibility(View.VISIBLE);
         uploadUnableButton.setVisibility(View.GONE);
 	}
+	
+	private void openBrowser(String url) {
+    	
+    	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    	startActivity(intent);
+    }
 
 	@Override
 	public void onScroll(AbsListView arg0, int arg1, int arg2, int arg3) {
