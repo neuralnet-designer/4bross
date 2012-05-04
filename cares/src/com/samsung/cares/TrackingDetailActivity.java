@@ -456,6 +456,9 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			            		if(tag.equals("item")) {
 			            			trackingDetailData = new XMLData();
 			            		} 
+			            		if(tag.equals("title")) {
+			            			trackingDetailData.title = xpp.nextText();		                      
+			            		} 
 			            		if(tag.equals("ticketNo")) {
 			            			trackingDetailData.ticketNo = xpp.nextText();		                      
 			            		} 
@@ -565,6 +568,7 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 	private void setTrackingDetail(final XMLData xmlData) {
 		detailLayout.setVisibility(View.VISIBLE);
 		
+		((TextView)findViewById(R.id.trackingTitle)).setText(xmlData.title);
         ((TextView)findViewById(R.id.ticketNo)).setText(xmlData.ticketNo);
         ((TextView)findViewById(R.id.statusDesc)).setText(xmlData.statusDesc);
     	((TextView)findViewById(R.id.requestDate)).setText(xmlData.postingDate);
