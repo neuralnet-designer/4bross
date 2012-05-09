@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -288,4 +289,12 @@ public class TrackingResultActivity extends Activity implements OnScrollListener
         
         alertDialog.show();
     }
+	
+	@Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }

@@ -35,6 +35,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -415,7 +416,13 @@ public class ContentDetailActivity extends ActivityGroup {
 			
 			webView.setWebViewClient(new WebViewClient() {
 				public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		            view.loadUrl(url);
+					if(url.indexOf("/nas/cares/") > 0) {
+						view.loadUrl(url);
+					}
+					else {
+						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				    	startActivity(intent);
+					}
 		            return true;
 		        }
 			});
@@ -567,4 +574,12 @@ public class ContentDetailActivity extends ActivityGroup {
     	
     	return urlContent.toString();
     }
+    
+    @Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 } 

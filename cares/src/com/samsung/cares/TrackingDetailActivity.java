@@ -42,6 +42,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -957,5 +958,13 @@ public class TrackingDetailActivity extends Activity implements OnScrollListener
 			//trackingLayout.setVisibility(View.VISIBLE);
 			detailLayout.setVisibility(View.VISIBLE);
 		}
+	}
+	
+	@Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 }

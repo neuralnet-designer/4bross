@@ -431,6 +431,10 @@ public class PlayerActivity extends Activity
         	}
             return true;
         }
+        else if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+    	    return true;
+    	}
+        
         return super.onKeyDown(keyCode, event);
     }
 	
