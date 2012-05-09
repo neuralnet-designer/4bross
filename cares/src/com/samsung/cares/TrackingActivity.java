@@ -88,13 +88,13 @@ public class TrackingActivity extends Activity {
 	        public void onClick(View v) {
 	        	String ticketNo = ticketNoText.getText().toString().trim();
 	        	String phoneNo = phoneNoText.getText().toString().trim();
-	        	if(ticketNo == "") {
+	        	if(ticketNo == null || ticketNo.equals("")) {
 	        		showResultDialog("Error", "Please input the Transaction Number.");
 	        	}
 	        	else if(ticketNo.length() != 10) {
 	        		showResultDialog("Error", "Transaction Number must be valid.");
 	        	}
-	        	else if(phoneNo == "") {
+	        	else if(phoneNo == null || phoneNo.equals("")) {
 	        		showResultDialog("Error", "Please input the Phone Number.");
 	        	}
 	        	else if(!Util.isNumeric(phoneNo) || phoneNo.length() != 10) {
