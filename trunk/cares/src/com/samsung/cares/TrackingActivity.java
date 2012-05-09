@@ -160,4 +160,12 @@ public class TrackingActivity extends Activity {
             imm.hideSoftInputFromWindow(ticketNoText.getWindowToken(), 0);
         }
     }
+	
+	@Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }

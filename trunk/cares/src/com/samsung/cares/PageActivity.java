@@ -779,26 +779,6 @@ public class PageActivity extends Activity implements OnScrollListener {
 		pageAdapter.notifyDataSetChanged();
 	}
 
-    @Override 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	//Logger.d("keyCode ===" + keyCode + "////////// KeyEvent == " + event.toString());
-	    
-	    //4 : BACK
-	    //82 : CONTROL
-	    //84 : SEARCH
-	    
-	    /*
-    	if(keyCode == KeyEvent.KEYCODE_BACK) {
-	    	Logger.d("event.KEYCODE_BACK");
-	    	if(TYPE.equals("howto")) {
-	    		showAlertDialog("Exit");
-	    	}
-	    }
-	    */
-	    
-	    return super.onKeyDown(keyCode, event);
-	}
-	
 	protected void showAlertDialog(String title) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -880,4 +860,12 @@ public class PageActivity extends Activity implements OnScrollListener {
     	startActivity(intent);
     	//overridePendingTransition(R.anim.fade, R.anim.hold);
     }
+	
+	@Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }

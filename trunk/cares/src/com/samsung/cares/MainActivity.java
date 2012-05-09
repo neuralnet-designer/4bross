@@ -325,6 +325,9 @@ public class MainActivity extends Activity {
 				return false;
 	    	}
 	    }
+	    else if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
 	    
 	    return super.onKeyDown(keyCode, event);
 	}
