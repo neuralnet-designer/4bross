@@ -446,6 +446,9 @@ public class LoadingActivity extends Activity {
 	    	forceStop = true;
 	    	finish();
 	    }
+	    else if(keyCode == KeyEvent.KEYCODE_SEARCH) {
+	        return true;
+	    }
 	    
 	    return super.onKeyDown(keyCode, event);
 	}
