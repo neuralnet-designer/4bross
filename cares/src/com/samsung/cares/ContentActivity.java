@@ -82,7 +82,7 @@ public class ContentActivity extends PageActivity {
                 			LayoutInflater factory = LayoutInflater.from(ContentActivity.this);
                 			final View contentLayout = factory.inflate(R.layout.content_alert, null);
                 			TextView contentText = (TextView)contentLayout.findViewById(R.id.alert_text);
-                			String text = getString(R.string.msg_contact_alert1) + " <font color=red><b>" + CALL_FULL_NUMBER + "**</b></font> " + getString(R.string.msg_contact_alert2);
+                			String text = getString(R.string.msg_contact_alert1) + " <font color=red><b>" + CALL_FULL_NUMBER + "</b></font> " + getString(R.string.msg_contact_alert2);
                 			contentText.setText(Html.fromHtml(text));
                 			
                 			AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this);
