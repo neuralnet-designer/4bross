@@ -93,6 +93,7 @@
 				    android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
 				    android:orientation="horizontal"
+				    android:gravity="center_horizontal" 
 				    android:layout_alignParentBottom="true"
 				    android:visibility="visible"
 				    >
