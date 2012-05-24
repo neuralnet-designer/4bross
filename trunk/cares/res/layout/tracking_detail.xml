@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 	<ImageView
 		android:id="@+id/logo"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"			
 		android:background="@drawable/logo_bg"
 	/>	
@@ -327,33 +327,39 @@
 				<ImageButton
 					android:id="@+id/call_button"
 					android:background="@drawable/bottom_4_btn_asc"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:visibility="gone"/>
 				<ImageButton
 					android:id="@+id/call_unable_button"
 					android:background="@drawable/bottom_4_btn_asc_unable"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 				<ImageButton
 					android:id="@+id/upload_button"
 					android:background="@drawable/bottom_4_btn_upload"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:visibility="gone"/>
 				<ImageButton
 					android:id="@+id/upload_unable_button"
 					android:background="@drawable/bottom_4_btn_upload_unable"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 				<ImageButton
 					android:id="@+id/home_button"
 					android:background="@drawable/bottom_4_btn_home"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 				<ImageButton
 					android:id="@+id/back_button"
 					android:background="@drawable/bottom_4_btn_back"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 			</LinearLayout>			
